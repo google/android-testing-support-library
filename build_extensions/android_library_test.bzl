@@ -26,11 +26,13 @@ def android_library_test(
         srcs = [],
         custom_package = None,
         javacopts = None,
+        manifest = None,
         manifest_values = {},
         nocompress_extensions = None,
         multidex = None,
         tags = [],
         test_class = None,
+        permissions = [],
         **kwargs):
     """A macro for an instrumentation test whose target under test is an android_library.
 
@@ -54,6 +56,7 @@ def android_library_test(
         custom_package: optional, Java package for which java sources will be generated. Passed to
             both android_library and android_binary
         javacopts: optional, Extra compiler options for this target, passed to android_library
+        manifest: optional, the AndroidManifest.xml to pass to android_library
         manifest_values: A dictionary of values to be overridden in the manifest., passed to android_binary.
         nocompress_extensions: A list of file extension to leave uncompressed in apk, passed to android_binary
         multidex: optional, whether to split code into multiple dex files, passed to android_binary
@@ -61,6 +64,8 @@ def android_library_test(
         test_class: The test class to run.  If this argument is omitted, the Java class whose name corresponds
             to the name of this android_library_test rule + current directory path will be used. The test class
             needs to be annotated with org.junit.runner.RunWith.
+        permissions: list of permissions the test application should hold. This is necessary since permission
+            declarations are not merged from transitive dependencies
         **kwargs: arguments to pass to android_instrumentation_test
     """
     test_application_id = custom_package if custom_package else infer_java_package_name()
@@ -71,6 +76,7 @@ def android_library_test(
         target_devices = target_devices,
         custom_package = custom_package,
         javacopts = javacopts,
+        manifest = manifest,
         manifest_values = manifest_values,
         nocompress_extensions = nocompress_extensions,
         multidex = multidex,
@@ -80,6 +86,7 @@ def android_library_test(
         # make this self instrumenting
         instruments_application_id = test_application_id,
         test_application_id = test_application_id,
+        permissions = permissions,
         **kwargs
     )
 
@@ -93,11 +100,13 @@ def _android_application_test(
         test_application_id = None,
         custom_package = None,
         javacopts = None,
+        manifest = None,
         manifest_values = {},
         nocompress_extensions = None,
         multidex = None,
         tags = [],
         test_class = None,
+        permissions = [],
         **kwargs):
     """A macro for an instrumentation test whose target under test is an android_application.
 
@@ -125,12 +134,15 @@ def _android_application_test(
         test_application_id: the application id for the test_app android_binary. If unspecified, will be derived based on package path
         custom_package: optional, Java package for which java sources will be generated. Passed to both android_library and android_binary
         javacopts: optional, Extra compiler options for this target, passed to android_library.
+        manifest: optional, the AndroidManifest.xml to pass to android_library
         manifest_values: A dictionary of values to be overridden in the manifest., passed to android_binary.
         nocompress_extensions: A list of file extension to leave uncompressed in apk, passed to android_binary
         multidex: optional, whether to split code into multiple dex files, passed to android_binary
         tags: passed to android_library, android_binary and a_i_t
         target_devices: the devices to execute on
         test_class: The test class to run.  If this argument is omitted, the Java class whose name corresponds to the name of this android_library_test rule + current directory path will be used. The test class needs to be annotated with org.junit.runner.RunWith.
+        permissions: list of permissions the test application should hold. This is necessary since
+            permission declarations are not merged from transitive dependencies
         **kwargs: arguments to pass to android_instrumentation_test
     """
     library_name = "%s_library" % name
@@ -143,6 +155,7 @@ def _android_application_test(
             name = library_name,
             srcs = srcs,
             testonly = 1,
+            manifest = manifest,
             deps = deps,
             custom_package = custom_package,
             javacopts = javacopts,
@@ -153,11 +166,25 @@ def _android_application_test(
             name = library_name,
             srcs = srcs,
             testonly = 1,
+            manifest = manifest,
             deps = deps,
             custom_package = custom_package,
             javacopts = javacopts,
             tags = tags,
         )
+
+    _permission_string = ""
+    for _permission in permissions:
+        _permission_string = "<uses-permission android:name=\\\"%s\\\"/>\\n" % _permission
+
+    # for some unknown reason _manifest_values doesn't replace permissionList properly
+    # so directly use sed
+    native.genrule(
+        name = "%s_manifest_genrule" % name,
+        srcs = ["//third_party/android/androidx_test/build_extensions:AndroidManifest_instrumentation_test_template.xml"],
+        outs = ["%s_manifest_with_permissions.xml" % name],
+        cmd = "sed s,permissionList,\"%s\",g $(SRCS) > $(OUTS)" % _permission_string,
+    )
 
     _manifest_values = {
         "applicationId": test_application_id,
@@ -166,7 +193,7 @@ def _android_application_test(
     _manifest_values.update(manifest_values)
     android_binary(
         name = "%s_binary" % name,
-        manifest = "//third_party/android/androidx_test/build_extensions:AndroidManifest_instrumentation_test_template.xml",
+        manifest = "%s_manifest_with_permissions.xml" % name,
         testonly = 1,
         instruments = instruments,
         manifest_values = _manifest_values,
