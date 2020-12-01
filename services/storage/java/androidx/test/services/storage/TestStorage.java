@@ -17,12 +17,9 @@ package androidx.test.services.storage;
 
 import static androidx.test.internal.util.Checks.checkNotNull;
 
-import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.ParcelFileDescriptor;
-import android.os.RemoteException;
 import android.util.Log;
 import androidx.test.internal.platform.tracker.UsageTrackerRegistry;
 import androidx.test.internal.platform.tracker.UsageTrackerRegistry.AxtVersions;
@@ -30,7 +27,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.services.storage.file.HostedFile;
 import androidx.test.services.storage.file.PropertyFile;
 import androidx.test.services.storage.file.PropertyFile.Authority;
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -129,7 +125,7 @@ public final class TestStorage {
    */
   public InputStream openInputFile(@Nonnull String pathname) throws FileNotFoundException {
     Uri dataUri = getInputFileUri(pathname);
-    return getInputStream(dataUri);
+    return TestStorageUtil.getInputStream(dataUri, contentResolver);
   }
 
   /**
@@ -203,7 +199,7 @@ public final class TestStorage {
     checkNotNull(pathname);
 
     Uri outputUri = getOutputFileUri(pathname);
-    return getOutputStream(outputUri);
+    return TestStorageUtil.getOutputStream(outputUri, contentResolver);
   }
 
   /**
@@ -225,7 +221,9 @@ public final class TestStorage {
     try {
       // Buffered to improve performance and avoid the unbuffered IO violation when running under
       // strict mode.
-      OutputStream outputStream = new BufferedOutputStream(getOutputStream(propertyFileUri));
+      OutputStream outputStream =
+          new BufferedOutputStream(
+              TestStorageUtil.getOutputStream(propertyFileUri, contentResolver));
       objectOutputStream = new ObjectOutputStream(outputStream);
       objectOutputStream.writeObject(allProperties);
     } catch (FileNotFoundException ex) {
@@ -247,7 +245,7 @@ public final class TestStorage {
     ObjectInputStream in = null;
     InputStream rawStream = null;
     try {
-      rawStream = getInputStream(propertyFileUri);
+      rawStream = TestStorageUtil.getInputStream(propertyFileUri, contentResolver);
       in = new ObjectInputStream(rawStream);
       @SuppressWarnings("unchecked")
       Map<String, Serializable> recordedProperties = (Map<String, Serializable>) in.readObject();
@@ -269,20 +267,6 @@ public final class TestStorage {
 
   private static Uri getPropertyFileUri() {
     return HostedFile.buildUri(HostedFile.FileHost.EXPORT_PROPERTIES, PROPERTIES_FILE_NAME);
-  }
-
-  private static ContentProviderClient makeContentProviderClient(
-      ContentResolver resolver, Uri uri) {
-    checkNotNull(resolver);
-
-    ContentProviderClient providerClient = resolver.acquireContentProviderClient(uri);
-    if (null == providerClient) {
-      throw new TestStorageException(
-          String.format(
-              "No content provider registered for: %s. Are all test services apks installed?",
-              uri));
-    }
-    return providerClient;
   }
 
   /**
@@ -334,56 +318,6 @@ public final class TestStorage {
         out.close();
       } catch (IOException e) {
         // do nothing.
-      }
-    }
-  }
-
-  /**
-   * Gets the input stream for a given Uri.
-   *
-   * @param uri The Uri for which the InputStream is required.
-   */
-  InputStream getInputStream(Uri uri) throws FileNotFoundException {
-    checkNotNull(uri);
-
-    ContentProviderClient providerClient = null;
-    try {
-      providerClient = makeContentProviderClient(contentResolver, uri);
-      // Assignment to a variable is required. Do not inline.
-      ParcelFileDescriptor pfd = providerClient.openFile(uri, "r");
-      // Buffered to improve performance.
-      return new BufferedInputStream(new ParcelFileDescriptor.AutoCloseInputStream(pfd));
-    } catch (RemoteException re) {
-      throw new TestStorageException("Unable to access content provider: " + uri, re);
-    } finally {
-      if (providerClient != null) {
-        // Uses #release() to be compatible with API < 24.
-        providerClient.release();
-      }
-    }
-  }
-
-  /**
-   * Gets the output stream for a given Uri.
-   *
-   * <p>The returned OutputStream is essentially a {@link java.io.FileOutputStream} which likely
-   * should be buffered to avoid {@code UnbufferedIoViolation} when running under strict mode.
-   *
-   * @param uri The Uri for which the OutputStream is required.
-   */
-  OutputStream getOutputStream(Uri uri) throws FileNotFoundException {
-    checkNotNull(uri);
-
-    ContentProviderClient providerClient = null;
-    try {
-      providerClient = makeContentProviderClient(contentResolver, uri);
-      return new ParcelFileDescriptor.AutoCloseOutputStream(providerClient.openFile(uri, "w"));
-    } catch (RemoteException re) {
-      throw new TestStorageException("Unable to access content provider: " + uri, re);
-    } finally {
-      if (providerClient != null) {
-        // Uses #release() to be compatible with API < 24.
-        providerClient.release();
       }
     }
   }

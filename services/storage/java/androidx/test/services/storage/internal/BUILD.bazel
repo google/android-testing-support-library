@@ -1,0 +1,16 @@
+load("@build_bazel_rules_android//android:rules.bzl", "android_library")
+
+licenses(["notice"])
+
+android_library(
+    name = "storage",
+    srcs = [
+        "InternalTestStorage.java",
+    ],
+    deps = [
+        "//runner/monitor",
+        "//services/storage",
+        "//services/storage/java/androidx/test/services/storage/file",
+        "@maven//:com_google_code_findbugs_jsr305",
+    ],
+)
