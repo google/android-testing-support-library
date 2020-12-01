@@ -543,7 +543,8 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
 
   private void addCoverageListener(RunnerArgs args, TestExecutor.Builder builder) {
     if (args.codeCoverage) {
-      builder.addRunListener(new CoverageListener(args.codeCoveragePath));
+      builder.addRunListener(
+          new CoverageListener(args.codeCoveragePath, args.isTestServiceAvailable));
     }
   }
 

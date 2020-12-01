@@ -17,11 +17,11 @@ package androidx.test.internal.runner.listener;
 
 import android.app.Instrumentation;
 import android.os.Bundle;
-import android.util.Log;
-import java.io.File;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.test.internal.runner.coverage.InstrumentationCoverageReporter;
+import androidx.test.services.storage.internal.InternalTestStorage;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import org.junit.runner.Result;
 
 /**
@@ -29,104 +29,65 @@ import org.junit.runner.Result;
  * <code>RunListener</code></a> that generates EMMA code coverage.
  */
 public class CoverageListener extends InstrumentationRunListener {
-  private static final String TAG = "CoverageListener";
-
-  private String coverageFilePath;
+  private final String coverageFilePath;
+  private boolean isTestServiceAvailable;
+  private InstrumentationCoverageReporter coverageReporter;
 
   /**
    * If included in the status or final bundle sent to an IInstrumentationWatcher, this key
    * identifies the path to the generated code coverage file.
    */
   private static final String REPORT_KEY_COVERAGE_PATH = "coverageFilePath";
-  // Default file name for code coverage
-  private static final String DEFAULT_COVERAGE_FILE_NAME = "coverage.ec";
-
-  private static final String EMMA_RUNTIME_CLASS = "com.vladium.emma.rt.RT";
-
 
   /**
-   * Creates a {@link CoverageListener).
+   * Constructor.
    *
-   * @param customCoverageFilePath an optional user specified path for the coverage file
-   *         If null, file will be generated in test app's file directory.
+   * <p>By default, we assume that the test storage is not available.
+   *
+   * @param customCoverageFilePath an optional user specified path for the coverage file. Can be
+   *     {@code null}.
    */
-  public CoverageListener(String customCoverageFilePath) {
-    coverageFilePath = customCoverageFilePath;
+  public CoverageListener(@Nullable String customCoverageFilePath) {
+    this(customCoverageFilePath, false /* isTestServiceAvailable */);
   }
 
+  /**
+   * Constructor.
+   *
+   * @param customCoverageFilePath an optional user specified path for the coverage file. Can be
+   *     {@code null}.
+   * @param isTestServiceAvailable specifies whether the test storage service is present when
+   *     running the Instrumentation tests.
+   */
+  public CoverageListener(@Nullable String customCoverageFilePath, boolean isTestServiceAvailable) {
+    coverageFilePath = customCoverageFilePath;
+    this.isTestServiceAvailable = isTestServiceAvailable;
+  }
+
+  @VisibleForTesting
+  CoverageListener(
+      @Nullable String customCoverageFilePath, InstrumentationCoverageReporter coverageReporter) {
+    this.coverageFilePath = customCoverageFilePath;
+    this.coverageReporter = coverageReporter;
+  }
+
+  /**
+   * Passes in the instrumentation instance, and initializes the test storage service if it's
+   * available on the device.
+   *
+   * @param instr the instrumentation instance. Must not be {@code null}.
+   */
   @Override
   public void setInstrumentation(Instrumentation instr) {
     super.setInstrumentation(instr);
-    if (coverageFilePath == null) {
-      coverageFilePath =
-          instr.getTargetContext().getFilesDir().getAbsolutePath()
-              + File.separator
-              + DEFAULT_COVERAGE_FILE_NAME;
-    }
+    // Initializes the coverage reporter.
+    InternalTestStorage testStorage = isTestServiceAvailable ? new InternalTestStorage() : null;
+    coverageReporter = new InstrumentationCoverageReporter(instrumentation, testStorage);
   }
 
   @Override
   public void instrumentationRunFinished(PrintStream writer, Bundle results, Result junitResults) {
-    generateCoverageReport(writer, results);
-  }
-
-  private void generateCoverageReport(PrintStream writer, Bundle results) {
-    // use reflection to call emma dump coverage method, to avoid
-    // always statically compiling against emma jar
-    java.io.File coverageFile = new java.io.File(coverageFilePath);
-    try {
-      // In case the target and instrumentation contexts are different,
-      // prioritize coverage from the target context. If the target
-      // context classloader implements a delegate-first strategy
-      // for org.jacoco.agent.rt and com.vladium.emma.rt, it will still
-      // be possible to get coverage from either, or both, contexts.
-      Class<?> emmaRTClass;
-      try {
-        emmaRTClass =
-            Class.forName(
-                EMMA_RUNTIME_CLASS, true, getInstrumentation().getTargetContext().getClassLoader());
-      } catch (ClassNotFoundException e) {
-        emmaRTClass =
-            Class.forName(
-                EMMA_RUNTIME_CLASS, true, getInstrumentation().getContext().getClassLoader());
-        String msg = "Generating coverage for alternate test context.";
-        Log.w(TAG, msg);
-        writer.format("\nWarning: %s", msg);
-      }
-
-      Method dumpCoverageMethod =
-          emmaRTClass.getMethod(
-              "dumpCoverageData", coverageFile.getClass(), boolean.class, boolean.class);
-
-      dumpCoverageMethod.invoke(null, coverageFile, false, false);
-
-      // output path to generated coverage file so it can be parsed by a test harness if
-      // needed
-      results.putString(REPORT_KEY_COVERAGE_PATH, coverageFilePath);
-      // also output a more user friendly msg
-      writer.format("\nGenerated code coverage data to %s", coverageFilePath);
-    } catch (ClassNotFoundException e) {
-      reportEmmaError(writer, "Is Emma/JaCoCo jar on classpath?", e);
-    } catch (SecurityException e) {
-      reportEmmaError(writer, e);
-    } catch (NoSuchMethodException e) {
-      reportEmmaError(writer, e);
-    } catch (IllegalArgumentException e) {
-      reportEmmaError(writer, e);
-    } catch (IllegalAccessException e) {
-      reportEmmaError(writer, e);
-    } catch (InvocationTargetException e) {
-      reportEmmaError(writer, e);
-    }
-  }
-
-  private void reportEmmaError(PrintStream writer, Exception e) {
-    reportEmmaError(writer, "", e);
-  }
-
-  private void reportEmmaError(PrintStream writer, String hint, Exception e) {
-    String msg = "Failed to generate Emma/JaCoCo coverage. " + hint;
-    Log.e(TAG, msg, e);
-    writer.format("\nError: %s", msg);
+    String actualCoveragePath = coverageReporter.generateCoverageReport(coverageFilePath, writer);
+    results.putString(REPORT_KEY_COVERAGE_PATH, actualCoveragePath);
   }
 }
