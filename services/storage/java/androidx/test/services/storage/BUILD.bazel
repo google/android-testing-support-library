@@ -23,15 +23,21 @@ java_library(
 )
 
 android_library(
+    name = "exception",
+    srcs = ["TestStorageException.java"],
+)
+
+android_library(
     name = "storage",
     srcs = [
         "TestStorage.java",
-        "TestStorageException.java",
     ],
     deps = [
+        ":exception",
         ":experimental_storage_annotation",
         "//runner/monitor",
         "//services/storage/java/androidx/test/services/storage/file",
+        "//services/storage/java/androidx/test/services/storage/internal:storage",
         "@maven//:com_google_code_findbugs_jsr305",
     ],
 )

@@ -26,8 +26,10 @@ android_library(
     ],
     deps = [
         "//:androidx_annotation",
+        "//runner/android_junit_runner/java/androidx/test/internal/runner/coverage",
         "//runner/monitor",
         "//services/events/java/androidx/test/services/events",
+        "//services/storage/java/androidx/test/services/storage/internal:storage",
         "@androidsdk//:legacy_test-30",
         "@maven//:junit_junit",
     ],

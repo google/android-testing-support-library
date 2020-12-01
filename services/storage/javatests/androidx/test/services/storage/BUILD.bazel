@@ -32,7 +32,10 @@ android_binary(
 android_library(
     name = "test_lib",
     testonly = 1,
-    srcs = ["TestStorageTest.java"],
+    srcs = [
+        "TestStorageTest.java",
+        "internal/InternalTestStorageTest.java",
+    ],
     manifest = "AndroidManifest_opensource.xml",
     deps = [
         ":dummy_app_lib",
@@ -41,8 +44,10 @@ android_library(
         "//runner/android_junit_runner",
         "//services/storage/java/androidx/test/services/storage",
         "//services/storage/java/androidx/test/services/storage/file",
+        "//services/storage/java/androidx/test/services/storage/internal:storage",
         "@androidsdk//:legacy_test-30",
         "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
 )

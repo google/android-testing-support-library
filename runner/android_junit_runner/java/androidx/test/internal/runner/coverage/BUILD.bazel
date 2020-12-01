@@ -1,0 +1,14 @@
+load("@build_bazel_rules_android//android:rules.bzl", "android_library")
+
+licenses(["notice"])
+
+android_library(
+    name = "coverage",
+    srcs = [
+        "InstrumentationCoverageReporter.java",
+    ],
+    deps = [
+        "//:androidx_annotation",
+        "//services/storage/java/androidx/test/services/storage/internal:storage",
+    ],
+)
