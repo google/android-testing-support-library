@@ -16,6 +16,7 @@
 package androidx.test.internal.runner;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -23,8 +24,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import android.app.Instrumentation;
 import android.os.Bundle;
-import androidx.test.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 import androidx.test.testing.fixtures.AppLifecycleListener;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -55,19 +57,23 @@ import org.junit.runners.model.RunnerBuilder;
 @SmallTest
 public class RunnerArgsTest {
 
+  private Instrumentation instrumentation;
+
   /** Temp file used for testing */
   @Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder(getApplicationContext().getCacheDir());
+
+  @Before
+  public void setUp() {
+    instrumentation = getInstrumentation();
+  }
 
   /** Simple test for parsing test class name */
   @Test
   public void testFromBundle_singleClass() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(1, args.tests.size());
     assertEquals("ClassName", args.tests.get(0).testClassName);
     assertNull(args.tests.get(0).methodName);
@@ -78,10 +84,7 @@ public class RunnerArgsTest {
   public void testFromBundle_multiClass() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1,ClassName2");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(2, args.tests.size());
     assertEquals("ClassName1", args.tests.get(0).testClassName);
     assertEquals("ClassName2", args.tests.get(1).testClassName);
@@ -94,26 +97,20 @@ public class RunnerArgsTest {
   public void testFromBundle_method() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1#method");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals("ClassName1", args.tests.get(0).testClassName);
     assertEquals("method", args.tests.get(0).methodName);
   }
 
   /**
-   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when
-   * class name and method name is provided along with an additional class name.
+   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when class
+   * name and method name is provided along with an additional class name.
    */
   @Test
   public void testFromBundle_classAndMethodCombo() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1#method,ClassName2");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(2, args.tests.size());
     assertEquals("ClassName1", args.tests.get(0).testClassName);
     assertEquals("method", args.tests.get(0).methodName);
@@ -126,10 +123,7 @@ public class RunnerArgsTest {
   public void testFromBundle_notSingleClass() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(1, args.notTests.size());
     assertEquals("ClassName", args.notTests.get(0).testClassName);
     assertNull(args.notTests.get(0).methodName);
@@ -140,10 +134,7 @@ public class RunnerArgsTest {
   public void testFromBundle_notMultiClass() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1,ClassName2");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(2, args.notTests.size());
     assertEquals("ClassName1", args.notTests.get(0).testClassName);
     assertEquals("ClassName2", args.notTests.get(1).testClassName);
@@ -156,26 +147,20 @@ public class RunnerArgsTest {
   public void testFromBundle_notMethod() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1#method");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals("ClassName1", args.notTests.get(0).testClassName);
     assertEquals("method", args.notTests.get(0).methodName);
   }
 
   /**
-   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when
-   * class name and method name is provided along with an additional class name.
+   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when class
+   * name and method name is provided along with an additional class name.
    */
   @Test
   public void testFromBundle_notClassAndMethodCombo_different() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1#method,ClassName2");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(2, args.notTests.size());
     assertEquals("ClassName1", args.notTests.get(0).testClassName);
     assertEquals("method", args.notTests.get(0).methodName);
@@ -184,17 +169,14 @@ public class RunnerArgsTest {
   }
 
   /**
-   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when
-   * class name and method name is provided along with the same class name again.
+   * Test {@link androidx.test.internal.runner.RunnerArgs.Builder#fromBundle(Bundle)} when class
+   * name and method name is provided along with the same class name again.
    */
   @Test
   public void testFromBundle_notClassAndMethodCombo_same() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1#method,ClassName1");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(2, args.notTests.size());
     assertEquals("ClassName1", args.notTests.get(0).testClassName);
     assertEquals("method", args.notTests.get(0).methodName);
@@ -208,10 +190,7 @@ public class RunnerArgsTest {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1");
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName2#method");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(1, args.tests.size());
     assertEquals(1, args.notTests.size());
     assertEquals("ClassName1", args.tests.get(0).testClassName);
@@ -225,10 +204,7 @@ public class RunnerArgsTest {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1");
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1#method");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(1, args.tests.size());
     assertEquals(1, args.notTests.size());
     assertEquals("ClassName1", args.tests.get(0).testClassName);
@@ -248,10 +224,7 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_TEST_FILE, file.getPath());
     b.putString(RunnerArgs.ARGUMENT_TEST_CLASS, "ClassName1#method1,ClassName2");
     b.putString(RunnerArgs.ARGUMENT_TEST_PACKAGE, "pkg.number.one");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(4, args.tests.size());
     assertEquals("ClassName1", args.tests.get(0).testClassName);
     assertEquals("method1", args.tests.get(0).methodName);
@@ -272,7 +245,7 @@ public class RunnerArgsTest {
   public void testFromBundle_testFileFailure() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TEST_FILE, "idontexist");
-    new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b).build();
+    new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
   }
 
   /**
@@ -287,10 +260,7 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_FILE, file.getPath());
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_CLASS, "ClassName1#method1,ClassName2");
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_PACKAGE, "pkg.number.one");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(4, args.notTests.size());
     assertEquals("ClassName1", args.notTests.get(0).testClassName);
     assertEquals("method1", args.notTests.get(0).methodName);
@@ -310,10 +280,7 @@ public class RunnerArgsTest {
   public void testFromBundle_testEmptyClasspathToScan() throws Exception {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_CLASSPATH_TO_SCAN, "");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(0, args.classpathToScan.size());
   }
 
@@ -321,10 +288,7 @@ public class RunnerArgsTest {
   @Test
   public void testFromBundle_testNoClasspathToScan() throws Exception {
     Bundle b = new Bundle();
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(0, args.classpathToScan.size());
   }
 
@@ -333,10 +297,7 @@ public class RunnerArgsTest {
   public void testFromBundle_testSinglePathToScan() throws Exception {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_CLASSPATH_TO_SCAN, "/foo/baz.dex");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(1, args.classpathToScan.size());
     assertTrue(args.classpathToScan.contains("/foo/baz.dex"));
   }
@@ -346,10 +307,7 @@ public class RunnerArgsTest {
   public void testFromBundle_testMultiplePathsToScan() throws Exception {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_CLASSPATH_TO_SCAN, "/foo/baz.dex:/foo/bar.dex:/baz/foo.dex");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(3, args.classpathToScan.size());
     assertTrue(args.classpathToScan.contains("/foo/baz.dex"));
     assertTrue(args.classpathToScan.contains("/foo/bar.dex"));
@@ -379,7 +337,7 @@ public class RunnerArgsTest {
   public void testFromBundle_testNotFileFailure() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_NOT_TEST_FILE, "idontexist");
-    new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b).build();
+    new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
   }
 
   /** Test static method isClassOrMethod in RunnerArgs.Builder with valid class or method names */
@@ -414,10 +372,7 @@ public class RunnerArgsTest {
   public void testFromBundle_timeout() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TIMEOUT, "5000"); // 5 seconds
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(5000, args.testTimeout);
   }
 
@@ -426,24 +381,15 @@ public class RunnerArgsTest {
   public void testFromBundle_debug() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_DEBUG, "true");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertTrue(args.debug);
 
     b.putString(RunnerArgs.ARGUMENT_DEBUG, "false");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.debug);
 
     b.putString(RunnerArgs.ARGUMENT_DEBUG, "blargh");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.debug);
   }
 
@@ -452,24 +398,15 @@ public class RunnerArgsTest {
   public void testFromBundle_logOnly() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_LOG_ONLY, "true");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertTrue(args.logOnly);
 
     b.putString(RunnerArgs.ARGUMENT_LOG_ONLY, "false");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.logOnly);
 
     b.putString(RunnerArgs.ARGUMENT_LOG_ONLY, "blargh");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.logOnly);
   }
 
@@ -479,10 +416,7 @@ public class RunnerArgsTest {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_FILTER, CustomTestFilterTakesBundle.class.getName());
     b.putString(CustomTestFilterTakesBundle.class.getName(), "test");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals("Mismatch in number of filters created", 1, args.filters.size());
     Filter filter = args.filters.get(0);
     assertTrue("Filter not of correct type", filter instanceof CustomTestFilterTakesBundle);
@@ -498,7 +432,7 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_FILTER, className);
     b.putString(className, "test");
     try {
-      new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b).build();
+      new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
       fail("Did not detect invalid filter");
     } catch (IllegalArgumentException e) {
       assertTrue("Unexpected exception", e.getMessage().contains("no argument constructor"));
@@ -511,10 +445,7 @@ public class RunnerArgsTest {
   public void fromBundle_customRunnerBuilder() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_RUNNER_BUILDER, CustomRunnerBuilder.class.getName());
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals(
         "Mismatch in number of runner builders loaded", 1, args.runnerBuilderClasses.size());
     Class<? extends RunnerBuilder> runnerBuilderClass = args.runnerBuilderClasses.get(0);
@@ -529,7 +460,7 @@ public class RunnerArgsTest {
     String className = CustomTestFilter.class.getName();
     b.putString(RunnerArgs.ARGUMENT_RUNNER_BUILDER, className);
     try {
-      new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b).build();
+      new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
       fail("Did not detect invalid runner builder");
     } catch (IllegalArgumentException e) {
       assertEquals(
@@ -571,6 +502,7 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_LIST_TESTS_FOR_ORCHESTRATOR, "true");
     b.putString(RunnerArgs.ARGUMENT_ORCHESTRATOR_DISCOVERY_SERVICE, "test.DiscoveryService");
     b.putString(RunnerArgs.ARGUMENT_ORCHESTRATOR_RUN_EVENTS_SERVICE, "test.RunEventsService");
+    b.putString(RunnerArgs.ARGUMENT_IS_TEST_SERVICE_AVAILABLE, "true");
     b.putString(RunnerArgs.ARGUMENT_SHELL_EXEC_BINDER_KEY, "secret");
     b.putString(
         RunnerArgs.ARGUMENT_SCREENSHOT_PROCESSORS,
@@ -579,10 +511,7 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_CLASSPATH_TO_SCAN, "/foo/baz/f.dex:/foo/bar/f.dex");
     b.putString(RunnerArgs.ARGUMENT_TESTS_REGEX, "myregex");
 
-    RunnerArgs fromBundle =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs fromBundle = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
 
     Set<String> exceptions = new HashSet<>();
     // Parsing of testFile requires a real file on the disk, same for classloader leave those
@@ -607,7 +536,7 @@ public class RunnerArgsTest {
   public void testFromBundle_timeoutWithWrongFormat() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TIMEOUT, "not a long");
-    new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b);
+    new RunnerArgs.Builder().fromBundle(instrumentation, b);
   }
 
   /** Test parsing bundle when a negative test timeout is provided */
@@ -616,7 +545,7 @@ public class RunnerArgsTest {
   public void testFromBundle_timeoutWithNegativeValue() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TIMEOUT, "-500");
-    new RunnerArgs.Builder().fromBundle(InstrumentationRegistry.getInstrumentation(), b);
+    new RunnerArgs.Builder().fromBundle(instrumentation, b);
   }
 
   /** Test parsing the boolean idle argument */
@@ -624,17 +553,11 @@ public class RunnerArgsTest {
   public void testFromBundle_targetProcess() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_TARGET_PROCESS, "com.foo.bar");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals("com.foo.bar", args.targetProcess);
 
     b.putString(RunnerArgs.ARGUMENT_TARGET_PROCESS, "com.foo.bar:ui");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertEquals("com.foo.bar:ui", args.targetProcess);
   }
 
@@ -643,24 +566,30 @@ public class RunnerArgsTest {
   public void testFromBundle_legacyRunListenerMode() {
     Bundle b = new Bundle();
     b.putString(RunnerArgs.ARGUMENT_RUN_LISTENER_NEW_ORDER, "true");
-    RunnerArgs args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertTrue(args.newRunListenerMode);
 
     b.putString(RunnerArgs.ARGUMENT_RUN_LISTENER_NEW_ORDER, "false");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.newRunListenerMode);
 
     b.putString(RunnerArgs.ARGUMENT_RUN_LISTENER_NEW_ORDER, "blargh");
-    args =
-        new RunnerArgs.Builder()
-            .fromBundle(InstrumentationRegistry.getInstrumentation(), b)
-            .build();
+    args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
     assertFalse(args.newRunListenerMode);
+  }
+
+  @Test
+  public void testFromBundle_isTestStorageAvailable_argNotPresent() {
+    Bundle b = new Bundle();
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
+    assertFalse(args.isTestServiceAvailable);
+  }
+
+  @Test
+  public void testFromBundle_isTestStorageAvailable_falseValue() {
+    Bundle b = new Bundle();
+    b.putString(RunnerArgs.ARGUMENT_IS_TEST_SERVICE_AVAILABLE, "false");
+    RunnerArgs args = new RunnerArgs.Builder().fromBundle(instrumentation, b).build();
+    assertFalse(args.isTestServiceAvailable);
   }
 }
