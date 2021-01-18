@@ -18,14 +18,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="androidx.test.orchestrator">
 
-  <queries>
-      <package android:name="androidx.test.services" />
-  </queries>
-
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_CONTENT_PROVIDERS_EXTERNALLY" />
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
   <uses-sdk
       android:minSdkVersion="14"
