@@ -27,7 +27,6 @@ final class OrchestratorConstants {
   // The following args have equivalents in AJUR:
   static final String AJUR_LIST_TESTS_ARGUMENT = "listTestsForOrchestrator";
   static final String AJUR_CLASS_ARGUMENT = "class";
-  static final String AJUR_DISABLE_ANALYTICS = "disableAnalytics";
   static final String AJUR_COVERAGE = "coverage";
   static final String AJUR_COVERAGE_FILE = "coverageFile";
 

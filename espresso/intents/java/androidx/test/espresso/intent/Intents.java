@@ -28,8 +28,6 @@ import androidx.test.annotation.Beta;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry.AxtVersions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.intent.IntentCallback;
 import androidx.test.runner.intent.IntentMonitor;
@@ -89,10 +87,6 @@ import org.hamcrest.Matcher;
  */
 public final class Intents {
   private static Intents defaultInstance;
-
-  static {
-    UsageTrackerRegistry.getInstance().trackUsage("Intento", AxtVersions.ESPRESSO_VERSION);
-  }
 
   // Should be accessed only from main thread
   private static final List<VerifiableIntent> recordedIntents = new ArrayList<VerifiableIntent>();

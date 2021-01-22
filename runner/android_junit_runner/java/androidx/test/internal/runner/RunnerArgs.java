@@ -73,7 +73,6 @@ public class RunnerArgs {
   static final String ARGUMENT_TIMEOUT = "timeout_msec";
   static final String ARGUMENT_TEST_FILE = "testFile";
   static final String ARGUMENT_NOT_TEST_FILE = "notTestFile";
-  static final String ARGUMENT_DISABLE_ANALYTICS = "disableAnalytics";
   static final String ARGUMENT_APP_LISTENER = "appListener";
   static final String ARGUMENT_CLASS_LOADER = "classLoader";
   static final String ARGUMENT_REMOTE_INIT_METHOD = "remoteMethod";
@@ -116,7 +115,6 @@ public class RunnerArgs {
   public final List<TestArg> notTests;
   public final int numShards;
   public final int shardIndex;
-  public final boolean disableAnalytics;
   public final List<ApplicationLifecycleCallback> appListeners;
   public final ClassLoader classLoader;
   public final Set<String> classpathToScan;
@@ -178,7 +176,6 @@ public class RunnerArgs {
     this.notTests = Collections.unmodifiableList(builder.notTests);
     this.numShards = builder.numShards;
     this.shardIndex = builder.shardIndex;
-    this.disableAnalytics = builder.disableAnalytics;
     this.appListeners = Collections.unmodifiableList(builder.appListeners);
     this.classLoader = builder.classLoader;
     this.classpathToScan = builder.classpathToScan;
@@ -216,7 +213,6 @@ public class RunnerArgs {
     private List<TestArg> notTests = new ArrayList<>();
     private int numShards = 0;
     private int shardIndex = 0;
-    private boolean disableAnalytics = false;
     private List<ApplicationLifecycleCallback> appListeners =
         new ArrayList<ApplicationLifecycleCallback>();
     private ClassLoader classLoader = null;
@@ -269,7 +265,6 @@ public class RunnerArgs {
       this.numShards = parseUnsignedInt(bundle.get(ARGUMENT_NUM_SHARDS), ARGUMENT_NUM_SHARDS);
       this.shardIndex = parseUnsignedInt(bundle.get(ARGUMENT_SHARD_INDEX), ARGUMENT_SHARD_INDEX);
       this.logOnly = parseBoolean(bundle.getString(ARGUMENT_LOG_ONLY));
-      this.disableAnalytics = parseBoolean(bundle.getString(ARGUMENT_DISABLE_ANALYTICS));
       this.appListeners.addAll(
           parseLoadAndInstantiateClasses(
               bundle.getString(ARGUMENT_APP_LISTENER), ApplicationLifecycleCallback.class, null));

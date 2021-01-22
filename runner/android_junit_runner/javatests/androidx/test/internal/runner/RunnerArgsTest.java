@@ -472,7 +472,6 @@ public class RunnerArgsTest {
     b.putString(RunnerArgs.ARGUMENT_COVERAGE_PATH, "coveragePath");
     b.putString(RunnerArgs.ARGUMENT_DEBUG, "true");
     b.putString(RunnerArgs.ARGUMENT_DELAY_IN_MILLIS, "100");
-    b.putString(RunnerArgs.ARGUMENT_DISABLE_ANALYTICS, "true");
     b.putString(RunnerArgs.ARGUMENT_LISTENER, RunListener.class.getName());
     b.putString(RunnerArgs.ARGUMENT_FILTER, CustomTestFilter.class.getName());
     b.putString(RunnerArgs.ARGUMENT_RUNNER_BUILDER, CustomRunnerBuilder.class.getName());

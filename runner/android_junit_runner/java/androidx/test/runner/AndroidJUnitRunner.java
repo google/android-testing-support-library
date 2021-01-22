@@ -20,7 +20,6 @@ import static androidx.test.internal.util.ReflectionUtil.reflectivelyInvokeRemot
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -32,8 +31,6 @@ import androidx.test.filters.SmallTest;
 import androidx.test.internal.events.client.TestEventClient;
 import androidx.test.internal.events.client.TestEventClientArgs;
 import androidx.test.internal.events.client.TestEventClientConnectListener;
-import androidx.test.internal.platform.tracker.AnalyticsBasedUsageTracker;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry.AxtVersions;
 import androidx.test.internal.runner.RunnerArgs;
 import androidx.test.internal.runner.TestExecutor;
 import androidx.test.internal.runner.TestRequestBuilder;
@@ -236,13 +233,6 @@ import org.junit.runners.model.RunnerBuilder;
  * href="http://junit.org/javadoc/latest/org/junit/rules/Timeout.html"><code>org.junit.rules.Timeout
  * </code></a> rule.
  *
- * <p><b>To disable Google Analytics:</b> -e disableAnalytics true
- *
- * <p>In order to make sure we are on the right track with each new release, the test runner
- * collects analytics. More specifically, it uploads a hash of the package name of the application
- * under test for each invocation. This allows us to measure both the count of unique packages using
- * this library as well as the volume of usage.
- *
  * <p><b>(Beta)To specify a custom {@link androidx.test.runner.screenshot.ScreenCaptureProcessor} to
  * use when processing a {@link androidx.test.runner.screenshot.ScreenCapture} produced by {@link
  * androidx.test.runner.screenshot.Screenshot#capture}</b>: -e screenCaptureProcessors
@@ -286,7 +276,6 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
   private InstrumentationResultPrinter instrumentationResultPrinter =
       new InstrumentationResultPrinter();
   private RunnerArgs runnerArgs;
-  private UsageTrackerFacilitator usageTrackerFacilitator;
   private TestEventClient testEventClient = TestEventClient.NO_OP_CLIENT;
   private RunnerIO runnerIO = new RunnerFileIO();
 
@@ -301,13 +290,6 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
       Log.i(LOG_TAG, "Waiting for debugger to connect...");
       Debug.waitForDebugger();
       Log.i(LOG_TAG, "Debugger connected.");
-    }
-
-    // We are only interested in tracking usage of the primary process.
-    if (isPrimaryInstrProcess(runnerArgs.targetProcess)) {
-      usageTrackerFacilitator = new UsageTrackerFacilitator(runnerArgs);
-    } else {
-      usageTrackerFacilitator = new UsageTrackerFacilitator(false);
     }
 
     for (ApplicationLifecycleCallback listener : runnerArgs.appListeners) {
@@ -448,17 +430,6 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
           Instrumentation.REPORT_KEY_STREAMRESULT, msg + "\n" + Log.getStackTraceString(e));
     }
     finish(Activity.RESULT_OK, results);
-  }
-
-  @Override
-  public void finish(int resultCode, Bundle results) {
-    try {
-      usageTrackerFacilitator.trackUsage("AndroidJUnitRunner", AxtVersions.RUNNER_VERSION);
-      usageTrackerFacilitator.sendUsages();
-    } catch (RuntimeException re) {
-      Log.w(LOG_TAG, "Failed to send analytics.", re);
-    }
-    super.finish(resultCode, results);
   }
 
   @VisibleForTesting
@@ -610,18 +581,7 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
       builder.addPathToScan(getContext().getPackageCodePath());
     }
     builder.addFromRunnerArgs(runnerArgs);
-
-    registerUserTracker();
-
     return builder.build();
-  }
-
-  private void registerUserTracker() {
-    Context targetContext = getTargetContext();
-    if (targetContext != null) {
-      usageTrackerFacilitator.registerUsageTracker(
-          new AnalyticsBasedUsageTracker.Builder(targetContext).buildIfPossible());
-    }
   }
 
   /** Factory method for {@link TestRequestBuilder}. */

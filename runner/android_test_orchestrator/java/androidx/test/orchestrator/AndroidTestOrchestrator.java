@@ -19,7 +19,6 @@ package androidx.test.orchestrator;
 import static androidx.test.orchestrator.OrchestratorConstants.AJUR_CLASS_ARGUMENT;
 import static androidx.test.orchestrator.OrchestratorConstants.AJUR_COVERAGE;
 import static androidx.test.orchestrator.OrchestratorConstants.AJUR_COVERAGE_FILE;
-import static androidx.test.orchestrator.OrchestratorConstants.AJUR_DISABLE_ANALYTICS;
 import static androidx.test.orchestrator.OrchestratorConstants.CLEAR_PKG_DATA;
 import static androidx.test.orchestrator.OrchestratorConstants.COVERAGE_FILE_PATH;
 import static androidx.test.orchestrator.OrchestratorConstants.ISOLATED_ARGUMENT;
@@ -47,15 +46,12 @@ import androidx.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.core.content.ContextCompat;
-import androidx.test.internal.platform.tracker.AnalyticsBasedUsageTracker;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry.AxtVersions;
 import androidx.test.orchestrator.TestRunnable.RunFinishedListener;
 import androidx.test.orchestrator.junit.ParcelableDescription;
 import androidx.test.orchestrator.listeners.OrchestrationListenerManager;
 import androidx.test.orchestrator.listeners.OrchestrationResult;
 import androidx.test.orchestrator.listeners.OrchestrationResultPrinter;
 import androidx.test.orchestrator.listeners.OrchestrationXmlTestRunListener;
-import androidx.test.runner.UsageTrackerFacilitator;
 import androidx.test.services.shellexecutor.ClientNotConnected;
 import androidx.test.services.shellexecutor.ShellExecSharedConstants;
 import androidx.test.services.shellexecutor.ShellExecutor;
@@ -153,7 +149,6 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
   // assigned on service connection callback thread, read from several other threads.
   private volatile CallbackLogic callbackLogic;
 
-  private UsageTrackerFacilitator usageTrackerFacilitator;
   private Bundle arguments;
 
   // TODO(b/73548232) logic that touches these fields has nothing to do with being an
@@ -197,7 +192,6 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
   public void onStart() {
     super.onStart();
     try {
-      registerUserTracker();
       grantRuntimePermissions(RUNTIME_PERMISSIONS);
       connectOrchestratorService();
     } catch (RuntimeException e) {
@@ -441,12 +435,7 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
   @Override
   public void finish(int resultCode, Bundle results) {
     xmlTestRunListener.orchestrationRunFinished();
-    try {
-      usageTrackerFacilitator.trackUsage("AndroidTestOrchestrator", AxtVersions.RUNNER_VERSION);
-      usageTrackerFacilitator.sendUsages();
-    } catch (RuntimeException re) {
-      Log.w(TAG, "Failed to send analytics.", re);
-    } finally {
+
       try {
         super.finish(resultCode, results);
       } catch (SecurityException e) {
@@ -457,7 +446,6 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
         results = createResultBundle();
         super.finish(resultCode, results);
       }
-    }
   }
 
   @Override
@@ -473,10 +461,6 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
 
   private static boolean debugOrchestrator(Bundle arguments) {
     return Boolean.parseBoolean(arguments.getString(ORCHESTRATOR_DEBUG_ARGUMENT));
-  }
-
-  private static boolean shouldTrackUsage(Bundle arguments) {
-    return !Boolean.parseBoolean(arguments.getString(AJUR_DISABLE_ANALYTICS));
   }
 
   private static boolean shouldRunCoverage(Bundle arguments) {
@@ -509,17 +493,6 @@ public final class AndroidTestOrchestrator extends android.app.Instrumentation
               + TARGET_INSTRUMENTATION_ARGUMENT);
     }
     return targetInstr;
-  }
-
-  private void registerUserTracker() {
-    usageTrackerFacilitator = new UsageTrackerFacilitator(shouldTrackUsage(arguments));
-    Context targetContext = getTargetContext();
-    if (targetContext != null) {
-      usageTrackerFacilitator.registerUsageTracker(
-          new AnalyticsBasedUsageTracker.Builder(targetContext)
-              .withTargetPackage(getTargetInstrPackage(arguments))
-              .buildIfPossible());
-    }
   }
 
   private static String execShellCommandSync(

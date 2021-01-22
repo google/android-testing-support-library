@@ -35,12 +35,6 @@ import androidx.test.espresso.web.assertion.WebAssertion;
 import androidx.test.espresso.web.model.Atom;
 import androidx.test.espresso.web.model.ElementReference;
 import androidx.test.espresso.web.model.WindowReference;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry;
-import androidx.test.internal.platform.tracker.UsageTrackerRegistry.AxtVersions;
-import androidx.test.internal.platform.util.TestOutputEmitter;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -61,14 +55,6 @@ import org.hamcrest.Matcher;
  * WebInteractions is fully supported.
  */
 public final class Web {
-  static {
-    UsageTrackerRegistry.getInstance().trackUsage("Espresso-Web", AxtVersions.ESPRESSO_VERSION);
-    // Also adds the usage data as test output properties. By default it's no-op.
-    Map<String, Serializable> usageProperties = new HashMap<>();
-    usageProperties.put("Espresso-Web", AxtVersions.ESPRESSO_VERSION);
-    TestOutputEmitter.addOutputProperties(usageProperties);
-  }
-
   public static WebInteraction<Void> onWebView() {
     return onWebView(isJavascriptEnabled());
   }
