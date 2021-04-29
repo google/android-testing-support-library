@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.platform.io.PlatformTestStorage;
 import androidx.test.services.storage.file.HostedFile;
 import androidx.test.services.storage.file.PropertyFile;
 import androidx.test.services.storage.file.PropertyFile.Authority;
@@ -43,7 +44,7 @@ import javax.annotation.Nonnull;
  * test.
  */
 @ExperimentalTestStorage
-public final class TestStorage {
+public final class TestStorage implements PlatformTestStorage {
   private static final String TAG = TestStorage.class.getSimpleName();
   private static final String PROPERTIES_FILE_NAME = "properties.dat";
 
@@ -117,6 +118,7 @@ public final class TestStorage {
    *     "/sdcard/test_input_files/path/to/my_input.txt" on device.
    * @return an InputStream to the given test file.
    */
+  @Override
   public InputStream openInputFile(@Nonnull String pathname) throws FileNotFoundException {
     Uri dataUri = getInputFileUri(pathname);
     return TestStorageUtil.getInputStream(dataUri, contentResolver);
@@ -136,6 +138,7 @@ public final class TestStorage {
    *
    * @param argName the argument name. Should not be null.
    */
+  @Override
   public String getInputArg(@Nonnull String argName) {
     checkNotNull(argName);
 
@@ -166,6 +169,7 @@ public final class TestStorage {
   /**
    * Returns the name/value map of all test arguments or an empty map if no arguments are defined.
    */
+  @Override
   public Map<String, String> getInputArgs() {
     Uri testArgUri = PropertyFile.buildUri(Authority.TEST_ARGS);
     Cursor cursor = null;
@@ -189,6 +193,7 @@ public final class TestStorage {
    *     "/sdcard/test_output_files/path/to/my_output.txt" on device.
    * @return an OutputStream to the given output file.
    */
+  @Override
   public OutputStream openOutputFile(@Nonnull String pathname) throws FileNotFoundException {
     checkNotNull(pathname);
 
@@ -202,6 +207,7 @@ public final class TestStorage {
    * <p>Adding a property with the same name would append new values and overwrite the old values if
    * keys already exist.
    */
+  @Override
   public void addOutputProperties(Map<String, Serializable> properties) {
     if (properties == null || properties.isEmpty()) {
       return;
@@ -233,6 +239,7 @@ public final class TestStorage {
    * Returns a map of all the output test properties. If no properties exist, an empty map will be
    * returned.
    */
+  @Override
   public Map<String, Serializable> getOutputProperties() {
     Uri propertyFileUri = getPropertyFileUri();
 

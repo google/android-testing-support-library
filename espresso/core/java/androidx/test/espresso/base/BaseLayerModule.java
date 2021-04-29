@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.base.IdlingResourceRegistry.IdleNotificationCallback;
@@ -27,6 +28,8 @@ import androidx.test.espresso.internal.inject.TargetContext;
 import androidx.test.internal.platform.ServiceLoaderWrapper;
 import androidx.test.internal.platform.os.ControlledLooper;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.platform.io.PlatformTestStorage;
+import androidx.test.platform.io.PlatformTestStorageRegistry;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitor;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import com.google.common.base.Optional;
@@ -50,6 +53,8 @@ import javax.inject.Singleton;
  */
 @Module
 public class BaseLayerModule {
+
+  private static final String TAG = BaseLayerModule.class.getSimpleName();
 
   @Provides
   public ActivityLifecycleMonitor provideLifecycleMonitor() {
@@ -197,5 +202,19 @@ public class BaseLayerModule {
     // load a service loaded provided ControlledLooper if available, otherwise return a no-op
     return ServiceLoaderWrapper.loadSingleService(
         ControlledLooper.class, () -> ControlledLooper.NO_OP_CONTROLLED_LOOPER);
+  }
+
+  @Provides
+  @Singleton
+  PlatformTestStorage provideTestStorage() {
+    PlatformTestStorage testStorage =
+        ServiceLoaderWrapper.loadSingleServiceOrNull(PlatformTestStorage.class);
+    if (testStorage != null) {
+      Log.d(TAG, "The platform test storage instance is loaded by the service loader.");
+      // Uses the instance loaded by the service loader if available.
+      return testStorage;
+    } else {
+      return PlatformTestStorageRegistry.getInstance();
+    }
   }
 }

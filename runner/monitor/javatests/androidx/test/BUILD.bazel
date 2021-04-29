@@ -47,6 +47,7 @@ android_library_instrumentation_tests(
         "//runner/monitor",
         "//runner/monitor/javatests/androidx/test/internal/platform:fixtures",
         "//runner/rules",
+        "//services/storage/java/androidx/test/services/storage",
         "@maven//:com_google_truth_truth",
         "@maven//:com_linkedin_dexmaker_dexmaker",
         "@maven//:com_linkedin_dexmaker_dexmaker_mockito",
