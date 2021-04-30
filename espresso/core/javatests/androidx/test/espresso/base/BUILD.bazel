@@ -45,6 +45,7 @@ android_app_instrumentation_tests(
         "//espresso/core/java/androidx/test/espresso:interface",
         "//espresso/core/java/androidx/test/espresso/assertion",
         "//espresso/core/java/androidx/test/espresso/base",
+        "//espresso/core/java/androidx/test/espresso/base:default_failure_handler",
         "//espresso/core/java/androidx/test/espresso/base:idling_resource_registry",
         "//espresso/core/java/androidx/test/espresso/matcher",
         "//ext/junit",

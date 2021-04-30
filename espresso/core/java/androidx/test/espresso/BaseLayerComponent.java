@@ -21,6 +21,7 @@ import androidx.test.espresso.base.BaseLayerModule;
 import androidx.test.espresso.base.IdlingResourceRegistry;
 import androidx.test.espresso.base.MainThread;
 import androidx.test.espresso.base.UiControllerModule;
+import androidx.test.internal.platform.io.PlatformTestStorage;
 import androidx.test.internal.platform.os.ControlledLooper;
 import dagger.Component;
 import java.util.concurrent.Executor;
@@ -46,4 +47,6 @@ public interface BaseLayerComponent {
   Executor mainThreadExecutor();
 
   ControlledLooper controlledLooper();
+
+  PlatformTestStorage testStorage();
 }
