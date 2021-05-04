@@ -10,7 +10,11 @@ android_library(
     srcs = glob(
         ["*.java"],
         exclude = [
+            "AssertionErrorHandler.java",
             "DefaultFailureHandler.java",
+            "EspressoExceptionHandler.java",
+            "PerformExceptionHandler.java",
+            "ThrowableHandler.java",
             "IdlingUiController.java",
             "IdlingResourceRegistry.java",
             "LooperIdlingResourceInterrogationHandler.java",
@@ -27,6 +31,7 @@ android_library(
         "//espresso/core/java/androidx/test/espresso/util",
         "//espresso/idling_resource/java/androidx/test/espresso:idling_resource",
         "//runner/android_junit_runner",
+        "//services/storage",
         "@maven//:com_google_dagger_dagger",
         "@maven//:com_google_guava_guava",
         "@maven//:org_hamcrest_hamcrest_all",
@@ -72,7 +77,13 @@ android_library(
 
 android_library(
     name = "default_failure_handler",
-    srcs = ["DefaultFailureHandler.java"],
+    srcs = [
+        "AssertionErrorHandler.java",
+        "DefaultFailureHandler.java",
+        "EspressoExceptionHandler.java",
+        "PerformExceptionHandler.java",
+        "ThrowableHandler.java",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//espresso/core/java/androidx/test/espresso:interface",

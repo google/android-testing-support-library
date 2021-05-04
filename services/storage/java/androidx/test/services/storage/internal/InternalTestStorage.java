@@ -20,16 +20,27 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.util.Log;
+import androidx.annotation.VisibleForTesting;
+import androidx.test.internal.platform.io.PlatformTestStorage;
+import androidx.test.services.storage.TestStorage;
+import androidx.test.services.storage.TestStorageException;
 import androidx.test.services.storage.file.HostedFile;
 import androidx.test.services.storage.file.HostedFile.FileHost;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Map;
 import javax.annotation.Nonnull;
 
 /** Test storage APIs meant to be used internally in androidx.test. */
-public final class InternalTestStorage {
+public final class InternalTestStorage implements PlatformTestStorage {
+  private static final String TAG = InternalTestStorage.class.getSimpleName();
+
   private final ContentResolver contentResolver;
+  private final TestStorage testStorage;
 
   /**
    * Default constructor.
@@ -39,19 +50,56 @@ public final class InternalTestStorage {
    * one to resolve a URI in this storage service.
    */
   public InternalTestStorage() {
-    contentResolver = getInstrumentation().getTargetContext().getContentResolver();
+    this(new TestStorage());
   }
 
-  /**
-   * Provides an InputStream to an internal file used by the testing infrastructure.
-   *
-   * @param pathname path to the internal file. Should not be null. This is a relative path to where
-   *     the storage service stores the internal files. For example, if the storage service stores
-   *     the input files under "/sdcard/internal_only", with a pathname "/path/to/my_input.txt", the
-   *     file will end up at "/sdcard/internal_only/path/to/my_input.txt" on device.
-   * @return an InputStream to the given test file.
-   * @hide
-   */
+  @VisibleForTesting
+  InternalTestStorage(TestStorage testStorage) {
+    contentResolver = getInstrumentation().getTargetContext().getContentResolver();
+    this.testStorage = testStorage;
+  }
+
+  @Override
+  public InputStream openInputFile(String pathname) throws IOException {
+    return testStorage.openInputFile(pathname);
+  }
+
+  @Override
+  public OutputStream openOutputFile(String pathname) throws IOException {
+    return testStorage.openOutputFile(pathname);
+  }
+
+  @Override
+  public boolean addOutputFile(String pathname, String data) {
+    try (OutputStream out = testStorage.openOutputFile(pathname)) {
+      out.write(data.getBytes());
+      return true;
+    } catch (IOException e) {
+      Log.d(
+          TAG,
+          "Error occurred during adding the output file "
+              + pathname
+              + "! This could happen when the test storage service is not available. Ignore.");
+    }
+    return false;
+  }
+
+  @Override
+  public boolean addOutputProperties(Map<String, Serializable> properties) {
+    try {
+      testStorage.addOutputProperties(properties);
+      return true;
+    } catch (TestStorageException e) {
+      Log.d(
+          TAG,
+          "Exception occurred during dumping test output properties! "
+              + "This could happen when the test storage service is not available, Ignore.",
+          e);
+      return false;
+    }
+  }
+
+  @Override
   public InputStream openInternalInputStream(@Nonnull String pathname)
       throws FileNotFoundException {
     checkNotNull(pathname);
@@ -59,16 +107,7 @@ public final class InternalTestStorage {
     return TestStorageUtil.getInputStream(outputUri, contentResolver);
   }
 
-  /**
-   * Provides an OutputStream to an internal file used by the testing infrastructure.
-   *
-   * @param pathname path to the internal file. Should not be null. This is a relative path to where
-   *     the storage service stores the output files. For example, if the storage service stores the
-   *     output files under "/sdcard/internal_only", with a pathname "/path/to/my_output.txt", the
-   *     file will end up at "/sdcard/internal_only/path/to/my_output.txt" on device.
-   * @return an OutputStream to the given output file.
-   * @hide
-   */
+  @Override
   public OutputStream openInternalOutputStream(@Nonnull String pathname)
       throws FileNotFoundException {
     checkNotNull(pathname);

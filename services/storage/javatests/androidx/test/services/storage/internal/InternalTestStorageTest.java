@@ -17,13 +17,19 @@ package androidx.test.services.storage.internal;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import androidx.test.services.storage.TestStorage;
 import com.google.common.io.CharStreams;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,17 +39,18 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class InternalTestStorageTest {
   private static final String OUTPUT_PATH = "parent_dir/output_file";
-
-  private InternalTestStorage testStorage;
+  private InternalTestStorage internalTestStorage;
+  private TestStorage testStorageDelegate;
 
   @Before
-  public void setUp() {
-    testStorage = new InternalTestStorage();
+  public void setUp() throws FileNotFoundException {
+    testStorageDelegate = new TestStorage();
+    internalTestStorage = new InternalTestStorage(testStorageDelegate);
   }
 
   @Test
   public void readAndWriteInternalFile() throws Exception {
-    OutputStream rawStream = testStorage.openInternalOutputStream(OUTPUT_PATH);
+    OutputStream rawStream = internalTestStorage.openInternalOutputStream(OUTPUT_PATH);
     Writer writer = new BufferedWriter(new OutputStreamWriter(rawStream));
     try {
       writer.write("Four score and 7 years ago\n");
@@ -53,10 +60,27 @@ public class InternalTestStorageTest {
     }
 
     // Checks the content is correctly written.
-    try (InputStream in = testStorage.openInternalInputStream(OUTPUT_PATH)) {
+    try (InputStream in = internalTestStorage.openInternalInputStream(OUTPUT_PATH)) {
       String content = CharStreams.toString(new InputStreamReader(in));
       assertThat(content)
           .isEqualTo("Four score and 7 years ago\nOur forefathers executed some tests.");
     }
+  }
+
+  @Test
+  public void addOutputFile() throws IOException {
+    boolean fileCreated =
+        internalTestStorage.addOutputFile("path/to/output_file", "espresso_test_data");
+    assertThat(fileCreated).isTrue();
+  }
+
+  @Test
+  public void addOutputProperties() {
+    Map<String, Serializable> properties = new HashMap<>();
+    properties.put("key1", "value1");
+    properties.put("key2", "value2");
+
+    boolean propertiesAdded = internalTestStorage.addOutputProperties(properties);
+    assertThat(propertiesAdded).isTrue();
   }
 }
