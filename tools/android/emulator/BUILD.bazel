@@ -118,8 +118,13 @@ py_library(
     ] + PYGLIB,
 )
 
-py_binary(
+alias(
     name = "unified_launcher_head",
+    actual = "//external:emulator_launcher_target"
+)
+
+py_binary(
+    name = "unified_launcher_head_default",
     srcs = ["unified_launcher.py"],
     imports = ["../../.."],
     main = "unified_launcher.py",

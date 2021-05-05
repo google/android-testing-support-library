@@ -45,8 +45,13 @@ java_import(
 # WORKSPACE using a repository_rule like git_repository or http_archive.
 # Use parameter `with_dev_repositories = True` to download the dev
 # repositories as well.
-def android_test_repositories(with_dev_repositories = False):
+def android_test_repositories(with_dev_repositories = False, emulator_launcher_target = "//tools/android/emulator:unified_launcher_head_default"):
     """Loads the workspace by downloading the required dependencies."""
+
+    native.bind(
+        name = "emulator_launcher_target",
+        actual = emulator_launcher_target,
+    )
 
     if with_dev_repositories:
         _development_repositories()
