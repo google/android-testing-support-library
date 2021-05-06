@@ -20,15 +20,19 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.base.IdlingResourceRegistry.IdleNotificationCallback;
 import androidx.test.espresso.internal.inject.TargetContext;
 import androidx.test.internal.platform.ServiceLoaderWrapper;
+import androidx.test.internal.platform.io.NoOpPlatformTestStorage;
+import androidx.test.internal.platform.io.PlatformTestStorage;
 import androidx.test.internal.platform.os.ControlledLooper;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitor;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.test.services.storage.internal.InternalTestStorage;
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -50,6 +54,8 @@ import javax.inject.Singleton;
  */
 @Module
 public class BaseLayerModule {
+
+  private static final String TAG = BaseLayerModule.class.getSimpleName();
 
   @Provides
   public ActivityLifecycleMonitor provideLifecycleMonitor() {
@@ -187,8 +193,9 @@ public class BaseLayerModule {
   }
 
   @Provides
-  DefaultFailureHandler provideDefaultFailureHander(@TargetContext Context context) {
-    return new DefaultFailureHandler(context);
+  DefaultFailureHandler provideDefaultFailureHander(
+      @TargetContext Context context, PlatformTestStorage testStorage) {
+    return new DefaultFailureHandler(context, testStorage);
   }
 
   @Provides
@@ -197,5 +204,42 @@ public class BaseLayerModule {
     // load a service loaded provided ControlledLooper if available, otherwise return a no-op
     return ServiceLoaderWrapper.loadSingleService(
         ControlledLooper.class, () -> ControlledLooper.NO_OP_CONTROLLED_LOOPER);
+  }
+
+  @Provides
+  @Singleton
+  PlatformTestStorage provideTestStorage() {
+    PlatformTestStorage testStorage =
+        ServiceLoaderWrapper.loadSingleServiceOrNull(PlatformTestStorage.class);
+    if (testStorage != null) {
+      Log.d(TAG, "The platform test storage instance is loaded by the service loader.");
+      // Uses the instance loaded by the service loader if available.
+      return testStorage;
+    }
+    if (getUseTestStorageServiceArg()) {
+      Log.d(TAG, "Use the test storage service for managing file I/O.");
+      return new InternalTestStorage();
+    } else {
+      Log.d(
+          TAG,
+          "The `useTestStorageService` Instrumentation arg is not set. Reading/writing files will"
+              + " be no_op.");
+      return new NoOpPlatformTestStorage();
+    }
+  }
+
+  private static boolean getUseTestStorageServiceArg() {
+    try {
+      String useTestStorageServiceValue =
+          InstrumentationRegistry.getArguments().getString("useTestStorageService");
+      if (useTestStorageServiceValue == null) {
+        return false;
+      } else {
+        return Boolean.parseBoolean(useTestStorageServiceValue);
+      }
+    } catch (IllegalStateException e) {
+      // Espresso might not run within Instrumentation. Do not use the test storage anyway.
+      return false;
+    }
   }
 }
