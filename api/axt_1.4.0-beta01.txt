@@ -1,0 +1,2671 @@
+package androidx.test {
+
+  public final deprecated class InstrumentationRegistry {
+    method public static deprecated android.os.Bundle getArguments();
+    method public static deprecated android.content.Context getContext();
+    method public static deprecated android.app.Instrumentation getInstrumentation();
+    method public static deprecated android.content.Context getTargetContext();
+    method public static deprecated void registerInstance(android.app.Instrumentation, android.os.Bundle);
+    method public static void registerInstrumentationProvider(androidx.test.platform.app.InstrumentationProvider, android.os.Bundle);
+  }
+
+}
+
+package androidx.test.annotation {
+
+  public abstract class Beta implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class UiThreadTest implements java.lang.annotation.Annotation {
+  }
+
+}
+
+package androidx.test.core.app {
+
+  public final class ActivityScenario<A extends android.app.Activity> implements java.lang.AutoCloseable java.io.Closeable {
+    method public void close();
+    method public android.app.Instrumentation.ActivityResult getResult();
+    method public android.arch.lifecycle.Lifecycle.State getState();
+    method public static <A extends android.app.Activity> androidx.test.core.app.ActivityScenario<A> launch(java.lang.Class<A>);
+    method public static <A extends android.app.Activity> androidx.test.core.app.ActivityScenario<A> launch(java.lang.Class<A>, android.os.Bundle);
+    method public static <A extends android.app.Activity> androidx.test.core.app.ActivityScenario<A> launch(android.content.Intent);
+    method public static <A extends android.app.Activity> androidx.test.core.app.ActivityScenario<A> launch(android.content.Intent, android.os.Bundle);
+    method public androidx.test.core.app.ActivityScenario<A> moveToState(android.arch.lifecycle.Lifecycle.State);
+    method public androidx.test.core.app.ActivityScenario<A> onActivity(androidx.test.core.app.ActivityScenario.ActivityAction<A>);
+    method public androidx.test.core.app.ActivityScenario<A> recreate();
+  }
+
+  public static abstract interface ActivityScenario.ActivityAction<A extends android.app.Activity> {
+    method public abstract void perform(A);
+  }
+
+  public final class ApplicationProvider {
+    method public static <T extends android.content.Context> T getApplicationContext();
+  }
+
+}
+
+package androidx.test.core.content.pm {
+
+  public final class ApplicationInfoBuilder {
+    method public android.content.pm.ApplicationInfo build();
+    method public static androidx.test.core.content.pm.ApplicationInfoBuilder newBuilder();
+    method public androidx.test.core.content.pm.ApplicationInfoBuilder setName(java.lang.String);
+    method public androidx.test.core.content.pm.ApplicationInfoBuilder setPackageName(java.lang.String);
+  }
+
+  public final class PackageInfoBuilder {
+    method public android.content.pm.PackageInfo build();
+    method public static androidx.test.core.content.pm.PackageInfoBuilder newBuilder();
+    method public androidx.test.core.content.pm.PackageInfoBuilder setApplicationInfo(android.content.pm.ApplicationInfo);
+    method public androidx.test.core.content.pm.PackageInfoBuilder setPackageName(java.lang.String);
+  }
+
+}
+
+package androidx.test.core.os {
+
+  public final class Parcelables {
+    method public static <T extends android.os.Parcelable> T forceParcel(T, android.os.Parcelable.Creator<T>);
+  }
+
+}
+
+package androidx.test.core.view {
+
+  public class MotionEventBuilder {
+    method public android.view.MotionEvent build();
+    method public static androidx.test.core.view.MotionEventBuilder newBuilder();
+    method public androidx.test.core.view.MotionEventBuilder setAction(int);
+    method public androidx.test.core.view.MotionEventBuilder setActionIndex(int);
+    method public androidx.test.core.view.MotionEventBuilder setButtonState(int);
+    method public androidx.test.core.view.MotionEventBuilder setDeviceId(int);
+    method public androidx.test.core.view.MotionEventBuilder setDownTime(long);
+    method public androidx.test.core.view.MotionEventBuilder setEdgeFlags(int);
+    method public androidx.test.core.view.MotionEventBuilder setEventTime(long);
+    method public androidx.test.core.view.MotionEventBuilder setFlags(int);
+    method public androidx.test.core.view.MotionEventBuilder setMetaState(int);
+    method public androidx.test.core.view.MotionEventBuilder setPointer(float, float);
+    method public androidx.test.core.view.MotionEventBuilder setPointer(android.view.MotionEvent.PointerProperties, android.view.MotionEvent.PointerCoords);
+    method public androidx.test.core.view.MotionEventBuilder setSource(int);
+    method public androidx.test.core.view.MotionEventBuilder setXPrecision(float);
+    method public androidx.test.core.view.MotionEventBuilder setYPrecision(float);
+  }
+
+  public class PointerCoordsBuilder {
+    method public android.view.MotionEvent.PointerCoords build();
+    method public static androidx.test.core.view.PointerCoordsBuilder newBuilder();
+    method public androidx.test.core.view.PointerCoordsBuilder setCoords(float, float);
+    method public androidx.test.core.view.PointerCoordsBuilder setOrientation(float);
+    method public androidx.test.core.view.PointerCoordsBuilder setPressure(float);
+    method public androidx.test.core.view.PointerCoordsBuilder setSize(float);
+    method public androidx.test.core.view.PointerCoordsBuilder setTool(float, float);
+    method public androidx.test.core.view.PointerCoordsBuilder setTouch(float, float);
+  }
+
+  public class PointerPropertiesBuilder {
+    method public android.view.MotionEvent.PointerProperties build();
+    method public static androidx.test.core.view.PointerPropertiesBuilder newBuilder();
+    method public androidx.test.core.view.PointerPropertiesBuilder setId(int);
+    method public androidx.test.core.view.PointerPropertiesBuilder setToolType(int);
+  }
+
+}
+
+package androidx.test.espresso {
+
+  public final class AmbiguousViewMatcherException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+  }
+
+  public static class AmbiguousViewMatcherException.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.AmbiguousViewMatcherException build();
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder from(androidx.test.espresso.AmbiguousViewMatcherException);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder includeViewHierarchy(boolean);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder withOtherAmbiguousViews(android.view.View...);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder withRootView(android.view.View);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder withView1(android.view.View);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder withView2(android.view.View);
+    method public androidx.test.espresso.AmbiguousViewMatcherException.Builder withViewMatcher(org.hamcrest.Matcher<? super android.view.View>);
+  }
+
+  public final class AppNotIdleException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    method public static deprecated androidx.test.espresso.AppNotIdleException create(java.util.List<java.lang.String>, int, int);
+    method public static androidx.test.espresso.AppNotIdleException create(java.util.List<java.lang.String>, java.lang.String);
+  }
+
+  public class DataInteraction {
+    method public androidx.test.espresso.DataInteraction atPosition(java.lang.Integer);
+    method public androidx.test.espresso.ViewInteraction check(androidx.test.espresso.ViewAssertion);
+    method public androidx.test.espresso.DataInteraction inAdapterView(org.hamcrest.Matcher<android.view.View>);
+    method public androidx.test.espresso.DataInteraction inRoot(org.hamcrest.Matcher<androidx.test.espresso.Root>);
+    method public androidx.test.espresso.DataInteraction onChildView(org.hamcrest.Matcher<android.view.View>);
+    method public androidx.test.espresso.ViewInteraction perform(androidx.test.espresso.ViewAction...);
+    method public androidx.test.espresso.DataInteraction usingAdapterViewProtocol(androidx.test.espresso.action.AdapterViewProtocol);
+  }
+
+  public static final class DataInteraction.DisplayDataMatcher extends org.hamcrest.TypeSafeMatcher {
+    method public void describeTo(org.hamcrest.Description);
+    method public static androidx.test.espresso.DataInteraction.DisplayDataMatcher displayDataMatcher(org.hamcrest.Matcher<android.view.View>, org.hamcrest.Matcher<? extends java.lang.Object>, org.hamcrest.Matcher<androidx.test.espresso.Root>, androidx.test.espresso.util.EspressoOptional<java.lang.Integer>, androidx.test.espresso.action.AdapterViewProtocol);
+    method public boolean matchesSafely(android.view.View);
+  }
+
+  public final class Espresso {
+    method public static void closeSoftKeyboard();
+    method public static deprecated java.util.List<androidx.test.espresso.IdlingResource> getIdlingResources();
+    method public static androidx.test.espresso.DataInteraction onData(org.hamcrest.Matcher<? extends java.lang.Object>);
+    method public static <T> T onIdle(java.util.concurrent.Callable<T>);
+    method public static void onIdle();
+    method public static androidx.test.espresso.ViewInteraction onView(org.hamcrest.Matcher<android.view.View>);
+    method public static void openActionBarOverflowOrOptionsMenu(android.content.Context);
+    method public static void openContextualActionModeOverflowMenu();
+    method public static void pressBack();
+    method public static void pressBackUnconditionally();
+    method public static deprecated boolean registerIdlingResources(androidx.test.espresso.IdlingResource...);
+    method public static deprecated void registerLooperAsIdlingResource(android.os.Looper);
+    method public static deprecated void registerLooperAsIdlingResource(android.os.Looper, boolean);
+    method public static void setFailureHandler(androidx.test.espresso.FailureHandler);
+    method public static deprecated boolean unregisterIdlingResources(androidx.test.espresso.IdlingResource...);
+  }
+
+  public abstract interface EspressoException implements androidx.test.platform.TestFrameworkException {
+  }
+
+  public abstract interface FailureHandler {
+    method public abstract void handle(java.lang.Throwable, org.hamcrest.Matcher<android.view.View>);
+  }
+
+  public final class IdlingPolicies {
+    method public static androidx.test.espresso.IdlingPolicy getDynamicIdlingResourceErrorPolicy();
+    method public static androidx.test.espresso.IdlingPolicy getDynamicIdlingResourceWarningPolicy();
+    method public static androidx.test.espresso.IdlingPolicy getMasterIdlingPolicy();
+    method public static void setIdlingResourceTimeout(long, java.util.concurrent.TimeUnit);
+    method public static void setMasterPolicyTimeout(long, java.util.concurrent.TimeUnit);
+    method public static void setMasterPolicyTimeoutWhenDebuggerAttached(boolean);
+  }
+
+  public final class IdlingPolicy {
+    method public boolean getDisableOnTimeout();
+    method public long getIdleTimeout();
+    method public java.util.concurrent.TimeUnit getIdleTimeoutUnit();
+    method public boolean getTimeoutIfDebuggerAttached();
+    method public void handleTimeout(java.util.List<java.lang.String>, java.lang.String);
+  }
+
+  public final class IdlingRegistry {
+    method public static androidx.test.espresso.IdlingRegistry getInstance();
+    method public java.util.Collection<android.os.Looper> getLoopers();
+    method public java.util.Collection<androidx.test.espresso.IdlingResource> getResources();
+    method public boolean register(androidx.test.espresso.IdlingResource...);
+    method public void registerLooperAsIdlingResource(android.os.Looper);
+    method public boolean unregister(androidx.test.espresso.IdlingResource...);
+    method public boolean unregisterLooperAsIdlingResource(android.os.Looper);
+  }
+
+  public abstract interface IdlingResource {
+    method public abstract java.lang.String getName();
+    method public abstract boolean isIdleNow();
+    method public abstract void registerIdleTransitionCallback(androidx.test.espresso.IdlingResource.ResourceCallback);
+  }
+
+  public static abstract interface IdlingResource.ResourceCallback {
+    method public abstract void onTransitionToIdle();
+  }
+
+  public final class IdlingResourceTimeoutException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public IdlingResourceTimeoutException(java.util.List<java.lang.String>);
+  }
+
+  public final class InjectEventSecurityException extends androidx.test.platform.ui.InjectEventSecurityException implements androidx.test.espresso.EspressoException {
+    ctor public InjectEventSecurityException(java.lang.String);
+    ctor public InjectEventSecurityException(java.lang.Throwable);
+    ctor public InjectEventSecurityException(java.lang.String, java.lang.Throwable);
+  }
+
+  public final class NoActivityResumedException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public NoActivityResumedException(java.lang.String);
+    ctor public NoActivityResumedException(java.lang.String, java.lang.Throwable);
+  }
+
+  public final class NoMatchingRootException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    method public static androidx.test.espresso.NoMatchingRootException create(org.hamcrest.Matcher<androidx.test.espresso.Root>, java.util.List<androidx.test.espresso.Root>);
+  }
+
+  public final class NoMatchingViewException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    method public java.lang.String getViewMatcherDescription();
+  }
+
+  public static class NoMatchingViewException.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.NoMatchingViewException build();
+    method public androidx.test.espresso.NoMatchingViewException.Builder from(androidx.test.espresso.NoMatchingViewException);
+    method public androidx.test.espresso.NoMatchingViewException.Builder includeViewHierarchy(boolean);
+    method public androidx.test.espresso.NoMatchingViewException.Builder withAdapterViewWarning(androidx.test.espresso.util.EspressoOptional<java.lang.String>);
+    method public androidx.test.espresso.NoMatchingViewException.Builder withAdapterViews(java.util.List<android.view.View>);
+    method public androidx.test.espresso.NoMatchingViewException.Builder withCause(java.lang.Throwable);
+    method public androidx.test.espresso.NoMatchingViewException.Builder withRootView(android.view.View);
+    method public androidx.test.espresso.NoMatchingViewException.Builder withViewMatcher(org.hamcrest.Matcher<? super android.view.View>);
+  }
+
+  public final class PerformException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    method public java.lang.String getActionDescription();
+    method public java.lang.String getViewDescription();
+  }
+
+  public static class PerformException.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.PerformException build();
+    method public androidx.test.espresso.PerformException.Builder from(androidx.test.espresso.PerformException);
+    method public androidx.test.espresso.PerformException.Builder withActionDescription(java.lang.String);
+    method public androidx.test.espresso.PerformException.Builder withCause(java.lang.Throwable);
+    method public androidx.test.espresso.PerformException.Builder withViewDescription(java.lang.String);
+  }
+
+  public final class Root {
+    method public android.view.View getDecorView();
+    method public androidx.test.espresso.util.EspressoOptional<android.view.WindowManager.LayoutParams> getWindowLayoutParams();
+    method public boolean isReady();
+  }
+
+  public static class Root.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.Root build();
+    method public androidx.test.espresso.Root.Builder withDecorView(android.view.View);
+    method public androidx.test.espresso.Root.Builder withWindowLayoutParams(android.view.WindowManager.LayoutParams);
+  }
+
+  public abstract interface UiController {
+    method public abstract boolean injectKeyEvent(android.view.KeyEvent) throws androidx.test.espresso.InjectEventSecurityException;
+    method public abstract boolean injectMotionEvent(android.view.MotionEvent) throws androidx.test.espresso.InjectEventSecurityException;
+    method public default boolean injectMotionEventSequence(java.lang.Iterable<android.view.MotionEvent>) throws androidx.test.espresso.InjectEventSecurityException;
+    method public abstract boolean injectString(java.lang.String) throws androidx.test.espresso.InjectEventSecurityException;
+    method public abstract void loopMainThreadForAtLeast(long);
+    method public abstract void loopMainThreadUntilIdle();
+  }
+
+  public abstract interface ViewAction {
+    method public abstract org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public abstract java.lang.String getDescription();
+    method public abstract void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public abstract interface ViewAssertion {
+    method public abstract void check(android.view.View, androidx.test.espresso.NoMatchingViewException);
+  }
+
+  public abstract interface ViewFinder {
+    method public abstract android.view.View getView() throws androidx.test.espresso.AmbiguousViewMatcherException, androidx.test.espresso.NoMatchingViewException;
+  }
+
+  public final class ViewInteraction {
+    method public androidx.test.espresso.ViewInteraction check(androidx.test.espresso.ViewAssertion);
+    method public androidx.test.espresso.ViewInteraction inRoot(org.hamcrest.Matcher<androidx.test.espresso.Root>);
+    method public androidx.test.espresso.ViewInteraction noActivity();
+    method public androidx.test.espresso.ViewInteraction perform(androidx.test.espresso.ViewAction...);
+    method public androidx.test.espresso.ViewInteraction withFailureHandler(androidx.test.espresso.FailureHandler);
+  }
+
+  public abstract interface ViewInteractionComponent {
+    method public abstract androidx.test.espresso.ViewInteraction viewInteraction();
+  }
+
+}
+
+package androidx.test.espresso.accessibility {
+
+  public final class AccessibilityChecks {
+    method public static androidx.test.espresso.ViewAssertion accessibilityAssertion();
+    method public static void disable();
+    method public static com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator enable();
+  }
+
+}
+
+package androidx.test.espresso.action {
+
+  public final class AdapterDataLoaderAction implements androidx.test.espresso.ViewAction {
+    ctor public AdapterDataLoaderAction(org.hamcrest.Matcher<? extends java.lang.Object>, androidx.test.espresso.util.EspressoOptional<java.lang.Integer>, androidx.test.espresso.action.AdapterViewProtocol);
+    method public androidx.test.espresso.action.AdapterViewProtocol.AdaptedData getAdaptedData();
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public abstract interface AdapterViewProtocol {
+    method public abstract java.lang.Iterable<androidx.test.espresso.action.AdapterViewProtocol.AdaptedData> getDataInAdapterView(android.widget.AdapterView<? extends android.widget.Adapter>);
+    method public abstract androidx.test.espresso.util.EspressoOptional<androidx.test.espresso.action.AdapterViewProtocol.AdaptedData> getDataRenderedByView(android.widget.AdapterView<? extends android.widget.Adapter>, android.view.View);
+    method public abstract boolean isDataRenderedWithinAdapterView(android.widget.AdapterView<? extends android.widget.Adapter>, androidx.test.espresso.action.AdapterViewProtocol.AdaptedData);
+    method public abstract void makeDataRenderedWithinAdapterView(android.widget.AdapterView<? extends android.widget.Adapter>, androidx.test.espresso.action.AdapterViewProtocol.AdaptedData);
+  }
+
+  public static class AdapterViewProtocol.AdaptedData {
+    method public java.lang.Object getData();
+    field public final deprecated java.lang.Object data;
+    field public final java.lang.Object opaqueToken;
+  }
+
+  public static class AdapterViewProtocol.AdaptedData.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.action.AdapterViewProtocol.AdaptedData build();
+    method public androidx.test.espresso.action.AdapterViewProtocol.AdaptedData.Builder withData(java.lang.Object);
+    method public androidx.test.espresso.action.AdapterViewProtocol.AdaptedData.Builder withDataFunction(androidx.test.espresso.action.AdapterViewProtocol.DataFunction);
+    method public androidx.test.espresso.action.AdapterViewProtocol.AdaptedData.Builder withOpaqueToken(java.lang.Object);
+  }
+
+  public static abstract interface AdapterViewProtocol.DataFunction {
+    method public abstract java.lang.Object getData();
+  }
+
+  public final class AdapterViewProtocols {
+    method public static androidx.test.espresso.action.AdapterViewProtocol standardProtocol();
+  }
+
+  public final class CloseKeyboardAction implements androidx.test.espresso.ViewAction {
+    ctor public CloseKeyboardAction();
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public abstract interface CoordinatesProvider {
+    method public abstract float[] calculateCoordinates(android.view.View);
+  }
+
+  public final class EditorAction implements androidx.test.espresso.ViewAction {
+    ctor public EditorAction();
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class EspressoKey {
+    method public int getKeyCode();
+    method public int getMetaState();
+  }
+
+  public static class EspressoKey.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.action.EspressoKey build();
+    method public androidx.test.espresso.action.EspressoKey.Builder withAltPressed(boolean);
+    method public androidx.test.espresso.action.EspressoKey.Builder withCtrlPressed(boolean);
+    method public androidx.test.espresso.action.EspressoKey.Builder withKeyCode(int);
+    method public androidx.test.espresso.action.EspressoKey.Builder withShiftPressed(boolean);
+  }
+
+  public final class GeneralClickAction implements androidx.test.espresso.ViewAction {
+    ctor public deprecated GeneralClickAction(androidx.test.espresso.action.Tapper, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.PrecisionDescriber);
+    ctor public GeneralClickAction(androidx.test.espresso.action.Tapper, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.PrecisionDescriber, int, int);
+    ctor public deprecated GeneralClickAction(androidx.test.espresso.action.Tapper, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.PrecisionDescriber, androidx.test.espresso.ViewAction);
+    ctor public GeneralClickAction(androidx.test.espresso.action.Tapper, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.PrecisionDescriber, int, int, androidx.test.espresso.ViewAction);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public class GeneralLocation extends java.lang.Enum implements androidx.test.espresso.action.CoordinatesProvider {
+    method public static androidx.test.espresso.action.GeneralLocation valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.GeneralLocation[] values();
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation BOTTOM_CENTER;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation BOTTOM_LEFT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation BOTTOM_RIGHT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation CENTER;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation CENTER_LEFT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation CENTER_RIGHT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation TOP_CENTER;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation TOP_LEFT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation TOP_RIGHT;
+    enum_constant public static final androidx.test.espresso.action.GeneralLocation VISIBLE_CENTER;
+  }
+
+  public final class GeneralSwipeAction implements androidx.test.espresso.ViewAction {
+    ctor public GeneralSwipeAction(androidx.test.espresso.action.Swiper, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.CoordinatesProvider, androidx.test.espresso.action.PrecisionDescriber);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class KeyEventAction implements androidx.test.espresso.ViewAction {
+    ctor public KeyEventAction(androidx.test.espresso.action.EspressoKey);
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class MotionEvents {
+    method public static android.view.MotionEvent obtainDownEvent(float[], float[], int, int);
+    method public static android.view.MotionEvent obtainDownEvent(float[], float[]);
+    method public static android.view.MotionEvent obtainMovement(long, float[]);
+    method public static android.view.MotionEvent obtainMovement(long, long, float[]);
+    method public static android.view.MotionEvent obtainUpEvent(android.view.MotionEvent, float[]);
+    method public static void sendCancel(androidx.test.espresso.UiController, android.view.MotionEvent);
+    method public static androidx.test.espresso.action.MotionEvents.DownResultHolder sendDown(androidx.test.espresso.UiController, float[], float[]);
+    method public static androidx.test.espresso.action.MotionEvents.DownResultHolder sendDown(androidx.test.espresso.UiController, float[], float[], int, int);
+    method public static boolean sendMovement(androidx.test.espresso.UiController, android.view.MotionEvent, float[]);
+    method public static boolean sendUp(androidx.test.espresso.UiController, android.view.MotionEvent);
+    method public static boolean sendUp(androidx.test.espresso.UiController, android.view.MotionEvent, float[]);
+  }
+
+  public static class MotionEvents.DownResultHolder {
+    field public final android.view.MotionEvent down;
+    field public final boolean longPress;
+  }
+
+  public final class OpenLinkAction implements androidx.test.espresso.ViewAction {
+    ctor public OpenLinkAction(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<android.net.Uri>);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public abstract interface PrecisionDescriber {
+    method public abstract float[] describePrecision();
+  }
+
+  public class Press extends java.lang.Enum implements androidx.test.espresso.action.PrecisionDescriber {
+    method public static androidx.test.espresso.action.Press valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.Press[] values();
+    enum_constant public static final androidx.test.espresso.action.Press FINGER;
+    enum_constant public static final androidx.test.espresso.action.Press PINPOINT;
+    enum_constant public static final androidx.test.espresso.action.Press THUMB;
+  }
+
+  public final class PressBackAction implements androidx.test.espresso.ViewAction {
+    ctor public PressBackAction(boolean);
+    ctor public PressBackAction(boolean, androidx.test.espresso.action.EspressoKey);
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class RepeatActionUntilViewState implements androidx.test.espresso.ViewAction {
+    ctor protected RepeatActionUntilViewState(androidx.test.espresso.ViewAction, org.hamcrest.Matcher<android.view.View>, int);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class ReplaceTextAction implements androidx.test.espresso.ViewAction {
+    ctor public ReplaceTextAction(java.lang.String);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class ScrollToAction implements androidx.test.espresso.ViewAction {
+    ctor public ScrollToAction();
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public class Swipe extends java.lang.Enum implements androidx.test.espresso.action.Swiper {
+    method public static androidx.test.espresso.action.Swipe valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.Swipe[] values();
+    enum_constant public static final androidx.test.espresso.action.Swipe FAST;
+    enum_constant public static final androidx.test.espresso.action.Swipe SLOW;
+  }
+
+  public abstract interface Swiper {
+    method public abstract androidx.test.espresso.action.Swiper.Status sendSwipe(androidx.test.espresso.UiController, float[], float[], float[]);
+  }
+
+  public static final class Swiper.Status extends java.lang.Enum {
+    method public static androidx.test.espresso.action.Swiper.Status valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.Swiper.Status[] values();
+    enum_constant public static final androidx.test.espresso.action.Swiper.Status FAILURE;
+    enum_constant public static final androidx.test.espresso.action.Swiper.Status SUCCESS;
+  }
+
+  public class Tap extends java.lang.Enum implements androidx.test.espresso.action.Tapper {
+    method public static androidx.test.espresso.action.Tap valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.Tap[] values();
+    enum_constant public static final androidx.test.espresso.action.Tap DOUBLE;
+    enum_constant public static final androidx.test.espresso.action.Tap LONG;
+    enum_constant public static final androidx.test.espresso.action.Tap SINGLE;
+  }
+
+  public abstract interface Tapper {
+    method public abstract androidx.test.espresso.action.Tapper.Status sendTap(androidx.test.espresso.UiController, float[], float[], int, int);
+    method public abstract deprecated androidx.test.espresso.action.Tapper.Status sendTap(androidx.test.espresso.UiController, float[], float[]);
+  }
+
+  public static final class Tapper.Status extends java.lang.Enum {
+    method public static androidx.test.espresso.action.Tapper.Status valueOf(java.lang.String);
+    method public static final androidx.test.espresso.action.Tapper.Status[] values();
+    enum_constant public static final androidx.test.espresso.action.Tapper.Status FAILURE;
+    enum_constant public static final androidx.test.espresso.action.Tapper.Status SUCCESS;
+    enum_constant public static final androidx.test.espresso.action.Tapper.Status WARNING;
+  }
+
+  public final class TypeTextAction implements androidx.test.espresso.ViewAction {
+    ctor public TypeTextAction(java.lang.String);
+    ctor public TypeTextAction(java.lang.String, boolean);
+    ctor public TypeTextAction(java.lang.String, boolean, androidx.test.espresso.action.GeneralClickAction);
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public final class ViewActions {
+    method public static androidx.test.espresso.ViewAction actionWithAssertions(androidx.test.espresso.ViewAction);
+    method public static void addGlobalAssertion(java.lang.String, androidx.test.espresso.ViewAssertion);
+    method public static void clearGlobalAssertions();
+    method public static androidx.test.espresso.ViewAction clearText();
+    method public static androidx.test.espresso.ViewAction click(int, int);
+    method public static androidx.test.espresso.ViewAction click();
+    method public static androidx.test.espresso.ViewAction click(androidx.test.espresso.ViewAction);
+    method public static androidx.test.espresso.ViewAction closeSoftKeyboard();
+    method public static androidx.test.espresso.ViewAction doubleClick();
+    method public static androidx.test.espresso.ViewAction longClick();
+    method public static androidx.test.espresso.ViewAction openLink(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<android.net.Uri>);
+    method public static androidx.test.espresso.ViewAction openLinkWithText(java.lang.String);
+    method public static androidx.test.espresso.ViewAction openLinkWithText(org.hamcrest.Matcher<java.lang.String>);
+    method public static androidx.test.espresso.ViewAction openLinkWithUri(java.lang.String);
+    method public static androidx.test.espresso.ViewAction openLinkWithUri(org.hamcrest.Matcher<android.net.Uri>);
+    method public static androidx.test.espresso.ViewAction pressBack();
+    method public static androidx.test.espresso.ViewAction pressBackUnconditionally();
+    method public static androidx.test.espresso.ViewAction pressImeActionButton();
+    method public static androidx.test.espresso.ViewAction pressKey(int);
+    method public static androidx.test.espresso.ViewAction pressKey(androidx.test.espresso.action.EspressoKey);
+    method public static androidx.test.espresso.ViewAction pressMenuKey();
+    method public static void removeGlobalAssertion(androidx.test.espresso.ViewAssertion);
+    method public static androidx.test.espresso.ViewAction repeatedlyUntil(androidx.test.espresso.ViewAction, org.hamcrest.Matcher<android.view.View>, int);
+    method public static androidx.test.espresso.ViewAction replaceText(java.lang.String);
+    method public static androidx.test.espresso.ViewAction scrollTo();
+    method public static androidx.test.espresso.ViewAction swipeDown();
+    method public static androidx.test.espresso.ViewAction swipeLeft();
+    method public static androidx.test.espresso.ViewAction swipeRight();
+    method public static androidx.test.espresso.ViewAction swipeUp();
+    method public static androidx.test.espresso.ViewAction typeText(java.lang.String);
+    method public static androidx.test.espresso.ViewAction typeTextIntoFocusedView(java.lang.String);
+  }
+
+}
+
+package androidx.test.espresso.assertion {
+
+  public final class LayoutAssertions {
+    method public static androidx.test.espresso.ViewAssertion noEllipsizedText();
+    method public static androidx.test.espresso.ViewAssertion noMultilineButtons();
+    method public static androidx.test.espresso.ViewAssertion noOverlaps(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion noOverlaps();
+  }
+
+  public final class PositionAssertions {
+    method public static deprecated androidx.test.espresso.ViewAssertion isAbove(org.hamcrest.Matcher<android.view.View>);
+    method public static deprecated androidx.test.espresso.ViewAssertion isBelow(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isBottomAlignedWith(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isCompletelyAbove(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isCompletelyBelow(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isCompletelyLeftOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isCompletelyRightOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isLeftAlignedWith(org.hamcrest.Matcher<android.view.View>);
+    method public static deprecated androidx.test.espresso.ViewAssertion isLeftOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isPartiallyAbove(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isPartiallyBelow(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isPartiallyLeftOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isPartiallyRightOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isRightAlignedWith(org.hamcrest.Matcher<android.view.View>);
+    method public static deprecated androidx.test.espresso.ViewAssertion isRightOf(org.hamcrest.Matcher<android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion isTopAlignedWith(org.hamcrest.Matcher<android.view.View>);
+  }
+
+  public final class ViewAssertions {
+    method public static androidx.test.espresso.ViewAssertion doesNotExist();
+    method public static androidx.test.espresso.ViewAssertion matches(org.hamcrest.Matcher<? super android.view.View>);
+    method public static androidx.test.espresso.ViewAssertion selectedDescendantsMatch(org.hamcrest.Matcher<android.view.View>, org.hamcrest.Matcher<android.view.View>);
+  }
+
+}
+
+package androidx.test.espresso.base {
+
+  public abstract interface ActiveRootLister {
+    method public abstract java.util.List<androidx.test.espresso.Root> listActiveRoots();
+  }
+
+  public abstract class Default implements java.lang.annotation.Annotation {
+  }
+
+  public final class DefaultFailureHandler implements androidx.test.espresso.FailureHandler {
+    ctor public DefaultFailureHandler(android.content.Context);
+    method public void handle(java.lang.Throwable, org.hamcrest.Matcher<android.view.View>);
+  }
+
+  public final class IdlingResourceRegistry {
+    ctor public IdlingResourceRegistry(android.os.Looper);
+    method public java.util.List<androidx.test.espresso.IdlingResource> getResources();
+    method public void registerLooper(android.os.Looper, boolean);
+    method public boolean registerResources(java.util.List<? extends androidx.test.espresso.IdlingResource>);
+    method public void sync(java.lang.Iterable<androidx.test.espresso.IdlingResource>, java.lang.Iterable<android.os.Looper>);
+    method public boolean unregisterResources(java.util.List<? extends androidx.test.espresso.IdlingResource>);
+  }
+
+  public abstract interface IdlingUiController implements androidx.test.espresso.UiController {
+    method public abstract androidx.test.espresso.base.IdlingResourceRegistry getIdlingResourceRegistry();
+  }
+
+  public abstract interface InterruptableUiController implements androidx.test.espresso.UiController {
+    method public abstract void interruptEspressoTasks();
+  }
+
+  public abstract class MainThread implements java.lang.annotation.Annotation {
+  }
+
+  public final class RootViewPicker implements javax.inject.Provider {
+    method public android.view.View get();
+  }
+
+  public abstract class RootViewPickerScope implements java.lang.annotation.Annotation {
+  }
+
+  public final class ViewFinderImpl implements androidx.test.espresso.ViewFinder {
+    method public android.view.View getView() throws androidx.test.espresso.AmbiguousViewMatcherException, androidx.test.espresso.NoMatchingViewException;
+  }
+
+}
+
+package androidx.test.espresso.contrib {
+
+  public final deprecated class AccessibilityChecks {
+    method public static androidx.test.espresso.ViewAssertion accessibilityAssertion();
+    method public static com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator enable();
+  }
+
+  public final class ActivityResultMatchers {
+    method public static org.hamcrest.Matcher<? super android.app.Instrumentation.ActivityResult> hasResultCode(int);
+    method public static org.hamcrest.Matcher<? super android.app.Instrumentation.ActivityResult> hasResultData(org.hamcrest.Matcher<android.content.Intent>);
+  }
+
+  public final class DrawerActions {
+    method public static androidx.test.espresso.ViewAction close();
+    method public static androidx.test.espresso.ViewAction close(int);
+    method public static deprecated void closeDrawer(int);
+    method public static deprecated void closeDrawer(int, int);
+    method public static androidx.test.espresso.ViewAction open();
+    method public static androidx.test.espresso.ViewAction open(int);
+    method public static deprecated void openDrawer(int);
+    method public static deprecated void openDrawer(int, int);
+  }
+
+  public final class DrawerMatchers {
+    method public static org.hamcrest.Matcher<android.view.View> isClosed(int);
+    method public static org.hamcrest.Matcher<android.view.View> isClosed();
+    method public static org.hamcrest.Matcher<android.view.View> isOpen(int);
+    method public static org.hamcrest.Matcher<android.view.View> isOpen();
+  }
+
+  public final class NavigationViewActions {
+    method public static androidx.test.espresso.ViewAction navigateTo(int);
+  }
+
+  public final class PickerActions {
+    method public static androidx.test.espresso.ViewAction setDate(int, int, int);
+    method public static androidx.test.espresso.ViewAction setTime(int, int);
+  }
+
+  public final class RecyclerViewActions {
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.contrib.RecyclerViewActions.PositionableRecyclerViewAction actionOnHolderItem(org.hamcrest.Matcher<VH>, androidx.test.espresso.ViewAction);
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.contrib.RecyclerViewActions.PositionableRecyclerViewAction actionOnItem(org.hamcrest.Matcher<android.view.View>, androidx.test.espresso.ViewAction);
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.ViewAction actionOnItemAtPosition(int, androidx.test.espresso.ViewAction);
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.contrib.RecyclerViewActions.PositionableRecyclerViewAction scrollTo(org.hamcrest.Matcher<android.view.View>);
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.contrib.RecyclerViewActions.PositionableRecyclerViewAction scrollToHolder(org.hamcrest.Matcher<VH>);
+    method public static <VH extends android.support.v7.widget.RecyclerView.ViewHolder> androidx.test.espresso.ViewAction scrollToPosition(int);
+  }
+
+  public static abstract interface RecyclerViewActions.PositionableRecyclerViewAction implements androidx.test.espresso.ViewAction {
+    method public abstract androidx.test.espresso.contrib.RecyclerViewActions.PositionableRecyclerViewAction atPosition(int);
+  }
+
+  public final class ViewPagerActions {
+    method public static androidx.test.espresso.ViewAction clickBetweenTwoTitles(java.lang.String, java.lang.String);
+    method public static androidx.test.espresso.ViewAction scrollLeft();
+    method public static androidx.test.espresso.ViewAction scrollLeft(boolean);
+    method public static androidx.test.espresso.ViewAction scrollRight();
+    method public static androidx.test.espresso.ViewAction scrollRight(boolean);
+    method public static androidx.test.espresso.ViewAction scrollToFirst();
+    method public static androidx.test.espresso.ViewAction scrollToFirst(boolean);
+    method public static androidx.test.espresso.ViewAction scrollToLast();
+    method public static androidx.test.espresso.ViewAction scrollToLast(boolean);
+    method public static androidx.test.espresso.ViewAction scrollToPage(int);
+    method public static androidx.test.espresso.ViewAction scrollToPage(int, boolean);
+  }
+
+}
+
+package androidx.test.espresso.idling {
+
+  public final class CountingIdlingResource implements androidx.test.espresso.IdlingResource {
+    ctor public CountingIdlingResource(java.lang.String);
+    ctor public CountingIdlingResource(java.lang.String, boolean);
+    method public void decrement();
+    method public void dumpStateToLogs();
+    method public java.lang.String getName();
+    method public void increment();
+    method public boolean isIdleNow();
+    method public void registerIdleTransitionCallback(androidx.test.espresso.IdlingResource.ResourceCallback);
+  }
+
+}
+
+package androidx.test.espresso.idling.concurrent {
+
+  public class IdlingScheduledThreadPoolExecutor extends java.util.concurrent.ScheduledThreadPoolExecutor implements androidx.test.espresso.IdlingResource {
+    ctor public IdlingScheduledThreadPoolExecutor(java.lang.String, int, java.util.concurrent.ThreadFactory);
+    ctor public IdlingScheduledThreadPoolExecutor(java.lang.String, int, java.util.concurrent.ThreadFactory, boolean);
+    method public java.lang.String getName();
+    method public boolean isIdleNow();
+    method public void registerIdleTransitionCallback(androidx.test.espresso.IdlingResource.ResourceCallback);
+  }
+
+  public class IdlingThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor implements androidx.test.espresso.IdlingResource {
+    ctor public IdlingThreadPoolExecutor(java.lang.String, int, int, long, java.util.concurrent.TimeUnit, java.util.concurrent.BlockingQueue<java.lang.Runnable>, java.util.concurrent.ThreadFactory);
+    method public synchronized void execute(java.lang.Runnable);
+    method public java.lang.String getName();
+    method public boolean isIdleNow();
+    method public void registerIdleTransitionCallback(androidx.test.espresso.IdlingResource.ResourceCallback);
+  }
+
+}
+
+package androidx.test.espresso.idling.net {
+
+  public class UriIdlingResource implements androidx.test.espresso.IdlingResource {
+    ctor public UriIdlingResource(java.lang.String, long);
+    method public void beginLoad(java.lang.String);
+    method public void endLoad(java.lang.String);
+    method public java.lang.String getName();
+    method public void ignoreUri(java.util.regex.Pattern);
+    method public boolean isIdleNow();
+    method public void registerIdleTransitionCallback(androidx.test.espresso.IdlingResource.ResourceCallback);
+  }
+
+  public static abstract interface UriIdlingResource.HandlerIntf {
+    method public abstract void postDelayed(java.lang.Runnable, long);
+    method public abstract void removeCallbacks(java.lang.Runnable);
+  }
+
+}
+
+package androidx.test.espresso.intent {
+
+  public abstract interface ActivityResultFunction {
+    method public abstract android.app.Instrumentation.ActivityResult apply(android.content.Intent);
+  }
+
+  public final class Checks {
+    method public static void checkArgument(boolean);
+    method public static void checkArgument(boolean, java.lang.Object);
+    method public static void checkArgument(boolean, java.lang.String, java.lang.Object...);
+    method public static <T> T checkNotNull(T);
+    method public static <T> T checkNotNull(T, java.lang.Object);
+    method public static <T> T checkNotNull(T, java.lang.String, java.lang.Object...);
+    method public static void checkState(boolean, java.lang.Object);
+    method public static void checkState(boolean, java.lang.String, java.lang.Object...);
+  }
+
+  public final class Intents {
+    method public static void assertNoUnverifiedIntents();
+    method public static java.util.List<android.content.Intent> getIntents();
+    method public static void init();
+    method public static void intended(org.hamcrest.Matcher<android.content.Intent>);
+    method public static void intended(org.hamcrest.Matcher<android.content.Intent>, androidx.test.espresso.intent.VerificationMode);
+    method public static androidx.test.espresso.intent.OngoingStubbing intending(org.hamcrest.Matcher<android.content.Intent>);
+    method public static void release();
+    method public static androidx.test.espresso.intent.VerificationMode times(int);
+  }
+
+  public final class OngoingStubbing {
+    method public void respondWith(android.app.Instrumentation.ActivityResult);
+    method public void respondWithFunction(androidx.test.espresso.intent.ActivityResultFunction);
+  }
+
+  public abstract interface ResettingStubber implements androidx.test.runner.intent.IntentStubber {
+    method public abstract void initialize();
+    method public abstract boolean isInitialized();
+    method public abstract void reset();
+    method public abstract void setActivityResultForIntent(org.hamcrest.Matcher<android.content.Intent>, android.app.Instrumentation.ActivityResult);
+    method public abstract void setActivityResultFunctionForIntent(org.hamcrest.Matcher<android.content.Intent>, androidx.test.espresso.intent.ActivityResultFunction);
+  }
+
+  public final class ResettingStubberImpl implements androidx.test.espresso.intent.ResettingStubber {
+    ctor public ResettingStubberImpl();
+    method public android.app.Instrumentation.ActivityResult getActivityResultForIntent(android.content.Intent);
+    method public void initialize();
+    method public boolean isInitialized();
+    method public void reset();
+    method public void setActivityResultForIntent(org.hamcrest.Matcher<android.content.Intent>, android.app.Instrumentation.ActivityResult);
+    method public void setActivityResultFunctionForIntent(org.hamcrest.Matcher<android.content.Intent>, androidx.test.espresso.intent.ActivityResultFunction);
+  }
+
+  public abstract interface ResolvedIntent {
+    method public abstract boolean canBeHandledBy(java.lang.String);
+    method public abstract android.content.Intent getIntent();
+  }
+
+  public abstract interface VerifiableIntent implements androidx.test.espresso.intent.ResolvedIntent {
+    method public abstract boolean hasBeenVerified();
+    method public abstract void markAsVerified();
+  }
+
+  public abstract interface VerificationMode {
+    method public abstract void verify(org.hamcrest.Matcher<android.content.Intent>, java.util.List<androidx.test.espresso.intent.VerifiableIntent>);
+  }
+
+  public final class VerificationModes {
+    method public static androidx.test.espresso.intent.VerificationMode noUnverifiedIntents();
+    method public static androidx.test.espresso.intent.VerificationMode times(int);
+  }
+
+}
+
+package androidx.test.espresso.intent.matcher {
+
+  public final class BundleMatchers {
+    method public static <T> org.hamcrest.Matcher<android.os.Bundle> hasEntry(java.lang.String, T);
+    method public static org.hamcrest.Matcher<android.os.Bundle> hasEntry(java.lang.String, org.hamcrest.Matcher<?>);
+    method public static org.hamcrest.Matcher<android.os.Bundle> hasEntry(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<?>);
+    method public static org.hamcrest.Matcher<android.os.Bundle> hasKey(java.lang.String);
+    method public static org.hamcrest.Matcher<android.os.Bundle> hasKey(org.hamcrest.Matcher<java.lang.String>);
+    method public static <T> org.hamcrest.Matcher<android.os.Bundle> hasValue(T);
+    method public static org.hamcrest.Matcher<android.os.Bundle> hasValue(org.hamcrest.Matcher<?>);
+    method public static org.hamcrest.Matcher<android.os.Bundle> isEmpty();
+    method public static org.hamcrest.Matcher<android.os.Bundle> isEmptyOrNull();
+  }
+
+  public final class ComponentNameMatchers {
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasClassName(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasClassName(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasMyPackageName();
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasPackageName(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasPackageName(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasShortClassName(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.ComponentName> hasShortClassName(org.hamcrest.Matcher<java.lang.String>);
+  }
+
+  public final class IntentMatchers {
+    method public static org.hamcrest.Matcher<android.content.Intent> anyIntent();
+    method public static org.hamcrest.Matcher<android.content.Intent> filterEquals(android.content.Intent);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasAction(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasAction(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasCategories(java.util.Set<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasCategories(org.hamcrest.Matcher<? extends java.lang.Iterable<? super java.lang.String>>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasComponent(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasComponent(android.content.ComponentName);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasComponent(org.hamcrest.Matcher<android.content.ComponentName>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasData(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasData(android.net.Uri);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasData(org.hamcrest.Matcher<android.net.Uri>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasDataString(org.hamcrest.Matcher<java.lang.String>);
+    method public static <T> org.hamcrest.Matcher<android.content.Intent> hasExtra(java.lang.String, T);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasExtra(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<?>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasExtraWithKey(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasExtraWithKey(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasExtras(org.hamcrest.Matcher<android.os.Bundle>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasFlag(int);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasFlags(int...);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasFlags(int);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasPackage(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasPackage(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasType(java.lang.String);
+    method public static org.hamcrest.Matcher<android.content.Intent> hasType(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.content.Intent> isInternal();
+    method public static org.hamcrest.Matcher<android.content.Intent> toPackage(java.lang.String);
+  }
+
+  public final class UriMatchers {
+    method public static org.hamcrest.Matcher<android.net.Uri> hasHost(java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasHost(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasParamWithName(java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasParamWithName(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasParamWithValue(java.lang.String, java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasParamWithValue(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasPath(java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasPath(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasScheme(java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasScheme(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasSchemeSpecificPart(java.lang.String, java.lang.String);
+    method public static org.hamcrest.Matcher<android.net.Uri> hasSchemeSpecificPart(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.String>);
+  }
+
+}
+
+package androidx.test.espresso.intent.rule {
+
+  public deprecated class IntentsTestRule<T extends android.app.Activity> extends androidx.test.rule.ActivityTestRule {
+    ctor public IntentsTestRule(java.lang.Class<T>);
+    ctor public IntentsTestRule(java.lang.Class<T>, boolean);
+    ctor public IntentsTestRule(java.lang.Class<T>, boolean, boolean);
+  }
+
+}
+
+package androidx.test.espresso.matcher {
+
+  public abstract class BoundedDiagnosingMatcher<S, T extends S> extends org.hamcrest.BaseMatcher {
+    ctor public BoundedDiagnosingMatcher(java.lang.Class<? extends S>);
+    ctor public BoundedDiagnosingMatcher(java.lang.Class<? extends S>, java.lang.Class<?>, java.lang.Class<?>...);
+    method public final void describeMismatch(java.lang.Object, org.hamcrest.Description);
+    method protected abstract void describeMoreTo(org.hamcrest.Description);
+    method public final void describeTo(org.hamcrest.Description);
+    method public final boolean matches(java.lang.Object);
+    method protected abstract boolean matchesSafely(T, org.hamcrest.Description);
+  }
+
+  public abstract deprecated class BoundedMatcher<T, S extends T> extends org.hamcrest.BaseMatcher {
+    ctor public BoundedMatcher(java.lang.Class<? extends S>);
+    ctor public BoundedMatcher(java.lang.Class<?>, java.lang.Class<?>, java.lang.Class<?>...);
+    method public final boolean matches(java.lang.Object);
+    method protected abstract boolean matchesSafely(S);
+  }
+
+  public final class CursorMatchers {
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowBlob(int, byte[]);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowBlob(int, org.hamcrest.Matcher<byte[]>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowBlob(java.lang.String, byte[]);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowBlob(java.lang.String, org.hamcrest.Matcher<byte[]>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowBlob(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<byte[]>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowDouble(int, double);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowDouble(int, org.hamcrest.Matcher<java.lang.Double>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowDouble(java.lang.String, double);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowDouble(java.lang.String, org.hamcrest.Matcher<java.lang.Double>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowDouble(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.Double>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowFloat(int, float);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowFloat(int, org.hamcrest.Matcher<java.lang.Float>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowFloat(java.lang.String, float);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowFloat(java.lang.String, org.hamcrest.Matcher<java.lang.Float>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowFloat(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.Float>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowInt(int, int);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowInt(int, org.hamcrest.Matcher<java.lang.Integer>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowInt(java.lang.String, int);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowInt(java.lang.String, org.hamcrest.Matcher<java.lang.Integer>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowInt(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.Integer>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowLong(int, long);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowLong(int, org.hamcrest.Matcher<java.lang.Long>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowLong(java.lang.String, long);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowLong(java.lang.String, org.hamcrest.Matcher<java.lang.Long>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowLong(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.Long>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowShort(int, short);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowShort(int, org.hamcrest.Matcher<java.lang.Short>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowShort(java.lang.String, short);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowShort(java.lang.String, org.hamcrest.Matcher<java.lang.Short>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowShort(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.Short>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowString(int, java.lang.String);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowString(int, org.hamcrest.Matcher<java.lang.String>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowString(java.lang.String, java.lang.String);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowString(java.lang.String, org.hamcrest.Matcher<java.lang.String>);
+    method public static androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withRowString(org.hamcrest.Matcher<java.lang.String>, org.hamcrest.Matcher<java.lang.String>);
+  }
+
+  public static class CursorMatchers.CursorMatcher extends androidx.test.espresso.matcher.BoundedDiagnosingMatcher {
+    method protected void describeMoreTo(org.hamcrest.Description);
+    method protected boolean matchesSafely(android.database.Cursor, org.hamcrest.Description);
+    method public androidx.test.espresso.matcher.CursorMatchers.CursorMatcher withStrictColumnChecks(boolean);
+  }
+
+  public final class HasBackgroundMatcher extends org.hamcrest.TypeSafeMatcher {
+    ctor public HasBackgroundMatcher(int);
+    method public void describeTo(org.hamcrest.Description);
+    method protected boolean matchesSafely(android.view.View);
+  }
+
+  public final class LayoutMatchers {
+    method public static org.hamcrest.Matcher<android.view.View> hasEllipsizedText();
+    method public static org.hamcrest.Matcher<android.view.View> hasMultilineText();
+  }
+
+  public final class PreferenceMatchers {
+    method public static org.hamcrest.Matcher<android.preference.Preference> isEnabled();
+    method public static org.hamcrest.Matcher<android.preference.Preference> withKey(java.lang.String);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withKey(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withSummary(int);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withSummaryText(java.lang.String);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withSummaryText(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withTitle(int);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withTitleText(java.lang.String);
+    method public static org.hamcrest.Matcher<android.preference.Preference> withTitleText(org.hamcrest.Matcher<java.lang.String>);
+  }
+
+  public final class RootMatchers {
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> hasWindowLayoutParams();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> isDialog();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> isFocusable();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> isPlatformPopup();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> isSystemAlertWindow();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> isTouchable();
+    method public static org.hamcrest.Matcher<androidx.test.espresso.Root> withDecorView(org.hamcrest.Matcher<android.view.View>);
+    field public static final org.hamcrest.Matcher<androidx.test.espresso.Root> DEFAULT;
+  }
+
+  public final class ViewMatchers {
+    method public static <T> void assertThat(T, org.hamcrest.Matcher<T>);
+    method public static <T> void assertThat(java.lang.String, T, org.hamcrest.Matcher<T>);
+    method public static org.hamcrest.Matcher<android.view.View> doesNotHaveFocus();
+    method public static org.hamcrest.Matcher<android.view.View> hasBackground(int);
+    method public static org.hamcrest.Matcher<android.view.View> hasChildCount(int);
+    method public static org.hamcrest.Matcher<android.view.View> hasContentDescription();
+    method public static org.hamcrest.Matcher<android.view.View> hasDescendant(org.hamcrest.Matcher<android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> hasErrorText(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> hasErrorText(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> hasFocus();
+    method public static org.hamcrest.Matcher<android.view.View> hasImeAction(int);
+    method public static org.hamcrest.Matcher<android.view.View> hasImeAction(org.hamcrest.Matcher<java.lang.Integer>);
+    method public static org.hamcrest.Matcher<android.view.View> hasLinks();
+    method public static org.hamcrest.Matcher<android.view.View> hasMinimumChildCount(int);
+    method public static org.hamcrest.Matcher<android.view.View> hasSibling(org.hamcrest.Matcher<android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> hasTextColor(int);
+    method public static org.hamcrest.Matcher<android.view.View> isAssignableFrom(java.lang.Class<? extends android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> isChecked();
+    method public static org.hamcrest.Matcher<android.view.View> isClickable();
+    method public static org.hamcrest.Matcher<android.view.View> isCompletelyDisplayed();
+    method public static org.hamcrest.Matcher<android.view.View> isDescendantOfA(org.hamcrest.Matcher<android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> isDisplayed();
+    method public static org.hamcrest.Matcher<android.view.View> isDisplayingAtLeast(int);
+    method public static org.hamcrest.Matcher<android.view.View> isEnabled();
+    method public static org.hamcrest.Matcher<android.view.View> isFocusable();
+    method public static org.hamcrest.Matcher<android.view.View> isFocused();
+    method public static org.hamcrest.Matcher<android.view.View> isJavascriptEnabled();
+    method public static org.hamcrest.Matcher<android.view.View> isNotChecked();
+    method public static org.hamcrest.Matcher<android.view.View> isNotClickable();
+    method public static org.hamcrest.Matcher<android.view.View> isNotEnabled();
+    method public static org.hamcrest.Matcher<android.view.View> isNotFocusable();
+    method public static org.hamcrest.Matcher<android.view.View> isNotFocused();
+    method public static org.hamcrest.Matcher<android.view.View> isNotSelected();
+    method public static org.hamcrest.Matcher<android.view.View> isRoot();
+    method public static org.hamcrest.Matcher<android.view.View> isSelected();
+    method public static org.hamcrest.Matcher<android.view.View> supportsInputMethods();
+    method public static org.hamcrest.Matcher<android.view.View> withAlpha(float);
+    method public static org.hamcrest.Matcher<android.view.View> withChild(org.hamcrest.Matcher<android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> withClassName(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> withContentDescription(int);
+    method public static org.hamcrest.Matcher<android.view.View> withContentDescription(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withContentDescription(org.hamcrest.Matcher<? extends java.lang.CharSequence>);
+    method public static org.hamcrest.Matcher<android.view.View> withEffectiveVisibility(androidx.test.espresso.matcher.ViewMatchers.Visibility);
+    method public static org.hamcrest.Matcher<android.view.View> withHint(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withHint(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> withHint(int);
+    method public static org.hamcrest.Matcher<android.view.View> withId(int);
+    method public static org.hamcrest.Matcher<android.view.View> withId(org.hamcrest.Matcher<java.lang.Integer>);
+    method public static org.hamcrest.Matcher<android.view.View> withInputType(int);
+    method public static org.hamcrest.Matcher<android.view.View> withParent(org.hamcrest.Matcher<android.view.View>);
+    method public static org.hamcrest.Matcher<android.view.View> withParentIndex(int);
+    method public static org.hamcrest.Matcher<android.view.View> withResourceName(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withResourceName(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> withSpinnerText(int);
+    method public static org.hamcrest.Matcher<android.view.View> withSpinnerText(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> withSpinnerText(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withSubstring(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withTagKey(int);
+    method public static org.hamcrest.Matcher<android.view.View> withTagKey(int, org.hamcrest.Matcher<?>);
+    method public static org.hamcrest.Matcher<android.view.View> withTagValue(org.hamcrest.Matcher<java.lang.Object>);
+    method public static org.hamcrest.Matcher<android.view.View> withText(java.lang.String);
+    method public static org.hamcrest.Matcher<android.view.View> withText(org.hamcrest.Matcher<java.lang.String>);
+    method public static org.hamcrest.Matcher<android.view.View> withText(int);
+  }
+
+  public static final class ViewMatchers.Visibility extends java.lang.Enum {
+    method public static androidx.test.espresso.matcher.ViewMatchers.Visibility forViewVisibility(android.view.View);
+    method public static androidx.test.espresso.matcher.ViewMatchers.Visibility forViewVisibility(int);
+    method public int getValue();
+    method public static androidx.test.espresso.matcher.ViewMatchers.Visibility valueOf(java.lang.String);
+    method public static final androidx.test.espresso.matcher.ViewMatchers.Visibility[] values();
+    enum_constant public static final androidx.test.espresso.matcher.ViewMatchers.Visibility GONE;
+    enum_constant public static final androidx.test.espresso.matcher.ViewMatchers.Visibility INVISIBLE;
+    enum_constant public static final androidx.test.espresso.matcher.ViewMatchers.Visibility VISIBLE;
+  }
+
+}
+
+package androidx.test.espresso.remote {
+
+  public abstract interface Bindable {
+    method public abstract android.os.IBinder getIBinder();
+    method public abstract java.lang.String getId();
+    method public abstract void setIBinder(android.os.IBinder);
+  }
+
+  public final class ConstructorInvocation {
+    ctor public ConstructorInvocation(java.lang.Class<?>, java.lang.Class<? extends java.lang.annotation.Annotation>, java.lang.Class<?>...);
+    method public java.lang.Object invokeConstructor(java.lang.Object...);
+  }
+
+  public abstract interface Converter<I, O> {
+    method public abstract O convert(I);
+  }
+
+  public final class EspressoRemote implements androidx.test.espresso.remote.RemoteInteraction {
+    method public synchronized java.util.concurrent.Callable<java.lang.Void> createRemoteCheckCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAssertion);
+    method public synchronized java.util.concurrent.Callable<java.lang.Void> createRemotePerformCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAction...);
+    method public static androidx.test.espresso.remote.EspressoRemote getInstance();
+    method public synchronized void init();
+    method public synchronized boolean isRemoteProcess();
+    method public synchronized void terminate();
+  }
+
+  public abstract interface EspressoRemoteMessage {
+  }
+
+  public static abstract interface EspressoRemoteMessage.From<T, M> {
+    method public abstract T fromProto(M);
+  }
+
+  public static abstract interface EspressoRemoteMessage.To<M> {
+    method public abstract M toProto();
+  }
+
+  public final class FieldDescriptor {
+    method public static androidx.test.espresso.remote.FieldDescriptor of(java.lang.Class<?>, java.lang.String, int);
+    field public final java.lang.String fieldName;
+    field public final java.lang.Class<?> fieldType;
+    field public final int order;
+  }
+
+  public final class GenericRemoteMessage implements androidx.test.espresso.remote.EspressoRemoteMessage.To {
+    ctor public GenericRemoteMessage(java.lang.Object);
+    method public com.google.protobuf.MessageLite toProto();
+    field public static final androidx.test.espresso.remote.EspressoRemoteMessage.From<java.lang.Object, com.google.protobuf.MessageLite> FROM;
+  }
+
+  public final class InteractionRequest implements androidx.test.espresso.remote.EspressoRemoteMessage.To {
+    method public org.hamcrest.Matcher<androidx.test.espresso.Root> getRootMatcher();
+    method public androidx.test.espresso.ViewAction getViewAction();
+    method public androidx.test.espresso.ViewAssertion getViewAssertion();
+    method public org.hamcrest.Matcher<android.view.View> getViewMatcher();
+    method public com.google.protobuf.MessageLite toProto();
+  }
+
+  public static class InteractionRequest.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.remote.InteractionRequest build();
+    method public androidx.test.espresso.remote.InteractionRequest.Builder setRequestProto(byte[]);
+    method public androidx.test.espresso.remote.InteractionRequest.Builder setRootMatcher(org.hamcrest.Matcher<androidx.test.espresso.Root>);
+    method public androidx.test.espresso.remote.InteractionRequest.Builder setViewAction(androidx.test.espresso.ViewAction);
+    method public androidx.test.espresso.remote.InteractionRequest.Builder setViewAssertion(androidx.test.espresso.ViewAssertion);
+    method public androidx.test.espresso.remote.InteractionRequest.Builder setViewMatcher(org.hamcrest.Matcher<android.view.View>);
+  }
+
+  public final class InteractionResponse implements androidx.test.espresso.remote.EspressoRemoteMessage.To {
+    method public androidx.test.espresso.remote.InteractionResponse.RemoteError getRemoteError();
+    method public androidx.test.espresso.remote.InteractionResponse.Status getStatus();
+    method public boolean hasRemoteError();
+    method public com.google.protobuf.MessageLite toProto();
+  }
+
+  public static class InteractionResponse.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.remote.InteractionResponse build();
+    method public androidx.test.espresso.remote.InteractionResponse.Builder setRemoteError(androidx.test.espresso.remote.InteractionResponse.RemoteError);
+    method public androidx.test.espresso.remote.InteractionResponse.Builder setResultProto(byte[]);
+    method public androidx.test.espresso.remote.InteractionResponse.Builder setStatus(androidx.test.espresso.remote.InteractionResponse.Status);
+  }
+
+  public static final class InteractionResponse.RemoteError {
+    method public int getCode();
+    method public java.lang.String getDescription();
+    field public static final int REMOTE_ESPRESSO_ERROR_CODE = 0; // 0x0
+    field public static final int REMOTE_PROTOCOL_ERROR_CODE = 1; // 0x1
+  }
+
+  public static final class InteractionResponse.Status extends java.lang.Enum {
+    method public static androidx.test.espresso.remote.InteractionResponse.Status valueOf(java.lang.String);
+    method public static final androidx.test.espresso.remote.InteractionResponse.Status[] values();
+    enum_constant public static final androidx.test.espresso.remote.InteractionResponse.Status Error;
+    enum_constant public static final androidx.test.espresso.remote.InteractionResponse.Status Ok;
+  }
+
+  public final class NoRemoteEspressoInstanceException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public NoRemoteEspressoInstanceException(java.lang.String);
+  }
+
+  public class NoopRemoteInteraction implements androidx.test.espresso.remote.RemoteInteraction {
+    ctor public NoopRemoteInteraction();
+    method public java.util.concurrent.Callable<java.lang.Void> createRemoteCheckCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAssertion);
+    method public java.util.concurrent.Callable<java.lang.Void> createRemotePerformCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAction...);
+    method public boolean isRemoteProcess();
+  }
+
+  public final class ProtoUtils {
+    method public static java.lang.String capitalizeFirstChar(java.lang.String);
+    method public static <T extends java.lang.Enum> T checkedGetEnumForProto(int, java.lang.Class<T>);
+    method public static java.util.List<java.lang.reflect.Field> getFilteredFieldList(java.lang.Class<?>, java.util.List<java.lang.String>) throws java.lang.NoSuchFieldException;
+  }
+
+  public final class RemoteDescriptor {
+    method public java.util.List<androidx.test.espresso.remote.FieldDescriptor> getInstanceFieldDescriptorList();
+    method public java.lang.Class<?> getInstanceType();
+    method public java.lang.String getInstanceTypeName();
+    method public java.lang.Class<?> getProtoBuilderClass();
+    method public com.google.protobuf.Parser<?> getProtoParser();
+    method public java.lang.Class<?> getProtoType();
+    method public java.lang.Class<?>[] getRemoteConstrTypes();
+    method public java.lang.Class<?> getRemoteType();
+  }
+
+  public static final class RemoteDescriptor.Builder {
+    ctor public Builder();
+    method public androidx.test.espresso.remote.RemoteDescriptor build();
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setInstanceFieldDescriptors(androidx.test.espresso.remote.FieldDescriptor...);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setInstanceType(java.lang.Class<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setProtoBuilderType(java.lang.Class<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setProtoParser(com.google.protobuf.Parser<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setProtoType(java.lang.Class<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setRemoteConstrTypes(java.lang.Class<?>...);
+    method public androidx.test.espresso.remote.RemoteDescriptor.Builder setRemoteType(java.lang.Class<?>);
+  }
+
+  public final class RemoteDescriptorRegistry {
+    method public androidx.test.espresso.remote.RemoteDescriptor argForInstanceType(java.lang.Class<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor argForMsgType(java.lang.Class<?>);
+    method public androidx.test.espresso.remote.RemoteDescriptor argForRemoteTypeUrl(java.lang.String);
+    method public static androidx.test.espresso.remote.RemoteDescriptorRegistry getInstance();
+    method public boolean hasArgForInstanceType(java.lang.Class<?>);
+    method public boolean registerRemoteTypeArgs(java.util.List<androidx.test.espresso.remote.RemoteDescriptor>);
+    method public void unregisterRemoteTypeArgs(java.util.List<androidx.test.espresso.remote.RemoteDescriptor>);
+  }
+
+  public class RemoteEspressoException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public RemoteEspressoException(java.lang.String);
+    ctor public RemoteEspressoException(java.lang.String, java.lang.Throwable);
+  }
+
+  public abstract interface RemoteInteraction {
+    method public abstract java.util.concurrent.Callable<java.lang.Void> createRemoteCheckCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAssertion);
+    method public abstract java.util.concurrent.Callable<java.lang.Void> createRemotePerformCallable(org.hamcrest.Matcher<androidx.test.espresso.Root>, org.hamcrest.Matcher<android.view.View>, java.util.Map<java.lang.String, android.os.IBinder>, androidx.test.espresso.ViewAction...);
+    method public abstract boolean isRemoteProcess();
+    field public static final java.lang.String BUNDLE_EXECUTION_STATUS = "executionStatus";
+  }
+
+  public class RemoteInteractionRegistry {
+    method public static androidx.test.espresso.remote.RemoteInteraction getInstance();
+    method public static void registerInstance(androidx.test.espresso.remote.RemoteInteraction);
+  }
+
+  public class RemoteProtocolException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public RemoteProtocolException(java.lang.String);
+    ctor public RemoteProtocolException(java.lang.String, java.lang.Throwable);
+  }
+
+  public final class TypeProtoConverters {
+    method public static <T> T anyToType(com.google.protobuf.Any);
+    method public static android.os.Parcelable byteStringToParcelable(com.google.protobuf.ByteString, java.lang.Class<android.os.Parcelable>);
+    method public static <T> T byteStringToType(com.google.protobuf.ByteString);
+    method public static com.google.protobuf.ByteString parcelableToByteString(android.os.Parcelable);
+    method public static <T> com.google.protobuf.Any typeToAny(T);
+    method public static com.google.protobuf.ByteString typeToByteString(java.lang.Object);
+  }
+
+}
+
+package androidx.test.espresso.util {
+
+  public final class ActivityLifecycles {
+    method public static boolean hasForegroundActivities(androidx.test.runner.lifecycle.ActivityLifecycleMonitor);
+    method public static boolean hasTransitioningActivities(androidx.test.runner.lifecycle.ActivityLifecycleMonitor);
+    method public static boolean hasVisibleActivities(androidx.test.runner.lifecycle.ActivityLifecycleMonitor);
+  }
+
+  public final class EspressoOptional<T> {
+    method public static <T> androidx.test.espresso.util.EspressoOptional<T> absent();
+    method public java.util.Set<T> asSet();
+    method public static <T> androidx.test.espresso.util.EspressoOptional<T> fromNullable(T);
+    method public T get();
+    method public boolean isPresent();
+    method public static <T> androidx.test.espresso.util.EspressoOptional<T> of(T);
+    method public com.google.common.base.Optional<T> or(com.google.common.base.Optional<? extends T>);
+    method public T or(com.google.common.base.Supplier<? extends T>);
+    method public T or(T);
+    method public T orNull();
+    method public static <T> java.lang.Iterable<T> presentInstances(java.lang.Iterable<? extends com.google.common.base.Optional<? extends T>>);
+    method public <V> com.google.common.base.Optional<V> transform(com.google.common.base.Function<? super T, V>);
+  }
+
+  public final class HumanReadables {
+    method public static java.lang.String describe(android.database.Cursor);
+    method public static java.lang.String describe(android.view.View);
+    method public static java.lang.String getViewHierarchyErrorMessage(android.view.View, java.util.List<android.view.View>, java.lang.String, java.lang.String);
+  }
+
+  public final class TreeIterables {
+    method public static java.lang.Iterable<android.view.View> breadthFirstViewTraversal(android.view.View);
+    method public static java.lang.Iterable<android.view.View> depthFirstViewTraversal(android.view.View);
+    method public static java.lang.Iterable<androidx.test.espresso.util.TreeIterables.ViewAndDistance> depthFirstViewTraversalWithDistance(android.view.View);
+  }
+
+  public static class TreeIterables.ViewAndDistance {
+    method public int getDistanceFromRoot();
+    method public android.view.View getView();
+  }
+
+}
+
+package androidx.test.espresso.web.action {
+
+  public final class AtomAction<E> implements androidx.test.espresso.remote.Bindable androidx.test.espresso.ViewAction {
+    ctor public AtomAction(androidx.test.espresso.web.model.Atom<E>, androidx.test.espresso.web.model.WindowReference, androidx.test.espresso.web.model.ElementReference);
+    method public E get() throws java.util.concurrent.ExecutionException, java.lang.InterruptedException;
+    method public E get(long, java.util.concurrent.TimeUnit) throws java.util.concurrent.ExecutionException, java.lang.InterruptedException, java.util.concurrent.TimeoutException;
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public java.util.concurrent.Future<E> getFuture();
+    method public android.os.IBinder getIBinder();
+    method public java.lang.String getId();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+    method public void setIBinder(android.os.IBinder);
+  }
+
+  public class EnableJavascriptAction implements androidx.test.espresso.ViewAction {
+    ctor public EnableJavascriptAction();
+    method public org.hamcrest.Matcher<android.view.View> getConstraints();
+    method public java.lang.String getDescription();
+    method public void perform(androidx.test.espresso.UiController, android.view.View);
+  }
+
+  public abstract interface IAtomActionResultPropagator implements android.os.IInterface {
+    method public abstract void setError(android.os.Bundle) throws android.os.RemoteException;
+    method public abstract void setResult(androidx.test.espresso.web.model.Evaluation) throws android.os.RemoteException;
+  }
+
+  public static abstract class IAtomActionResultPropagator.Stub extends com.google.android.aidl.BaseStub implements androidx.test.espresso.web.action.IAtomActionResultPropagator {
+    ctor public Stub();
+    method public static androidx.test.espresso.web.action.IAtomActionResultPropagator asInterface(android.os.IBinder);
+  }
+
+  public static class IAtomActionResultPropagator.Stub.Proxy extends com.google.android.aidl.BaseProxy implements androidx.test.espresso.web.action.IAtomActionResultPropagator {
+    method public void setError(android.os.Bundle) throws android.os.RemoteException;
+    method public void setResult(androidx.test.espresso.web.model.Evaluation) throws android.os.RemoteException;
+  }
+
+}
+
+package androidx.test.espresso.web.assertion {
+
+  public final class TagSoupDocumentParser {
+    method public static androidx.test.espresso.web.assertion.TagSoupDocumentParser newInstance() throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+    method public org.w3c.dom.Document parse(java.lang.String) throws java.io.IOException, org.xml.sax.SAXException;
+  }
+
+  public abstract class WebAssertion<E> {
+    ctor public WebAssertion(androidx.test.espresso.web.model.Atom<E>);
+    method protected abstract void checkResult(android.webkit.WebView, E);
+    method public final androidx.test.espresso.web.model.Atom<E> getAtom();
+    method public final androidx.test.espresso.ViewAssertion toViewAssertion(E);
+  }
+
+  public final class WebViewAssertions {
+    method public static androidx.test.espresso.web.assertion.WebAssertion<org.w3c.dom.Document> webContent(org.hamcrest.Matcher<org.w3c.dom.Document>);
+    method public static <E> androidx.test.espresso.web.assertion.WebAssertion<E> webMatches(androidx.test.espresso.web.model.Atom<E>, org.hamcrest.Matcher<E>, androidx.test.espresso.web.assertion.WebViewAssertions.ResultDescriber<? super E>);
+    method public static <E> androidx.test.espresso.web.assertion.WebAssertion<E> webMatches(androidx.test.espresso.web.model.Atom<E>, org.hamcrest.Matcher<E>);
+  }
+
+  public static abstract interface WebViewAssertions.ResultDescriber<E> {
+    method public abstract java.lang.String apply(E);
+  }
+
+}
+
+package androidx.test.espresso.web.matcher {
+
+  public final class AmbiguousElementMatcherException extends java.lang.RuntimeException implements androidx.test.espresso.EspressoException {
+    ctor public AmbiguousElementMatcherException(java.lang.String);
+  }
+
+  public final class DomMatchers {
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> containingTextInBody(java.lang.String);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> elementById(java.lang.String, org.hamcrest.Matcher<org.w3c.dom.Element>);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> elementByXPath(java.lang.String, org.hamcrest.Matcher<org.w3c.dom.Element>);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> hasElementWithId(java.lang.String);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> hasElementWithXpath(java.lang.String);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Document> withBody(org.hamcrest.Matcher<org.w3c.dom.Element>);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Element> withTextContent(java.lang.String);
+    method public static org.hamcrest.Matcher<org.w3c.dom.Element> withTextContent(org.hamcrest.Matcher<java.lang.String>);
+  }
+
+}
+
+package androidx.test.espresso.web.model {
+
+  public abstract interface Atom<R> {
+    method public abstract java.util.List<java.lang.Object> getArguments(androidx.test.espresso.web.model.ElementReference);
+    method public abstract java.lang.String getScript();
+    method public abstract R transform(androidx.test.espresso.web.model.Evaluation);
+  }
+
+  public final class Atoms {
+    method public static <E> androidx.test.espresso.web.model.TransformingAtom.Transformer<androidx.test.espresso.web.model.Evaluation, E> castOrDie(java.lang.Class<E>);
+    method public static androidx.test.espresso.web.model.Atom<java.lang.String> getCurrentUrl();
+    method public static androidx.test.espresso.web.model.Atom<java.lang.String> getTitle();
+    method public static <O> androidx.test.espresso.web.model.Atom<O> script(java.lang.String, androidx.test.espresso.web.model.TransformingAtom.Transformer<androidx.test.espresso.web.model.Evaluation, O>);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.Evaluation> script(java.lang.String);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.Evaluation> scriptWithArgs(java.lang.String, java.util.List<java.lang.Object>);
+    method public static <I, O> androidx.test.espresso.web.model.Atom<O> transform(androidx.test.espresso.web.model.Atom<I>, androidx.test.espresso.web.model.TransformingAtom.Transformer<I, O>);
+  }
+
+  public final class ElementReference implements androidx.test.espresso.web.model.JSONAble {
+    method public java.lang.String toJSONString();
+  }
+
+  public final class Evaluation implements androidx.test.espresso.web.model.JSONAble android.os.Parcelable {
+    ctor protected Evaluation(android.os.Parcel);
+    method public int describeContents();
+    method public java.lang.String getMessage();
+    method public int getStatus();
+    method public java.lang.Object getValue();
+    method public boolean hasMessage();
+    method public void readFromParcel(android.os.Parcel);
+    method public java.lang.String toJSONString();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<androidx.test.espresso.web.model.Evaluation> CREATOR;
+  }
+
+  public abstract interface JSONAble {
+    method public abstract java.lang.String toJSONString();
+  }
+
+  public static abstract interface JSONAble.DeJSONFactory {
+    method public abstract java.lang.Object attemptDeJSONize(java.util.Map<java.lang.String, java.lang.Object>);
+  }
+
+  public final class ModelCodec {
+    method public static void addDeJSONFactory(androidx.test.espresso.web.model.JSONAble.DeJSONFactory);
+    method public static androidx.test.espresso.web.model.Evaluation decodeEvaluation(java.lang.String);
+    method public static java.lang.String encode(java.lang.Object);
+    method public static void removeDeJSONFactory(androidx.test.espresso.web.model.JSONAble.DeJSONFactory);
+  }
+
+  public class SimpleAtom implements androidx.test.espresso.web.model.Atom {
+    ctor public SimpleAtom(java.lang.String);
+    ctor public SimpleAtom(java.lang.String, androidx.test.espresso.web.model.SimpleAtom.ElementReferencePlacement);
+    method public final java.util.List<java.lang.Object> getArguments(androidx.test.espresso.web.model.ElementReference);
+    method protected java.util.List<java.lang.Object> getNonContextualArguments();
+    method public final java.lang.String getScript();
+    method protected androidx.test.espresso.web.model.Evaluation handleBadEvaluation(androidx.test.espresso.web.model.Evaluation);
+    method protected void handleNoElementReference();
+    method public final androidx.test.espresso.web.model.Evaluation transform(androidx.test.espresso.web.model.Evaluation);
+  }
+
+  public static final class SimpleAtom.ElementReferencePlacement extends java.lang.Enum {
+    method public static androidx.test.espresso.web.model.SimpleAtom.ElementReferencePlacement valueOf(java.lang.String);
+    method public static final androidx.test.espresso.web.model.SimpleAtom.ElementReferencePlacement[] values();
+    enum_constant public static final androidx.test.espresso.web.model.SimpleAtom.ElementReferencePlacement FIRST;
+    enum_constant public static final androidx.test.espresso.web.model.SimpleAtom.ElementReferencePlacement LAST;
+  }
+
+  public class TransformingAtom<I, O> implements androidx.test.espresso.web.model.Atom {
+    ctor public TransformingAtom(androidx.test.espresso.web.model.Atom<I>, androidx.test.espresso.web.model.TransformingAtom.Transformer<I, O>);
+    method public java.util.List<java.lang.Object> getArguments(androidx.test.espresso.web.model.ElementReference);
+    method public java.lang.String getScript();
+    method public O transform(androidx.test.espresso.web.model.Evaluation);
+  }
+
+  public static abstract interface TransformingAtom.Transformer<I, O> {
+    method public abstract O apply(I);
+  }
+
+  public final class WindowReference implements androidx.test.espresso.web.model.JSONAble {
+    method public java.lang.String toJSONString();
+  }
+
+}
+
+package androidx.test.espresso.web.sugar {
+
+  public final class Web {
+    ctor public Web();
+    method public static androidx.test.espresso.web.sugar.Web.WebInteraction<java.lang.Void> onWebView();
+    method public static androidx.test.espresso.web.sugar.Web.WebInteraction<java.lang.Void> onWebView(org.hamcrest.Matcher<android.view.View>);
+  }
+
+  public static class Web.WebInteraction<R> {
+    method public <E> androidx.test.espresso.web.sugar.Web.WebInteraction<E> check(androidx.test.espresso.web.assertion.WebAssertion<E>);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> forceJavascriptEnabled();
+    method public R get();
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> inWindow(androidx.test.espresso.web.model.WindowReference);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> inWindow(androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.WindowReference>);
+    method public <E> androidx.test.espresso.web.sugar.Web.WebInteraction<E> perform(androidx.test.espresso.web.model.Atom<E>);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> reset();
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> withContextualElement(androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.ElementReference>);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> withElement(androidx.test.espresso.web.model.ElementReference);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> withElement(androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.ElementReference>);
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> withNoTimeout();
+    method public androidx.test.espresso.web.sugar.Web.WebInteraction<R> withTimeout(long, java.util.concurrent.TimeUnit);
+  }
+
+}
+
+package androidx.test.espresso.web.webdriver {
+
+  public final class DriverAtoms {
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.Evaluation> clearElement();
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.ElementReference> findElement(androidx.test.espresso.web.webdriver.Locator, java.lang.String);
+    method public static androidx.test.espresso.web.model.Atom<java.util.List<androidx.test.espresso.web.model.ElementReference>> findMultipleElements(androidx.test.espresso.web.webdriver.Locator, java.lang.String);
+    method public static androidx.test.espresso.web.model.Atom<java.lang.String> getText();
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.ElementReference> selectActiveElement();
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.WindowReference> selectFrameByIdOrName(java.lang.String, androidx.test.espresso.web.model.WindowReference);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.WindowReference> selectFrameByIdOrName(java.lang.String);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.WindowReference> selectFrameByIndex(int);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.WindowReference> selectFrameByIndex(int, androidx.test.espresso.web.model.WindowReference);
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.Evaluation> webClick();
+    method public static androidx.test.espresso.web.model.Atom<androidx.test.espresso.web.model.Evaluation> webKeys(java.lang.String);
+    method public static androidx.test.espresso.web.model.Atom<java.lang.Boolean> webScrollIntoView();
+  }
+
+  public final class Locator extends java.lang.Enum {
+    method public java.lang.String getType();
+    method public static androidx.test.espresso.web.webdriver.Locator valueOf(java.lang.String);
+    method public static final androidx.test.espresso.web.webdriver.Locator[] values();
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator CLASS_NAME;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator CSS_SELECTOR;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator ID;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator LINK_TEXT;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator NAME;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator PARTIAL_LINK_TEXT;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator TAG_NAME;
+    enum_constant public static final androidx.test.espresso.web.webdriver.Locator XPATH;
+  }
+
+}
+
+package androidx.test.ext.junit.rules {
+
+  public final class ActivityScenarioRule<A extends android.app.Activity> extends org.junit.rules.ExternalResource {
+    ctor public ActivityScenarioRule(java.lang.Class<A>);
+    ctor public ActivityScenarioRule(java.lang.Class<A>, android.os.Bundle);
+    ctor public ActivityScenarioRule(android.content.Intent);
+    ctor public ActivityScenarioRule(android.content.Intent, android.os.Bundle);
+    method public androidx.test.core.app.ActivityScenario<A> getScenario();
+  }
+
+}
+
+package androidx.test.ext.junit.runners {
+
+  public final class AndroidJUnit4 extends org.junit.runner.Runner implements org.junit.runner.manipulation.Filterable org.junit.runner.manipulation.Sortable {
+    ctor public AndroidJUnit4(java.lang.Class<?>) throws org.junit.runners.model.InitializationError;
+    method public void filter(org.junit.runner.manipulation.Filter) throws org.junit.runner.manipulation.NoTestsRemainException;
+    method public org.junit.runner.Description getDescription();
+    method public void run(org.junit.runner.notification.RunNotifier);
+    method public void sort(org.junit.runner.manipulation.Sorter);
+  }
+
+}
+
+package androidx.test.ext.truth.app {
+
+  public class NotificationActionSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.app.NotificationActionSubject assertThat(android.app.Notification.Action);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.app.NotificationActionSubject, android.app.Notification.Action> notificationActions();
+    method public final com.google.common.truth.StringSubject title();
+  }
+
+  public class NotificationSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.app.NotificationSubject assertThat(android.app.Notification);
+    method public final androidx.test.ext.truth.app.PendingIntentSubject contentIntent();
+    method public final androidx.test.ext.truth.app.PendingIntentSubject deleteIntent();
+    method public final void doesNotHaveFlags(int);
+    method public final androidx.test.ext.truth.os.BundleSubject extras();
+    method public final void hasFlags(int);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.app.NotificationSubject, android.app.Notification> notifications();
+    method public final com.google.common.truth.StringSubject tickerText();
+  }
+
+  public class PendingIntentSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.app.PendingIntentSubject assertThat(android.app.PendingIntent);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.app.PendingIntentSubject, android.app.PendingIntent> pendingIntents();
+  }
+
+}
+
+package androidx.test.ext.truth.content {
+
+  public final class IntentCorrespondences {
+    method public static com.google.common.truth.Correspondence<android.content.Intent, android.content.Intent> action();
+    method public static com.google.common.truth.Correspondence<android.content.Intent, android.content.Intent> all(com.google.common.truth.Correspondence<android.content.Intent, android.content.Intent>...);
+    method public static com.google.common.truth.Correspondence<android.content.Intent, android.content.Intent> data();
+  }
+
+  public final class IntentSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.content.IntentSubject assertThat(android.content.Intent);
+    method public com.google.common.truth.IterableSubject categories();
+    method public androidx.test.ext.truth.os.BundleSubject extras();
+    method public void filtersEquallyTo(android.content.Intent);
+    method public void hasAction(java.lang.String);
+    method public void hasComponent(java.lang.String, java.lang.String);
+    method public void hasComponent(android.content.ComponentName);
+    method public void hasComponentClass(java.lang.Class<?>);
+    method public void hasComponentClass(java.lang.String);
+    method public void hasComponentPackage(java.lang.String);
+    method public void hasData(android.net.Uri);
+    method public void hasFlags(int);
+    method public void hasNoAction();
+    method public void hasPackage(java.lang.String);
+    method public void hasType(java.lang.String);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.content.IntentSubject, android.content.Intent> intents();
+  }
+
+}
+
+package androidx.test.ext.truth.location {
+
+  public final class LocationCorrespondences {
+    method public static com.google.common.truth.Correspondence<android.location.Location, android.location.Location> at();
+    method public static com.google.common.truth.Correspondence<android.location.Location, android.location.Location> equality();
+    method public static com.google.common.truth.Correspondence<android.location.Location, android.location.Location> nearby(float);
+  }
+
+  public class LocationSubject extends com.google.common.truth.Subject {
+    method public com.google.common.truth.FloatSubject accuracy();
+    method public com.google.common.truth.DoubleSubject altitude();
+    method public static androidx.test.ext.truth.location.LocationSubject assertThat(android.location.Location);
+    method public com.google.common.truth.FloatSubject bearing();
+    method public com.google.common.truth.FloatSubject bearingAccuracy();
+    method public com.google.common.truth.FloatSubject bearingTo(double, double);
+    method public com.google.common.truth.FloatSubject bearingTo(android.location.Location);
+    method public com.google.common.truth.FloatSubject distanceTo(double, double);
+    method public com.google.common.truth.FloatSubject distanceTo(android.location.Location);
+    method public void doesNotHaveProvider(java.lang.String);
+    method public com.google.common.truth.LongSubject elapsedRealtimeMillis();
+    method public com.google.common.truth.LongSubject elapsedRealtimeNanos();
+    method public final androidx.test.ext.truth.os.BundleSubject extras();
+    method public void hasAccuracy();
+    method public void hasAltitude();
+    method public void hasBearing();
+    method public void hasBearingAccuracy();
+    method public void hasProvider(java.lang.String);
+    method public void hasSpeed();
+    method public void hasSpeedAccuracy();
+    method public void hasVerticalAccuracy();
+    method public void isAt(android.location.Location);
+    method public void isAt(double, double);
+    method public void isFaraway(android.location.Location, float);
+    method public void isMock();
+    method public void isNearby(android.location.Location, float);
+    method public void isNotAt(android.location.Location);
+    method public void isNotAt(double, double);
+    method public void isNotMock();
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.location.LocationSubject, android.location.Location> locations();
+    method public com.google.common.truth.FloatSubject speed();
+    method public com.google.common.truth.FloatSubject speedAccuracy();
+    method public com.google.common.truth.LongSubject time();
+    method public com.google.common.truth.FloatSubject verticalAccuracy();
+  }
+
+}
+
+package androidx.test.ext.truth.os {
+
+  public final class BundleSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.os.BundleSubject assertThat(android.os.Bundle);
+    method public com.google.common.truth.BooleanSubject bool(java.lang.String);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.os.BundleSubject, android.os.Bundle> bundles();
+    method public void containsKey(java.lang.String);
+    method public void doesNotContainKey(java.lang.String);
+    method public void hasSize(int);
+    method public com.google.common.truth.IntegerSubject integer(java.lang.String);
+    method public void isEmpty();
+    method public void isNotEmpty();
+    method public com.google.common.truth.LongSubject longInt(java.lang.String);
+    method public <T extends android.os.Parcelable> androidx.test.ext.truth.os.ParcelableSubject<T> parcelable(java.lang.String);
+    method public com.google.common.truth.IterableSubject parcelableArrayList(java.lang.String);
+    method public <T extends android.os.Parcelable, SubjectT extends com.google.common.truth.Subject> SubjectT parcelableAsType(java.lang.String, com.google.common.truth.Subject.Factory<SubjectT, T>);
+    method public com.google.common.truth.StringSubject string(java.lang.String);
+    method public com.google.common.truth.IterableSubject stringArrayList(java.lang.String);
+  }
+
+  public final class ParcelableSubject<T extends android.os.Parcelable> extends com.google.common.truth.Subject {
+    method public static <T extends android.os.Parcelable> androidx.test.ext.truth.os.ParcelableSubject<T> assertThat(T);
+    method public static <T extends android.os.Parcelable> com.google.common.truth.Subject.Factory<androidx.test.ext.truth.os.ParcelableSubject<T>, T> parcelables();
+    method public void recreatesEqual(android.os.Parcelable.Creator<T>);
+  }
+
+}
+
+package androidx.test.ext.truth.view {
+
+  public final class MotionEventSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.view.MotionEventSubject assertThat(android.view.MotionEvent);
+    method public void hasAction(int);
+    method public void hasActionButton(int);
+    method public void hasButtonState(int);
+    method public void hasDeviceId(int);
+    method public void hasDownTime(long);
+    method public void hasEdgeFlags(int);
+    method public void hasEventTime(long);
+    method public void hasFlags(int);
+    method public void hasHistorySize(int);
+    method public void hasMetaState(int);
+    method public void hasPointerCount(int);
+    method public com.google.common.truth.LongSubject historicalEventTime(int);
+    method public com.google.common.truth.FloatSubject historicalOrientation(int);
+    method public androidx.test.ext.truth.view.PointerCoordsSubject historicalPointerCoords(int, int);
+    method public com.google.common.truth.FloatSubject historicalPressure(int);
+    method public com.google.common.truth.FloatSubject historicalSize(int);
+    method public com.google.common.truth.FloatSubject historicalToolMajor(int);
+    method public com.google.common.truth.FloatSubject historicalToolMinor(int);
+    method public com.google.common.truth.FloatSubject historicalTouchMajor(int);
+    method public com.google.common.truth.FloatSubject historicalTouchMinor(int);
+    method public com.google.common.truth.FloatSubject historicalX(int);
+    method public com.google.common.truth.FloatSubject historicalY(int);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.view.MotionEventSubject, android.view.MotionEvent> motionEvents();
+    method public com.google.common.truth.FloatSubject orientation();
+    method public com.google.common.truth.FloatSubject orientation(int);
+    method public androidx.test.ext.truth.view.PointerCoordsSubject pointerCoords(int);
+    method public com.google.common.truth.IntegerSubject pointerId(int);
+    method public androidx.test.ext.truth.view.PointerPropertiesSubject pointerProperties(int);
+    method public com.google.common.truth.FloatSubject pressure();
+    method public com.google.common.truth.FloatSubject pressure(int);
+    method public com.google.common.truth.FloatSubject rawX();
+    method public com.google.common.truth.FloatSubject rawY();
+    method public com.google.common.truth.FloatSubject size();
+    method public com.google.common.truth.FloatSubject size(int);
+    method public com.google.common.truth.FloatSubject toolMajor();
+    method public com.google.common.truth.FloatSubject toolMajor(int);
+    method public com.google.common.truth.FloatSubject toolMinor();
+    method public com.google.common.truth.FloatSubject toolMinor(int);
+    method public com.google.common.truth.FloatSubject touchMajor();
+    method public com.google.common.truth.FloatSubject touchMajor(int);
+    method public com.google.common.truth.FloatSubject touchMinor();
+    method public com.google.common.truth.FloatSubject touchMinor(int);
+    method public com.google.common.truth.FloatSubject x();
+    method public com.google.common.truth.FloatSubject x(int);
+    method public com.google.common.truth.FloatSubject xPrecision();
+    method public com.google.common.truth.FloatSubject y();
+    method public com.google.common.truth.FloatSubject y(int);
+    method public com.google.common.truth.FloatSubject yPrecision();
+  }
+
+  public final class PointerCoordsSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.view.PointerCoordsSubject assertThat(android.view.MotionEvent.PointerCoords);
+    method public com.google.common.truth.FloatSubject axisValue(int);
+    method public com.google.common.truth.FloatSubject orientation();
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.view.PointerCoordsSubject, android.view.MotionEvent.PointerCoords> pointerCoords();
+    method public com.google.common.truth.FloatSubject pressure();
+    method public com.google.common.truth.FloatSubject size();
+    method public com.google.common.truth.FloatSubject toolMajor();
+    method public com.google.common.truth.FloatSubject toolMinor();
+    method public com.google.common.truth.FloatSubject touchMajor();
+    method public com.google.common.truth.FloatSubject touchMinor();
+    method public com.google.common.truth.FloatSubject x();
+    method public com.google.common.truth.FloatSubject y();
+  }
+
+  public final class PointerPropertiesSubject extends com.google.common.truth.Subject {
+    method public static androidx.test.ext.truth.view.PointerPropertiesSubject assertThat(android.view.MotionEvent.PointerProperties);
+    method public void hasId(int);
+    method public void hasToolType(int);
+    method public void isEqualTo(android.view.MotionEvent.PointerProperties);
+    method public static com.google.common.truth.Subject.Factory<androidx.test.ext.truth.view.PointerPropertiesSubject, android.view.MotionEvent.PointerProperties> pointerProperties();
+  }
+
+}
+
+package androidx.test.filters {
+
+  public abstract class FlakyTest implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class LargeTest implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class MediumTest implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class RequiresDevice implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class SdkSuppress implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class SmallTest implements java.lang.annotation.Annotation {
+  }
+
+  public abstract class Suppress implements java.lang.annotation.Annotation {
+  }
+
+}
+
+package androidx.test.jank {
+
+  public abstract class GfxFrameStatsMonitor implements java.lang.annotation.Annotation {
+    field public static final java.lang.String KEY_AVG_FPS = "framestats-fps";
+    field public static final java.lang.String KEY_AVG_JANK_RATE = "framestats-jankrate";
+    field public static final java.lang.String KEY_AVG_SLOW_RATE = "framestats-slowrate";
+    field public static final java.lang.String KEY_FRAME_COUNT = "framestats-frame-count";
+    field public static final java.lang.String KEY_RENDERTHREAD_TIME_90TH_PERCENTILE = "framestats-renderthread-90";
+    field public static final java.lang.String KEY_RENDERTHREAD_TIME_95TH_PERCENTILE = "framestats-renderthread-95";
+    field public static final java.lang.String KEY_RENDERTHREAD_TIME_99TH_PERCENTILE = "framestats-renderthread-99";
+    field public static final java.lang.String KEY_RENDERTHREAD_TIME_MEDIAN = "framestats-renderthread-median";
+    field public static final java.lang.String KEY_TOTAL_TIME_90TH_PERCENTILE = "framestats-totaltime-90";
+    field public static final java.lang.String KEY_TOTAL_TIME_95TH_PERCENTILE = "framestats-totaltime-95";
+    field public static final java.lang.String KEY_TOTAL_TIME_99TH_PERCENTILE = "framestats-totaltime-99";
+    field public static final java.lang.String KEY_TOTAL_TIME_MEDIAN = "framestats-totaltime-median";
+    field public static final java.lang.String KEY_UITHREAD_TIME_90TH_PERCENTILE = "framestats-uithread-90";
+    field public static final java.lang.String KEY_UITHREAD_TIME_95TH_PERCENTILE = "framestats-uithread-95";
+    field public static final java.lang.String KEY_UITHREAD_TIME_99TH_PERCENTILE = "framestats-uithread-99";
+    field public static final java.lang.String KEY_UITHREAD_TIME_MEDIAN = "framestats-uithread-median";
+    field public static final java.lang.String KEY_VSYNC_COUNT = "framestats-vsync-count";
+  }
+
+  public abstract class GfxMonitor implements java.lang.annotation.Annotation {
+    field public static final java.lang.String KEY_AVG_FRAME_TIME_50TH_PERCENTILE = "gfx-avg-frame-time-50";
+    field public static final java.lang.String KEY_AVG_FRAME_TIME_90TH_PERCENTILE = "gfx-avg-frame-time-90";
+    field public static final java.lang.String KEY_AVG_FRAME_TIME_95TH_PERCENTILE = "gfx-avg-frame-time-95";
+    field public static final java.lang.String KEY_AVG_FRAME_TIME_99TH_PERCENTILE = "gfx-avg-frame-time-99";
+    field public static final java.lang.String KEY_AVG_HIGH_INPUT_LATENCY = "gfx-avg-high-input-latency";
+    field public static final java.lang.String KEY_AVG_MISSED_VSYNC = "gfx-avg-missed-vsync";
+    field public static final java.lang.String KEY_AVG_NUM_FRAME_MISSED = "gfx-avg-num-frame-deadline-missed";
+    field public static final java.lang.String KEY_AVG_NUM_JANKY = "gfx-avg-jank";
+    field public static final java.lang.String KEY_AVG_SLOW_BITMAP_UPLOADS = "gfx-avg-slow-bitmap-uploads";
+    field public static final java.lang.String KEY_AVG_SLOW_DRAW = "gfx-avg-slow-draw";
+    field public static final java.lang.String KEY_AVG_SLOW_UI_THREAD = "gfx-avg-slow-ui-thread";
+    field public static final java.lang.String KEY_AVG_TOTAL_FRAMES = "gfx-avg-total-frames";
+    field public static final java.lang.String KEY_MAX_FRAME_TIME_50TH_PERCENTILE = "gfx-max-frame-time-50";
+    field public static final java.lang.String KEY_MAX_FRAME_TIME_90TH_PERCENTILE = "gfx-max-frame-time-90";
+    field public static final java.lang.String KEY_MAX_FRAME_TIME_95TH_PERCENTILE = "gfx-max-frame-time-95";
+    field public static final java.lang.String KEY_MAX_FRAME_TIME_99TH_PERCENTILE = "gfx-max-frame-time-99";
+    field public static final java.lang.String KEY_MAX_HIGH_INPUT_LATENCY = "gfx-max-high-input-latency";
+    field public static final java.lang.String KEY_MAX_MISSED_VSYNC = "gfx-max-missed-vsync";
+    field public static final java.lang.String KEY_MAX_NUM_FRAME_MISSED = "gfx-max-num-frame-deadline-missed";
+    field public static final java.lang.String KEY_MAX_NUM_JANKY = "gfx-max-jank";
+    field public static final java.lang.String KEY_MAX_SLOW_BITMAP_UPLOADS = "gfx-max-slow-bitmap-uploads";
+    field public static final java.lang.String KEY_MAX_SLOW_DRAW = "gfx-max-slow-draw";
+    field public static final java.lang.String KEY_MAX_SLOW_UI_THREAD = "gfx-max-slow-ui-thread";
+    field public static final java.lang.String KEY_MAX_TOTAL_FRAMES = "gfx-max-total-frames";
+    field public static final java.lang.String KEY_MIN_TOTAL_FRAMES = "gfx-min-total-frames";
+  }
+
+  public abstract interface IMonitor {
+    method public abstract android.os.Bundle getMetrics();
+    method public abstract void startIteration() throws java.lang.Throwable;
+    method public abstract android.os.Bundle stopIteration() throws java.lang.Throwable;
+  }
+
+  public abstract interface IMonitorFactory {
+    method public abstract java.util.List<androidx.test.jank.IMonitor> getMonitors(java.lang.reflect.Method, java.lang.Object);
+  }
+
+  public abstract class JankTest implements java.lang.annotation.Annotation {
+  }
+
+  public class JankTestBase extends android.test.InstrumentationTestCase {
+    ctor public JankTestBase();
+    method public void afterLoop() throws java.lang.Exception;
+    method public void afterTest(android.os.Bundle);
+    method public void beforeLoop() throws java.lang.Exception;
+    method public void beforeTest() throws java.lang.Exception;
+    method protected androidx.test.jank.IMonitorFactory createMonitorFactory();
+    method protected final android.os.Bundle getArguments();
+    method public final int getCurrentIteration();
+    method protected androidx.test.jank.IMonitorFactory getMonitorFactory();
+    method protected java.util.List<androidx.test.jank.IMonitor> getMonitors(java.lang.reflect.Method);
+  }
+
+}
+
+package androidx.test.jank.annotations {
+
+  public abstract class UseMonitorFactory implements java.lang.annotation.Annotation {
+  }
+
+}
+
+package androidx.test.platform {
+
+  public abstract interface TestFrameworkException {
+  }
+
+}
+
+package androidx.test.platform.app {
+
+  public abstract interface InstrumentationProvider {
+    method public abstract android.app.Instrumentation provide();
+  }
+
+  public final class InstrumentationRegistry {
+    method public static android.os.Bundle getArguments();
+    method public static android.app.Instrumentation getInstrumentation();
+    method public static void registerInstance(android.app.Instrumentation, android.os.Bundle);
+    method public static void registerInstrumentationProvider(androidx.test.platform.app.InstrumentationProvider, android.os.Bundle);
+  }
+
+}
+
+package androidx.test.platform.ui {
+
+  public class InjectEventSecurityException extends java.lang.Exception implements androidx.test.platform.TestFrameworkException {
+    ctor public InjectEventSecurityException(java.lang.String);
+    ctor public InjectEventSecurityException(java.lang.Throwable);
+    ctor public InjectEventSecurityException(java.lang.String, java.lang.Throwable);
+  }
+
+  public abstract interface UiController {
+    method public abstract boolean injectKeyEvent(android.view.KeyEvent) throws androidx.test.platform.ui.InjectEventSecurityException;
+    method public abstract boolean injectMotionEvent(android.view.MotionEvent) throws androidx.test.platform.ui.InjectEventSecurityException;
+    method public abstract boolean injectString(java.lang.String) throws androidx.test.platform.ui.InjectEventSecurityException;
+    method public abstract void loopMainThreadForAtLeast(long);
+    method public abstract void loopMainThreadUntilIdle();
+  }
+
+}
+
+package androidx.test.rule {
+
+  public deprecated class ActivityTestRule<T extends android.app.Activity> implements org.junit.rules.TestRule {
+    ctor public ActivityTestRule(java.lang.Class<T>);
+    ctor public ActivityTestRule(java.lang.Class<T>, boolean);
+    ctor public ActivityTestRule(java.lang.Class<T>, boolean, boolean);
+    ctor public ActivityTestRule(androidx.test.runner.intercepting.SingleActivityFactory<T>, boolean, boolean);
+    ctor public ActivityTestRule(java.lang.Class<T>, java.lang.String, int, boolean, boolean);
+    method protected void afterActivityFinished();
+    method protected void afterActivityLaunched();
+    method public org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method protected void beforeActivityLaunched();
+    method public void finishActivity();
+    method public T getActivity();
+    method protected android.content.Intent getActivityIntent();
+    method public android.app.Instrumentation.ActivityResult getActivityResult();
+    method public T launchActivity(android.content.Intent);
+    method public void runOnUiThread(java.lang.Runnable) throws java.lang.Throwable;
+  }
+
+  public class DisableOnAndroidDebug implements org.junit.rules.TestRule {
+    ctor public DisableOnAndroidDebug(org.junit.rules.TestRule);
+    method public final org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method public boolean isDebugging();
+  }
+
+  public class GrantPermissionRule implements org.junit.rules.TestRule {
+    method public final org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method public static androidx.test.rule.GrantPermissionRule grant(java.lang.String...);
+  }
+
+  public class ServiceTestRule implements org.junit.rules.TestRule {
+    ctor public ServiceTestRule();
+    ctor protected ServiceTestRule(long, java.util.concurrent.TimeUnit);
+    method protected void afterService();
+    method public org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method protected void beforeService();
+    method public android.os.IBinder bindService(android.content.Intent) throws java.util.concurrent.TimeoutException;
+    method public android.os.IBinder bindService(android.content.Intent, android.content.ServiceConnection, int) throws java.util.concurrent.TimeoutException;
+    method public void startService(android.content.Intent) throws java.util.concurrent.TimeoutException;
+    method public void unbindService();
+    method public static androidx.test.rule.ServiceTestRule withTimeout(long, java.util.concurrent.TimeUnit);
+  }
+
+  public deprecated class UiThreadTestRule implements org.junit.rules.TestRule {
+    ctor public UiThreadTestRule();
+    method public org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method public void runOnUiThread(java.lang.Runnable) throws java.lang.Throwable;
+    method protected boolean shouldRunOnUiThread(org.junit.runner.Description);
+  }
+
+}
+
+package androidx.test.rule.logging {
+
+  public class AtraceLogger {
+    method public void atraceStart(java.util.Set<java.lang.String>, int, int, java.io.File, java.lang.String) throws java.io.IOException;
+    method public void atraceStop() throws java.io.IOException, java.lang.InterruptedException;
+    method public static androidx.test.rule.logging.AtraceLogger getAtraceLoggerInstance(android.app.Instrumentation);
+  }
+
+}
+
+package androidx.test.rule.provider {
+
+  public class ProviderTestRule implements org.junit.rules.TestRule {
+    method protected void afterProviderCleanedUp();
+    method public org.junit.runners.model.Statement apply(org.junit.runners.model.Statement, org.junit.runner.Description);
+    method protected void beforeProviderSetup();
+    method public android.content.ContentResolver getResolver();
+    method public void revokePermission(java.lang.String);
+    method public void runDatabaseCommands(java.lang.String, java.lang.String...);
+  }
+
+  public static class ProviderTestRule.Builder {
+    ctor public Builder(java.lang.Class<T>, java.lang.String);
+    method public <T extends android.content.ContentProvider> androidx.test.rule.provider.ProviderTestRule.Builder addProvider(java.lang.Class<T>, java.lang.String);
+    method public androidx.test.rule.provider.ProviderTestRule build();
+    method public androidx.test.rule.provider.ProviderTestRule.Builder setDatabaseCommands(java.lang.String, java.lang.String...);
+    method public androidx.test.rule.provider.ProviderTestRule.Builder setDatabaseCommandsFile(java.lang.String, java.io.File);
+    method public androidx.test.rule.provider.ProviderTestRule.Builder setDatabaseFile(java.lang.String, java.io.File);
+    method public androidx.test.rule.provider.ProviderTestRule.Builder setPrefix(java.lang.String);
+  }
+
+}
+
+package androidx.test.runner {
+
+  public final deprecated class AndroidJUnit4 extends org.junit.runner.Runner implements org.junit.runner.manipulation.Filterable org.junit.runner.manipulation.Sortable {
+    ctor public AndroidJUnit4(java.lang.Class<?>, androidx.test.internal.util.AndroidRunnerParams) throws org.junit.runners.model.InitializationError;
+    ctor public AndroidJUnit4(java.lang.Class<?>) throws org.junit.runners.model.InitializationError;
+    method public void filter(org.junit.runner.manipulation.Filter) throws org.junit.runner.manipulation.NoTestsRemainException;
+    method public org.junit.runner.Description getDescription();
+    method public void run(org.junit.runner.notification.RunNotifier);
+    method public void sort(org.junit.runner.manipulation.Sorter);
+  }
+
+  public class AndroidJUnitRunner extends androidx.test.runner.MonitoringInstrumentation implements androidx.test.internal.events.client.TestEventClientConnectListener {
+    ctor public AndroidJUnitRunner();
+    method public void onTestEventClientConnect();
+  }
+
+  public class MonitoringInstrumentation extends androidx.test.internal.runner.hidden.ExposedInstrumentationApi {
+    ctor public MonitoringInstrumentation();
+    method protected void dumpThreadStateToOutputs(java.lang.String);
+    method protected java.lang.String getThreadState();
+    method protected void installMultidex();
+    method protected void installOldMultiDex(java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.reflect.InvocationTargetException, java.lang.NoSuchMethodException;
+    method public void interceptActivityUsing(androidx.test.runner.intercepting.InterceptingActivityFactory);
+    method protected deprecated boolean isPrimaryInstrProcess(java.lang.String);
+    method protected final boolean isPrimaryInstrProcess();
+    method protected void restoreUncaughtExceptionHandler();
+    method protected final void setJsBridgeClassName(java.lang.String);
+    method protected boolean shouldWaitForActivitiesToComplete();
+    method protected void specifyDexMakerCacheProperty();
+    method public void useDefaultInterceptingActivityFactory();
+    method protected void waitForActivitiesToComplete();
+  }
+
+  public class MonitoringInstrumentation.ActivityFinisher implements java.lang.Runnable {
+    ctor public ActivityFinisher();
+    method public void run();
+  }
+
+  public class UsageTrackerFacilitator implements androidx.test.internal.runner.tracker.UsageTracker {
+    ctor public UsageTrackerFacilitator(androidx.test.internal.runner.RunnerArgs);
+    ctor public UsageTrackerFacilitator(boolean);
+    method public void registerUsageTracker(androidx.test.internal.runner.tracker.UsageTracker);
+    method public void sendUsages();
+    method public boolean shouldTrackUsage();
+    method public void trackUsage(java.lang.String, java.lang.String);
+  }
+
+}
+
+package androidx.test.runner.intent {
+
+  public abstract interface IntentCallback {
+    method public abstract void onIntentSent(android.content.Intent);
+  }
+
+  public abstract interface IntentMonitor {
+    method public abstract void addIntentCallback(androidx.test.runner.intent.IntentCallback);
+    method public abstract void removeIntentCallback(androidx.test.runner.intent.IntentCallback);
+  }
+
+  public final class IntentMonitorRegistry {
+    method public static androidx.test.runner.intent.IntentMonitor getInstance();
+    method public static void registerInstance(androidx.test.runner.intent.IntentMonitor);
+  }
+
+  public abstract interface IntentStubber {
+    method public abstract android.app.Instrumentation.ActivityResult getActivityResultForIntent(android.content.Intent);
+  }
+
+  public final class IntentStubberRegistry {
+    method public static androidx.test.runner.intent.IntentStubber getInstance();
+    method public static boolean isLoaded();
+    method public static void load(androidx.test.runner.intent.IntentStubber);
+    method public static synchronized void reset();
+  }
+
+}
+
+package androidx.test.runner.intercepting {
+
+  public abstract interface InterceptingActivityFactory {
+    method public abstract android.app.Activity create(java.lang.ClassLoader, java.lang.String, android.content.Intent);
+    method public abstract boolean shouldIntercept(java.lang.ClassLoader, java.lang.String, android.content.Intent);
+  }
+
+  public abstract class SingleActivityFactory<T extends android.app.Activity> implements androidx.test.runner.intercepting.InterceptingActivityFactory {
+    ctor public SingleActivityFactory(java.lang.Class<T>);
+    method public final android.app.Activity create(java.lang.ClassLoader, java.lang.String, android.content.Intent);
+    method protected abstract T create(android.content.Intent);
+    method public final java.lang.Class<T> getActivityClassToIntercept();
+    method public final boolean shouldIntercept(java.lang.ClassLoader, java.lang.String, android.content.Intent);
+  }
+
+}
+
+package androidx.test.runner.lifecycle {
+
+  public abstract interface ActivityLifecycleCallback {
+    method public abstract void onActivityLifecycleChanged(android.app.Activity, androidx.test.runner.lifecycle.Stage);
+  }
+
+  public abstract interface ActivityLifecycleMonitor {
+    method public abstract void addLifecycleCallback(androidx.test.runner.lifecycle.ActivityLifecycleCallback);
+    method public abstract java.util.Collection<android.app.Activity> getActivitiesInStage(androidx.test.runner.lifecycle.Stage);
+    method public abstract androidx.test.runner.lifecycle.Stage getLifecycleStageOf(android.app.Activity);
+    method public abstract void removeLifecycleCallback(androidx.test.runner.lifecycle.ActivityLifecycleCallback);
+  }
+
+  public final class ActivityLifecycleMonitorRegistry {
+    method public static androidx.test.runner.lifecycle.ActivityLifecycleMonitor getInstance();
+    method public static void registerInstance(androidx.test.runner.lifecycle.ActivityLifecycleMonitor);
+  }
+
+  public abstract interface ApplicationLifecycleCallback {
+    method public abstract void onApplicationLifecycleChanged(android.app.Application, androidx.test.runner.lifecycle.ApplicationStage);
+  }
+
+  public abstract interface ApplicationLifecycleMonitor {
+    method public abstract void addLifecycleCallback(androidx.test.runner.lifecycle.ApplicationLifecycleCallback);
+    method public abstract void removeLifecycleCallback(androidx.test.runner.lifecycle.ApplicationLifecycleCallback);
+  }
+
+  public final class ApplicationLifecycleMonitorRegistry {
+    method public static androidx.test.runner.lifecycle.ApplicationLifecycleMonitor getInstance();
+    method public static void registerInstance(androidx.test.runner.lifecycle.ApplicationLifecycleMonitor);
+  }
+
+  public final class ApplicationStage extends java.lang.Enum {
+    method public static androidx.test.runner.lifecycle.ApplicationStage valueOf(java.lang.String);
+    method public static final androidx.test.runner.lifecycle.ApplicationStage[] values();
+    enum_constant public static final androidx.test.runner.lifecycle.ApplicationStage CREATED;
+    enum_constant public static final androidx.test.runner.lifecycle.ApplicationStage PRE_ON_CREATE;
+  }
+
+  public final class Stage extends java.lang.Enum {
+    method public static androidx.test.runner.lifecycle.Stage valueOf(java.lang.String);
+    method public static final androidx.test.runner.lifecycle.Stage[] values();
+    enum_constant public static final androidx.test.runner.lifecycle.Stage CREATED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage DESTROYED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage PAUSED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage PRE_ON_CREATE;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage RESTARTED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage RESUMED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage STARTED;
+    enum_constant public static final androidx.test.runner.lifecycle.Stage STOPPED;
+  }
+
+}
+
+package androidx.test.runner.permission {
+
+  public class PermissionRequester implements androidx.test.internal.platform.content.PermissionGranter {
+    ctor public PermissionRequester();
+    method public void addPermissions(java.lang.String...);
+    method public void requestPermissions();
+    method protected void setAndroidRuntimeVersion(int);
+  }
+
+  public abstract class RequestPermissionCallable implements java.util.concurrent.Callable {
+    ctor public RequestPermissionCallable(androidx.test.runner.permission.ShellCommand, android.content.Context, java.lang.String);
+    method protected java.lang.String getPermission();
+    method protected androidx.test.runner.permission.ShellCommand getShellCommand();
+    method protected boolean isPermissionGranted();
+  }
+
+  public static final class RequestPermissionCallable.Result extends java.lang.Enum {
+    method public static androidx.test.runner.permission.RequestPermissionCallable.Result valueOf(java.lang.String);
+    method public static final androidx.test.runner.permission.RequestPermissionCallable.Result[] values();
+    enum_constant public static final androidx.test.runner.permission.RequestPermissionCallable.Result FAILURE;
+    enum_constant public static final androidx.test.runner.permission.RequestPermissionCallable.Result SUCCESS;
+  }
+
+  public abstract class ShellCommand {
+    ctor public ShellCommand();
+  }
+
+}
+
+package androidx.test.runner.screenshot {
+
+  public class BasicScreenCaptureProcessor implements androidx.test.runner.screenshot.ScreenCaptureProcessor {
+    ctor public BasicScreenCaptureProcessor();
+    method protected java.lang.String getDefaultFilename();
+    method protected java.lang.String getFilename(java.lang.String);
+    method public java.lang.String process(androidx.test.runner.screenshot.ScreenCapture) throws java.io.IOException;
+    field protected java.lang.String mDefaultFilenamePrefix;
+    field protected java.io.File mDefaultScreenshotPath;
+    field protected java.lang.String mFileNameDelimiter;
+    field protected java.lang.String mTag;
+  }
+
+  public final class ScreenCapture {
+    method public android.graphics.Bitmap getBitmap();
+    method public android.graphics.Bitmap.CompressFormat getFormat();
+    method public java.lang.String getName();
+    method public void process() throws java.io.IOException;
+    method public void process(java.util.Set<androidx.test.runner.screenshot.ScreenCaptureProcessor>) throws java.io.IOException;
+    method public androidx.test.runner.screenshot.ScreenCapture setFormat(android.graphics.Bitmap.CompressFormat);
+    method public androidx.test.runner.screenshot.ScreenCapture setName(java.lang.String);
+  }
+
+  public abstract interface ScreenCaptureProcessor {
+    method public abstract java.lang.String process(androidx.test.runner.screenshot.ScreenCapture) throws java.io.IOException;
+  }
+
+  public final class Screenshot {
+    ctor public Screenshot();
+    method public static void addScreenCaptureProcessors(java.util.Set<androidx.test.runner.screenshot.ScreenCaptureProcessor>);
+    method public static androidx.test.runner.screenshot.ScreenCapture capture() throws androidx.test.runner.screenshot.Screenshot.ScreenShotException;
+    method public static androidx.test.runner.screenshot.ScreenCapture capture(android.app.Activity) throws androidx.test.runner.screenshot.Screenshot.ScreenShotException;
+    method public static androidx.test.runner.screenshot.ScreenCapture capture(android.view.View) throws androidx.test.runner.screenshot.Screenshot.ScreenShotException;
+    method public static void setScreenshotProcessors(java.util.Set<androidx.test.runner.screenshot.ScreenCaptureProcessor>);
+  }
+
+  public class UiAutomationWrapper {
+    method public android.graphics.Bitmap takeScreenshot();
+  }
+
+}
+
+package androidx.test.uiautomator {
+
+  public class By {
+    method public static androidx.test.uiautomator.BySelector checkable(boolean);
+    method public static androidx.test.uiautomator.BySelector checked(boolean);
+    method public static androidx.test.uiautomator.BySelector clazz(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector clazz(java.lang.String, java.lang.String);
+    method public static androidx.test.uiautomator.BySelector clazz(java.lang.Class);
+    method public static androidx.test.uiautomator.BySelector clazz(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.BySelector clickable(boolean);
+    method public static androidx.test.uiautomator.BySelector copy(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.BySelector depth(int);
+    method public static androidx.test.uiautomator.BySelector desc(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector desc(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.BySelector descContains(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector descEndsWith(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector descStartsWith(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector enabled(boolean);
+    method public static androidx.test.uiautomator.BySelector focusable(boolean);
+    method public static androidx.test.uiautomator.BySelector focused(boolean);
+    method public static androidx.test.uiautomator.BySelector hasChild(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.BySelector hasDescendant(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.BySelector hasDescendant(androidx.test.uiautomator.BySelector, int);
+    method public static androidx.test.uiautomator.BySelector longClickable(boolean);
+    method public static androidx.test.uiautomator.BySelector pkg(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector pkg(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.BySelector res(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector res(java.lang.String, java.lang.String);
+    method public static androidx.test.uiautomator.BySelector res(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.BySelector scrollable(boolean);
+    method public static androidx.test.uiautomator.BySelector selected(boolean);
+    method public static androidx.test.uiautomator.BySelector text(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector text(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.BySelector textContains(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector textEndsWith(java.lang.String);
+    method public static androidx.test.uiautomator.BySelector textStartsWith(java.lang.String);
+  }
+
+  public class BySelector {
+    method public androidx.test.uiautomator.BySelector checkable(boolean);
+    method public androidx.test.uiautomator.BySelector checked(boolean);
+    method public androidx.test.uiautomator.BySelector clazz(java.lang.String);
+    method public androidx.test.uiautomator.BySelector clazz(java.lang.String, java.lang.String);
+    method public androidx.test.uiautomator.BySelector clazz(java.lang.Class);
+    method public androidx.test.uiautomator.BySelector clazz(java.util.regex.Pattern);
+    method public androidx.test.uiautomator.BySelector clickable(boolean);
+    method public androidx.test.uiautomator.BySelector depth(int);
+    method public androidx.test.uiautomator.BySelector depth(int, int);
+    method public androidx.test.uiautomator.BySelector desc(java.lang.String);
+    method public androidx.test.uiautomator.BySelector desc(java.util.regex.Pattern);
+    method public androidx.test.uiautomator.BySelector descContains(java.lang.String);
+    method public androidx.test.uiautomator.BySelector descEndsWith(java.lang.String);
+    method public androidx.test.uiautomator.BySelector descStartsWith(java.lang.String);
+    method public androidx.test.uiautomator.BySelector enabled(boolean);
+    method public androidx.test.uiautomator.BySelector focusable(boolean);
+    method public androidx.test.uiautomator.BySelector focused(boolean);
+    method public androidx.test.uiautomator.BySelector hasChild(androidx.test.uiautomator.BySelector);
+    method public androidx.test.uiautomator.BySelector hasDescendant(androidx.test.uiautomator.BySelector);
+    method public androidx.test.uiautomator.BySelector hasDescendant(androidx.test.uiautomator.BySelector, int);
+    method public androidx.test.uiautomator.BySelector longClickable(boolean);
+    method public androidx.test.uiautomator.BySelector maxDepth(int);
+    method public androidx.test.uiautomator.BySelector minDepth(int);
+    method public androidx.test.uiautomator.BySelector pkg(java.lang.String);
+    method public androidx.test.uiautomator.BySelector pkg(java.util.regex.Pattern);
+    method public androidx.test.uiautomator.BySelector res(java.lang.String);
+    method public androidx.test.uiautomator.BySelector res(java.lang.String, java.lang.String);
+    method public androidx.test.uiautomator.BySelector res(java.util.regex.Pattern);
+    method public androidx.test.uiautomator.BySelector scrollable(boolean);
+    method public androidx.test.uiautomator.BySelector selected(boolean);
+    method public androidx.test.uiautomator.BySelector text(java.lang.String);
+    method public androidx.test.uiautomator.BySelector text(java.util.regex.Pattern);
+    method public androidx.test.uiautomator.BySelector textContains(java.lang.String);
+    method public androidx.test.uiautomator.BySelector textEndsWith(java.lang.String);
+    method public androidx.test.uiautomator.BySelector textStartsWith(java.lang.String);
+  }
+
+  public final class Configurator {
+    method public long getActionAcknowledgmentTimeout();
+    method public static androidx.test.uiautomator.Configurator getInstance();
+    method public long getKeyInjectionDelay();
+    method public long getScrollAcknowledgmentTimeout();
+    method public int getToolType();
+    method public int getUiAutomationFlags();
+    method public long getWaitForIdleTimeout();
+    method public long getWaitForSelectorTimeout();
+    method public androidx.test.uiautomator.Configurator setActionAcknowledgmentTimeout(long);
+    method public androidx.test.uiautomator.Configurator setKeyInjectionDelay(long);
+    method public androidx.test.uiautomator.Configurator setScrollAcknowledgmentTimeout(long);
+    method public androidx.test.uiautomator.Configurator setToolType(int);
+    method public androidx.test.uiautomator.Configurator setUiAutomationFlags(int);
+    method public androidx.test.uiautomator.Configurator setWaitForIdleTimeout(long);
+    method public androidx.test.uiautomator.Configurator setWaitForSelectorTimeout(long);
+  }
+
+  public final class Direction extends java.lang.Enum {
+    method public static androidx.test.uiautomator.Direction reverse(androidx.test.uiautomator.Direction);
+    method public static androidx.test.uiautomator.Direction valueOf(java.lang.String);
+    method public static final androidx.test.uiautomator.Direction[] values();
+    enum_constant public static final androidx.test.uiautomator.Direction DOWN;
+    enum_constant public static final androidx.test.uiautomator.Direction LEFT;
+    enum_constant public static final androidx.test.uiautomator.Direction RIGHT;
+    enum_constant public static final androidx.test.uiautomator.Direction UP;
+  }
+
+  public abstract class EventCondition<R> {
+    ctor public EventCondition();
+  }
+
+  public abstract interface IAutomationSupport {
+    method public abstract void sendStatus(int, android.os.Bundle);
+  }
+
+  public abstract class SearchCondition<R> {
+    ctor public SearchCondition();
+  }
+
+  public class StaleObjectException extends java.lang.RuntimeException {
+    ctor public StaleObjectException();
+  }
+
+  public class UiAutomatorInstrumentationTestRunner extends android.test.InstrumentationTestRunner {
+    ctor public UiAutomatorInstrumentationTestRunner();
+    method protected android.test.AndroidTestRunner getAndroidTestRunner();
+    method protected void initializeUiAutomatorTest(androidx.test.uiautomator.UiAutomatorTestCase);
+  }
+
+  public deprecated class UiAutomatorTestCase extends android.test.InstrumentationTestCase {
+    ctor public UiAutomatorTestCase();
+    method public deprecated androidx.test.uiautomator.IAutomationSupport getAutomationSupport();
+    method public android.os.Bundle getParams();
+    method public androidx.test.uiautomator.UiDevice getUiDevice();
+    method public deprecated void sleep(long);
+  }
+
+  public class UiCollection extends androidx.test.uiautomator.UiObject {
+    ctor public UiCollection(androidx.test.uiautomator.UiSelector);
+    method public androidx.test.uiautomator.UiObject getChildByDescription(androidx.test.uiautomator.UiSelector, java.lang.String) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getChildByInstance(androidx.test.uiautomator.UiSelector, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getChildByText(androidx.test.uiautomator.UiSelector, java.lang.String) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public int getChildCount(androidx.test.uiautomator.UiSelector);
+  }
+
+  public class UiDevice {
+    method public void clearLastTraversedText();
+    method public boolean click(int, int);
+    method public boolean drag(int, int, int, int, int);
+    method public deprecated void dumpWindowHierarchy(java.lang.String);
+    method public void dumpWindowHierarchy(java.io.File) throws java.io.IOException;
+    method public void dumpWindowHierarchy(java.io.OutputStream) throws java.io.IOException;
+    method public androidx.test.uiautomator.UiObject findObject(androidx.test.uiautomator.UiSelector);
+    method public androidx.test.uiautomator.UiObject2 findObject(androidx.test.uiautomator.BySelector);
+    method public java.util.List<androidx.test.uiautomator.UiObject2> findObjects(androidx.test.uiautomator.BySelector);
+    method public void freezeRotation() throws android.os.RemoteException;
+    method public deprecated java.lang.String getCurrentActivityName();
+    method public java.lang.String getCurrentPackageName();
+    method public int getDisplayHeight();
+    method public int getDisplayRotation();
+    method public android.graphics.Point getDisplaySizeDp();
+    method public int getDisplayWidth();
+    method public static deprecated androidx.test.uiautomator.UiDevice getInstance();
+    method public static androidx.test.uiautomator.UiDevice getInstance(android.app.Instrumentation);
+    method public java.lang.String getLastTraversedText();
+    method public java.lang.String getLauncherPackageName();
+    method public java.lang.String getProductName();
+    method public boolean hasAnyWatcherTriggered();
+    method public boolean hasObject(androidx.test.uiautomator.BySelector);
+    method public boolean hasWatcherTriggered(java.lang.String);
+    method public boolean isNaturalOrientation();
+    method public boolean isScreenOn() throws android.os.RemoteException;
+    method public boolean openNotification();
+    method public boolean openQuickSettings();
+    method public <R> R performActionAndWait(java.lang.Runnable, androidx.test.uiautomator.EventCondition<R>, long);
+    method public boolean pressBack();
+    method public boolean pressDPadCenter();
+    method public boolean pressDPadDown();
+    method public boolean pressDPadLeft();
+    method public boolean pressDPadRight();
+    method public boolean pressDPadUp();
+    method public boolean pressDelete();
+    method public boolean pressEnter();
+    method public boolean pressHome();
+    method public boolean pressKeyCode(int);
+    method public boolean pressKeyCode(int, int);
+    method public boolean pressMenu();
+    method public boolean pressRecentApps() throws android.os.RemoteException;
+    method public boolean pressSearch();
+    method public void registerWatcher(java.lang.String, androidx.test.uiautomator.UiWatcher);
+    method public void removeWatcher(java.lang.String);
+    method public void resetWatcherTriggers();
+    method public void runWatchers();
+    method public void setCompressedLayoutHeirarchy(boolean);
+    method public void setOrientationLeft() throws android.os.RemoteException;
+    method public void setOrientationNatural() throws android.os.RemoteException;
+    method public void setOrientationRight() throws android.os.RemoteException;
+    method public void sleep() throws android.os.RemoteException;
+    method public boolean swipe(int, int, int, int, int);
+    method public boolean swipe(android.graphics.Point[], int);
+    method public boolean takeScreenshot(java.io.File);
+    method public boolean takeScreenshot(java.io.File, float, int);
+    method public void unfreezeRotation() throws android.os.RemoteException;
+    method public <R> R wait(androidx.test.uiautomator.SearchCondition<R>, long);
+    method public void waitForIdle();
+    method public void waitForIdle(long);
+    method public boolean waitForWindowUpdate(java.lang.String, long);
+    method public void wakeUp() throws android.os.RemoteException;
+  }
+
+  public class UiObject {
+    ctor public deprecated UiObject(androidx.test.uiautomator.UiSelector);
+    method public void clearTextField() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean click() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean clickAndWaitForNewWindow() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean clickAndWaitForNewWindow(long) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean clickBottomRight() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean clickTopLeft() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean dragTo(androidx.test.uiautomator.UiObject, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean dragTo(int, int, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean exists();
+    method protected android.view.accessibility.AccessibilityNodeInfo findAccessibilityNodeInfo(long);
+    method public android.graphics.Rect getBounds() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getChild(androidx.test.uiautomator.UiSelector) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public int getChildCount() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public java.lang.String getClassName() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public java.lang.String getContentDescription() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getFromParent(androidx.test.uiautomator.UiSelector) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public java.lang.String getPackageName() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public final androidx.test.uiautomator.UiSelector getSelector();
+    method public java.lang.String getText() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public android.graphics.Rect getVisibleBounds() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isCheckable() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isChecked() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isClickable() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isEnabled() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isFocusable() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isFocused() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isLongClickable() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isScrollable() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean isSelected() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean longClick() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean longClickBottomRight() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean longClickTopLeft() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean performMultiPointerGesture(android.view.MotionEvent.PointerCoords...);
+    method public boolean performTwoPointerGesture(android.graphics.Point, android.graphics.Point, android.graphics.Point, android.graphics.Point, int);
+    method public boolean pinchIn(int, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean pinchOut(int, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean setText(java.lang.String) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean swipeDown(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean swipeLeft(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean swipeRight(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean swipeUp(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean waitForExists(long);
+    method public boolean waitUntilGone(long);
+    field protected static final int FINGER_TOUCH_HALF_WIDTH = 20; // 0x14
+    field protected static final int SWIPE_MARGIN_LIMIT = 5; // 0x5
+    field protected static final deprecated long WAIT_FOR_EVENT_TMEOUT = 3000L; // 0xbb8L
+    field protected static final long WAIT_FOR_SELECTOR_POLL = 1000L; // 0x3e8L
+    field protected static final deprecated long WAIT_FOR_SELECTOR_TIMEOUT = 10000L; // 0x2710L
+    field protected static final long WAIT_FOR_WINDOW_TMEOUT = 5500L; // 0x157cL
+  }
+
+  public class UiObject2 {
+    method public void clear();
+    method public void click();
+    method public void click(long);
+    method public <R> R clickAndWait(androidx.test.uiautomator.EventCondition<R>, long);
+    method public void drag(android.graphics.Point);
+    method public void drag(android.graphics.Point, int);
+    method public androidx.test.uiautomator.UiObject2 findObject(androidx.test.uiautomator.BySelector);
+    method public java.util.List<androidx.test.uiautomator.UiObject2> findObjects(androidx.test.uiautomator.BySelector);
+    method public boolean fling(androidx.test.uiautomator.Direction);
+    method public boolean fling(androidx.test.uiautomator.Direction, int);
+    method public java.lang.String getApplicationPackage();
+    method public int getChildCount();
+    method public java.util.List<androidx.test.uiautomator.UiObject2> getChildren();
+    method public java.lang.String getClassName();
+    method public java.lang.String getContentDescription();
+    method public androidx.test.uiautomator.UiObject2 getParent();
+    method public java.lang.String getResourceName();
+    method public java.lang.String getText();
+    method public android.graphics.Rect getVisibleBounds();
+    method public android.graphics.Point getVisibleCenter();
+    method public boolean hasObject(androidx.test.uiautomator.BySelector);
+    method public boolean isCheckable();
+    method public boolean isChecked();
+    method public boolean isClickable();
+    method public boolean isEnabled();
+    method public boolean isFocusable();
+    method public boolean isFocused();
+    method public boolean isLongClickable();
+    method public boolean isScrollable();
+    method public boolean isSelected();
+    method public void longClick();
+    method public void pinchClose(float);
+    method public void pinchClose(float, int);
+    method public void pinchOpen(float);
+    method public void pinchOpen(float, int);
+    method public void recycle();
+    method public boolean scroll(androidx.test.uiautomator.Direction, float);
+    method public boolean scroll(androidx.test.uiautomator.Direction, float, int);
+    method public void setGestureMargin(int);
+    method public void setGestureMargins(int, int, int, int);
+    method public void setText(java.lang.String);
+    method public void swipe(androidx.test.uiautomator.Direction, float);
+    method public void swipe(androidx.test.uiautomator.Direction, float, int);
+    method public <R> R wait(androidx.test.uiautomator.UiObject2Condition<R>, long);
+    method public <R> R wait(androidx.test.uiautomator.SearchCondition<R>, long);
+  }
+
+  public abstract class UiObject2Condition<R> {
+    ctor public UiObject2Condition();
+  }
+
+  public class UiObjectNotFoundException extends java.lang.Exception {
+    ctor public UiObjectNotFoundException(java.lang.String);
+    ctor public UiObjectNotFoundException(java.lang.String, java.lang.Throwable);
+    ctor public UiObjectNotFoundException(java.lang.Throwable);
+  }
+
+  public class UiScrollable extends androidx.test.uiautomator.UiCollection {
+    ctor public UiScrollable(androidx.test.uiautomator.UiSelector);
+    method protected boolean exists(androidx.test.uiautomator.UiSelector);
+    method public boolean flingBackward() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean flingForward() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean flingToBeginning(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean flingToEnd(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getChildByDescription(androidx.test.uiautomator.UiSelector, java.lang.String, boolean) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiObject getChildByText(androidx.test.uiautomator.UiSelector, java.lang.String, boolean) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public int getMaxSearchSwipes();
+    method public double getSwipeDeadZonePercentage();
+    method public boolean scrollBackward() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollBackward(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollDescriptionIntoView(java.lang.String) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollForward() throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollForward(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollIntoView(androidx.test.uiautomator.UiObject) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollIntoView(androidx.test.uiautomator.UiSelector) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollTextIntoView(java.lang.String) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollToBeginning(int, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollToBeginning(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollToEnd(int, int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public boolean scrollToEnd(int) throws androidx.test.uiautomator.UiObjectNotFoundException;
+    method public androidx.test.uiautomator.UiScrollable setAsHorizontalList();
+    method public androidx.test.uiautomator.UiScrollable setAsVerticalList();
+    method public androidx.test.uiautomator.UiScrollable setMaxSearchSwipes(int);
+    method public androidx.test.uiautomator.UiScrollable setSwipeDeadZonePercentage(double);
+  }
+
+  public class UiSelector {
+    ctor public UiSelector();
+    method public androidx.test.uiautomator.UiSelector checkable(boolean);
+    method public androidx.test.uiautomator.UiSelector checked(boolean);
+    method public androidx.test.uiautomator.UiSelector childSelector(androidx.test.uiautomator.UiSelector);
+    method public androidx.test.uiautomator.UiSelector className(java.lang.String);
+    method public <T> androidx.test.uiautomator.UiSelector className(java.lang.Class<T>);
+    method public androidx.test.uiautomator.UiSelector classNameMatches(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector clickable(boolean);
+    method protected androidx.test.uiautomator.UiSelector cloneSelector();
+    method public androidx.test.uiautomator.UiSelector description(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector descriptionContains(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector descriptionMatches(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector descriptionStartsWith(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector enabled(boolean);
+    method public androidx.test.uiautomator.UiSelector focusable(boolean);
+    method public androidx.test.uiautomator.UiSelector focused(boolean);
+    method public androidx.test.uiautomator.UiSelector fromParent(androidx.test.uiautomator.UiSelector);
+    method public androidx.test.uiautomator.UiSelector index(int);
+    method public androidx.test.uiautomator.UiSelector instance(int);
+    method public androidx.test.uiautomator.UiSelector longClickable(boolean);
+    method public androidx.test.uiautomator.UiSelector packageName(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector packageNameMatches(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector resourceId(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector resourceIdMatches(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector scrollable(boolean);
+    method public androidx.test.uiautomator.UiSelector selected(boolean);
+    method public androidx.test.uiautomator.UiSelector text(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector textContains(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector textMatches(java.lang.String);
+    method public androidx.test.uiautomator.UiSelector textStartsWith(java.lang.String);
+  }
+
+  public abstract interface UiWatcher {
+    method public abstract boolean checkForCondition();
+  }
+
+  public class Until {
+    ctor public Until();
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> checkable(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> checked(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> clickable(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descContains(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descEndsWith(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descEquals(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descMatches(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descMatches(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> descStartsWith(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> enabled(boolean);
+    method public static androidx.test.uiautomator.SearchCondition<androidx.test.uiautomator.UiObject2> findObject(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.SearchCondition<java.util.List<androidx.test.uiautomator.UiObject2>> findObjects(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> focusable(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> focused(boolean);
+    method public static androidx.test.uiautomator.SearchCondition<java.lang.Boolean> gone(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.SearchCondition<java.lang.Boolean> hasObject(androidx.test.uiautomator.BySelector);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> longClickable(boolean);
+    method public static androidx.test.uiautomator.EventCondition<java.lang.Boolean> newWindow();
+    method public static androidx.test.uiautomator.EventCondition<java.lang.Boolean> scrollFinished(androidx.test.uiautomator.Direction);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> scrollable(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> selected(boolean);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textContains(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textEndsWith(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textEquals(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textMatches(java.util.regex.Pattern);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textMatches(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textNotEquals(java.lang.String);
+    method public static androidx.test.uiautomator.UiObject2Condition<java.lang.Boolean> textStartsWith(java.lang.String);
+  }
+
+}
+
