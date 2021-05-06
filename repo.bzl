@@ -91,9 +91,9 @@ def android_test_repositories(with_dev_repositories = False):
     http_archive(
         name = "google_apputils",
         build_file = str(Label("//opensource:google-apputils.BUILD")),
-        sha256 = "47959d0651c32102c10ad919b8a0ffe0ae85f44b8457ddcf2bdc0358fb03dc29",
-        strip_prefix = "google-apputils-0.4.2",
-        url = "https://pypi.python.org/packages/69/66/a511c428fef8591c5adfa432a257a333e0d14184b6c5d03f1450827f7fe7/google-apputils-0.4.2.tar.gz",
+        sha256 = "3d863efb7f952485e8969a1cb0f6fef9bc100ef4283020cf0f6eb8a5ae98dae3",
+        strip_prefix = "google-apputils-eb14d358af7b82f71b5104f91161eb6c8848fbdc",
+        url = "https://github.com/jin/google-apputils/archive/eb14d358af7b82f71b5104f91161eb6c8848fbdc.zip",
     )
 
     http_archive(
