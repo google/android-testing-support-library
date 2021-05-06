@@ -933,8 +933,9 @@ public class MonitoringInstrumentation extends ExposedInstrumentationApi {
     int wantLen = wantName.length();
     int cmdLen = ps.cmdline.length();
     if (wantLen == cmdLen) {
-      // not truncated - just .equals()
-      return wantName.equals(ps.cmdline);
+      // If wantName == "a.b.c" and process name is "a.b.c" we still might be truncated at exactly
+      // right point (maybe process full name is "a.b.c:d"), so check suffix too.
+      return wantName.equals(ps.cmdline) && wantName.endsWith(ps.name);
     } else if (wantLen < cmdLen) {
       // obviously not the same.
       return false;
