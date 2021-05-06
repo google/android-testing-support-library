@@ -48,10 +48,12 @@ import androidx.test.internal.runner.storage.RunnerTestStorageIO;
 import androidx.test.internal.runner.tracker.AnalyticsBasedUsageTracker;
 import androidx.test.internal.runner.tracker.UsageTrackerRegistry.AxtVersions;
 import androidx.test.orchestrator.callback.OrchestratorV1Connection;
+import androidx.test.platform.io.PlatformTestStorageRegistry;
 import androidx.test.runner.lifecycle.ApplicationLifecycleCallback;
 import androidx.test.runner.lifecycle.ApplicationLifecycleMonitorRegistry;
 import androidx.test.runner.screenshot.ScreenCaptureProcessor;
 import androidx.test.runner.screenshot.Screenshot;
+import androidx.test.services.storage.TestStorage;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
@@ -310,6 +312,8 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
     } else {
       usageTrackerFacilitator = new UsageTrackerFacilitator(false);
     }
+
+    registerTestStorage(runnerArgs);
 
     for (ApplicationLifecycleCallback listener : runnerArgs.appListeners) {
       ApplicationLifecycleMonitorRegistry.getInstance().addLifecycleCallback(listener);
@@ -624,5 +628,13 @@ public class AndroidJUnitRunner extends MonitoringInstrumentation
   /** Factory method for {@link TestRequestBuilder}. */
   TestRequestBuilder createTestRequestBuilder(Instrumentation instr, Bundle arguments) {
     return new TestRequestBuilder(instr, arguments);
+  }
+
+  private void registerTestStorage(RunnerArgs runnerArgs) {
+    // TODO: Uses the app folder for test storage otherwise.
+    if (runnerArgs.useTestStorageService) {
+      Log.d(LOG_TAG, "Use the test storage service for managing file I/O.");
+      PlatformTestStorageRegistry.registerInstance(new TestStorage());
+    }
   }
 }
