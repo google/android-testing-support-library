@@ -64,12 +64,12 @@ public final class AmbiguousViewMatcherException extends RuntimeException
 
   private static String getErrorMessage(Builder builder) {
     String errorMessage = "";
-    if (builder.includeViewHierarchy) {
-      ImmutableSet<View> ambiguousViews =
-          ImmutableSet.<View>builder()
-              .add(builder.view1, builder.view2)
-              .add(builder.others)
-              .build();
+    // if (builder.includeViewHierarchy) {
+    ImmutableSet<View> ambiguousViews =
+        ImmutableSet.<View>builder().add(builder.view1, builder.view2).add(builder.others).build();
+    for (View v : Lists.newArrayList(ambiguousViews)) {
+      System.out.println("~~~~~~" + v.toString());
+    }
       errorMessage =
           HumanReadables.getViewHierarchyErrorMessage(
               builder.rootView,
@@ -79,11 +79,11 @@ public final class AmbiguousViewMatcherException extends RuntimeException
                   "'%s' matches multiple views in the hierarchy.",
                   builder.viewMatcher),
               "****MATCHES****");
-    } else {
-      errorMessage =
-          String.format(
-              Locale.ROOT, "Multiple Ambiguous Views found for matcher %s", builder.viewMatcher);
-    }
+    // } else {
+    //   errorMessage =
+    //       String.format(
+    //           Locale.ROOT, "Multiple Ambiguous Views found for matcher %s", builder.viewMatcher);
+    // }
     return errorMessage;
   }
 
