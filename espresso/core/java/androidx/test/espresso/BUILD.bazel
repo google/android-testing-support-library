@@ -235,18 +235,19 @@ load("//build_extensions:remove_from_jar.bzl", "remove_from_jar")
 filegroup(
     name = "espresso_src",
     srcs = [
-        ":libespresso-src.jar",
-        ":libframework-src.jar",
-        ":libinterface-src.jar",
-        ":libview-interaction-src.jar",
-        "//espresso/core/java/androidx/test/espresso/action:libaction-src.jar",
-        "//espresso/core/java/androidx/test/espresso/action:libadapter_view_protocol-src.jar",
-        "//espresso/core/java/androidx/test/espresso/assertion:libassertion-src.jar",
-        "//espresso/core/java/androidx/test/espresso/base:espresso_base_src",
-        "//espresso/core/java/androidx/test/espresso/matcher:libmatcher-src.jar",
-        "//espresso/core/java/androidx/test/espresso/remote:espresso_remote_src",
-        "//espresso/core/java/androidx/test/espresso/util:libutil-src.jar",
+        ":espresso",
+        ":framework",
+        ":interface",
+        ":view-interaction",
+        "//espresso/core/java/androidx/test/espresso/action",
+        "//espresso/core/java/androidx/test/espresso/action:adapter_view_protocol",
+        "//espresso/core/java/androidx/test/espresso/assertion",
+        "//espresso/core/java/androidx/test/espresso/base",
+        "//espresso/core/java/androidx/test/espresso/matcher",
+        "//espresso/core/java/androidx/test/espresso/remote",
+        "//espresso/core/java/androidx/test/espresso/util",
     ],
+    output_group = "_source_jars",
 )
 
 combine_jars(

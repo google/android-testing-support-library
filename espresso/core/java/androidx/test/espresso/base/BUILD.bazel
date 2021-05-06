@@ -29,9 +29,9 @@ android_library(
         "//runner/android_junit_runner",
         "@maven//:com_google_dagger_dagger",
         "@maven//:com_google_guava_guava",
-        "@maven//:org_hamcrest_hamcrest_all",
         "@maven//:javax_inject_javax_inject",
         "@maven//:junit_junit",
+        "@maven//:org_hamcrest_hamcrest_all",
     ],
 )
 
@@ -80,20 +80,9 @@ android_library(
         "//runner/monitor/java/androidx/test:monitor",
         "@maven//:com_google_dagger_dagger",
         "@maven//:com_google_guava_guava",
-        "@maven//:org_hamcrest_hamcrest_all",
         "@maven//:javax_annotation_javax_annotation_api",
         "@maven//:javax_inject_javax_inject",
         "@maven//:junit_junit",
-    ],
-)
-
-filegroup(
-    name = "espresso_base_src",
-    srcs = [
-        ":libactive_root_lister-src.jar",
-        ":libbase-src.jar",
-        ":libdefault_failure_handler-src.jar",
-        ":libidling_resource_registry-src.jar",
-        ":libidling_uicontroller_interface-src.jar",
+        "@maven//:org_hamcrest_hamcrest_all",
     ],
 )
