@@ -109,6 +109,9 @@ import java.util.concurrent.locks.ReentrantLock;
  *   }
  * }</pre>
  */
+
+/* this is just a test, thank you for this awesome framework*/
+
 public final class ActivityScenario<A extends Activity> implements AutoCloseable, Closeable {
   private static final String TAG = ActivityScenario.class.getSimpleName();
 
