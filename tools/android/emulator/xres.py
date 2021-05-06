@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Simply prints out screen resolution."""
+from __future__ import print_function
 
 
 import Tkinter
@@ -20,7 +21,7 @@ import Tkinter
 
 def main():
   root = Tkinter.Tk()
-  print '%sx%s' % (root.winfo_screenwidth(), root.winfo_screenheight())
+  print('%sx%s' % (root.winfo_screenwidth(), root.winfo_screenheight()))
   root.destroy()
 
 if __name__ == '__main__':

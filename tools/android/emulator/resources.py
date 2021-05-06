@@ -26,10 +26,8 @@ def GetRunfilesDir():
   starting_point = sys.argv[0]
   return FindRunfilesDir(os.path.abspath(starting_point))
 
-
-def GetResourceAsFile(file_path):
-  return open(GetResourceFilename(file_path))
-
+def GetResourceAsFile(file_path, mode='r'):
+  return open(GetResourceFilename(file_path), mode=mode)
 
 def GetResourceFilename(file_path):
   if os.path.isabs(file_path):

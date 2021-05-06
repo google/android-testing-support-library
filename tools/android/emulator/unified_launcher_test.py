@@ -18,12 +18,13 @@
 
 import collections
 import os
-import StringIO
 import tempfile
 
 
 from absl import flags
 import mox
+
+from io import StringIO
 
 from google.apputils import basetest as googletest
 from tools.android.emulator import emulated_device
@@ -646,7 +647,7 @@ class UnifiedLauncherTest(mox.MoxTestBase):
     with tempfile.NamedTemporaryFile() as proto_file:
       proto_file.write(self._test_proto.SerializeToString())
       proto_file.flush()
-      output = StringIO.StringIO()
+      output = StringIO()
       unified_launcher._PrintInfo(proto_file.name, 'raw', out=output)
       self.assertEquals(output.getvalue(),
                         self._test_proto.SerializeToString())
@@ -655,7 +656,7 @@ class UnifiedLauncherTest(mox.MoxTestBase):
     with tempfile.NamedTemporaryFile() as proto_file:
       proto_file.write(self._test_proto.SerializeToString())
       proto_file.flush()
-      output = StringIO.StringIO()
+      output = StringIO()
       unified_launcher._PrintInfo(proto_file.name, 'text', out=output)
       self.assertTrue('skin: "800x900"' in output.getvalue(), output.getvalue())
 

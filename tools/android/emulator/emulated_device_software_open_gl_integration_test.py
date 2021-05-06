@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Large tests which actually starts an emulator."""
+from __future__ import print_function
 
 
 
@@ -83,7 +84,7 @@ class EmulatedDeviceSoftwareOpenGlIntegrationTest(googletest.TestCase):
 
     # Vals for this flag: -1 not an emulator, 0 emulator which doesn't support
     # open gl, 1 emulator which supports opengl.
-    print get_prop_output
+    print(get_prop_output)
     self.assertTrue('[ro.kernel.qemu.gles]: [1]' in get_prop_output)
 
 if __name__ == '__main__':

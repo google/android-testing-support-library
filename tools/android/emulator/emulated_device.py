@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Classes to interact with android emulator."""
+from __future__ import print_function
 
 
 
@@ -52,11 +53,11 @@ import portpicker
 
 
 from tools.android.emulator import resources
-from google.apputils import stopwatch
 
 from tools.android.emulator import common
 from tools.android.emulator import emulator_meta_data_pb2
 from tools.android.emulator import reporting
+from tools.android.emulator import stopwatch
 
 from tools.android.emulator import xserver
 
@@ -511,7 +512,7 @@ class EmulatedDevice(object):
       dst: the destination file
     """
     subprocess.check_call(
-        ['cp', '--sparse=always', '--dereference', src, dst])
+        ['cp', '--sparse=always', '--dereference', src, dst], encoding='ascii')
 
   def _ExtractTarEntry(self, archive, entry, working_dir):
     """Extracts a single entry from a compressed tar archive."""
@@ -825,7 +826,7 @@ class EmulatedDevice(object):
 
       # the default size is ~256 megs, which fills up fast on iterative
       # development.
-      if 'ext4' in subprocess.check_output(['file', self._UserdataQemuFile()]):
+      if 'ext4' in subprocess.check_output(['file', self._UserdataQemuFile()], encoding='ascii'):
         # getting this size right is pretty crucial - if it doesnt match
         # the underlying file the guest os will get confused.
         config_ini.write('disk.dataPartition.size=%s\n' %
@@ -836,7 +837,7 @@ class EmulatedDevice(object):
       # system partition must be less than 2GB (there's a constraint check in
       # qemu). Also we must set the commandline flag too - which sets both
       # userdata and system sizes, so everything is set to 2047 for sanity.
-      if 'ext4' in subprocess.check_output(['file', self._SystemFile()]):
+      if 'ext4' in subprocess.check_output(['file', self._SystemFile()], encoding='ascii'):
         # getting this size right is pretty crucial - if it doesnt match
         # the underlying file the guest os will get confused.
         config_ini.write('disk.systemPartition.size=%s\n' %
@@ -855,7 +856,7 @@ class EmulatedDevice(object):
       config_ini.write('disk.cachePartition=1\n')
       config_ini.write('disk.cachePartition.path=cache.img\n')
       cache_size = '66m'
-      if 'ext4' in subprocess.check_output(['file', self._CacheFile()]):
+      if 'ext4' in subprocess.check_output(['file', self._CacheFile()], encoding='ascii'):
         cache_size = os.path.getsize(self._CacheFile())
 
       # getting this size right is pretty crucial - if it doesnt match
@@ -1815,7 +1816,7 @@ class EmulatedDevice(object):
       with contextlib.closing(
           resources.GetResourceAsFile(
               'android_test_support/'
-              'tools/android/emulator/daemon/x86/pipe_traversal')) as piper:
+              'tools/android/emulator/daemon/x86/pipe_traversal', 'rb')) as piper:
         with open(os.path.join(services_dir, 'pipe_traversal'), 'w+b') as o:
           shutil.copyfileobj(piper, o)
           os.chmod(os.path.join(services_dir, 'pipe_traversal'), stat.S_IRWXU)
@@ -1919,7 +1920,16 @@ class EmulatedDevice(object):
     """The main loop of the watchdog process."""
     if new_process_group:
       os.setsid()
-    os.closerange(-1, subprocess.MAXFD)
+
+    # subprocess.MAXFD has been removed from Python 3.5.
+    # This is the original implementation from Python 2.7.
+    try:
+        MAXFD = os.sysconf("SC_OPEN_MAX")
+    except:
+        MAXFD = 256
+
+    os.closerange(-1, MAXFD)
+
     watchdog_dir = None
     if 'TEST_UNDECLARED_OUTPUTS_DIR' in os.environ:
       watchdog_dir = tempfile.mkdtemp(
@@ -1999,7 +2009,7 @@ class EmulatedDevice(object):
 
       if self.delete_temp_on_exit and self._emulator_tmp_dir:
         logging.info('Cleaning up data dirs.')
-        print 'cleanup data dirs...'
+        print('cleanup data dirs...')
         self.CleanUp()
         logging.info('Clean up done.')
 
@@ -3459,7 +3469,7 @@ class EmulatedDevice(object):
     if not self._ShouldModifySystemImage(enable_guest_gl):
       return
 
-    if 'ext4' in subprocess.check_output(['file', self._SystemFile()]):
+    if 'ext4' in subprocess.check_output(['file', self._SystemFile()], encoding='ascii'):
       debugfs_cmd = self._GetDebugfsCmd(enable_guest_gl)
       if debugfs_cmd:
         logging.info('Running debugfs commands: %s', debugfs_cmd)
@@ -3468,12 +3478,12 @@ class EmulatedDevice(object):
   def _ExecDebugfsCmd(self, image_file, cmd_list):
     """Execute debugfs commands from cmd_list on disk image file."""
     assert not self._emu_process_pid, 'Emulator is running!'
-    assert 'ext4' in subprocess.check_output(['file', image_file]), (
+    assert 'ext4' in subprocess.check_output(['file', image_file], encoding='ascii'), (
         'Not ext4 image')
     assert os.path.exists('/sbin/debugfs'), 'No debugfs tool find'
     os.chmod(image_file, stat.S_IRWXU)
     proc = subprocess.Popen(['/sbin/debugfs', '-w', '-f', '-', image_file],
-                            stdin=subprocess.PIPE)
+                            stdin=subprocess.PIPE, encoding='utf8')
     proc.communicate('\n'.join(cmd_list) + '\n')
     proc.wait()
 
@@ -3523,8 +3533,7 @@ class EmulatedDevice(object):
 
   def GetApiCodeName(self):
     """Returns the codename of the image if it exists in source.properties."""
-    if self._source_properties and self._source_properties.has_key(
-        API_CODE_NAME):
+    if self._source_properties and API_CODE_NAME in self._source_properties:
       return self._source_properties[API_CODE_NAME]
     return ''
 

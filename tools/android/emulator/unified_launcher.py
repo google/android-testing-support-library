@@ -13,15 +13,15 @@
 # limitations under the License.
 
 """Allows emulators to be booted ran/killed."""
+from __future__ import print_function
 
 
 
 import collections
-import ConfigParser
+import configparser
 import json
 import logging
 import os
-import StringIO
 import subprocess
 import sys
 import tempfile
@@ -32,6 +32,8 @@ import time
 from absl import app
 from absl import flags
 
+from io import StringIO
+
 from google.protobuf import text_format
 from tools.android.emulator import resources
 
@@ -39,7 +41,6 @@ from tools.android.emulator import common
 from tools.android.emulator import emulated_device
 from tools.android.emulator import emulator_meta_data_pb2
 from tools.android.emulator import reporting
-
 
 FLAGS = flags.FLAGS
 flags.DEFINE_enum('action', None,
@@ -465,25 +466,25 @@ def _RestartDevice(device,
 
   if 'x86' == proto.emulator_architecture:
     if not _IsKvmPresent():
-      print ''
-      print '=' * 80
+      print('')
+      print('=' * 80)
       print ('= By activating KVM on your local host you can increase the '
              'speed of the emulator.      =')
-      print '=' * 80
+      print('=' * 80)
     elif not proto.with_kvm:
-      print ''
-      print '=' * 80
+      print('')
+      print('=' * 80)
       print ('= Please add --no to your bazel command line, to create '
              'snapshot images   =')
       print ('= local with KVM support. This will increase the speed of the '
              'emulator.        =')
-      print '=' * 80
+      print('=' * 80)
   else:
-    print ''
-    print '=' * 80
+    print('')
+    print('=' * 80)
     print ('= By using x86 with KVM on your local host you can increase the '
            'speed of the emulator.')
-    print '=' * 80
+    print('=' * 80)
 
   proto.system_image_dir = system_images_dir
   sysimg = (
@@ -748,9 +749,9 @@ def _TryToConvertIniStyleFileToDict(ini_style_file):
   if ini_style_file:
     with open(ini_style_file) as real_text_handle:
       text = real_text_handle.read()
-      filehandle = StringIO.StringIO('[android]\n' + text)
+      filehandle = StringIO('[android]\n' + text)
       try:
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.readfp(filehandle)
         return dict(config.items('android'))
       finally:
@@ -1060,9 +1061,9 @@ def _IsKvmPresent():
   kernel_module = os.access('/sys/class/misc/kvm/dev', os.R_OK)
   device_node = os.access(kvm_device, os.R_OK | os.W_OK)
   if not kernel_module:
-    print 'KVM Kernel module not readable.'
+    print('KVM Kernel module not readable.')
   if not device_node:
-    print '%s: not readable or writable by current user' % kvm_device
+    print('%s: not readable or writable by current user' % kvm_device)
 
   return device_node and kernel_module
 
