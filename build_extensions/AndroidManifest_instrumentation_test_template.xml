@@ -16,10 +16,9 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="${applicationId}" >
-
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="28" />
+        android:targetSdkVersion="30" />
 
     <application/>
 

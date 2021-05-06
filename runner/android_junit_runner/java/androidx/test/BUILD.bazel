@@ -20,6 +20,8 @@ android_library(
     proguard_specs = [
         "proguard_library.cfg",
     ],
+    exports_manifest = 1,
+    manifest = "AndroidManifest.xml",
     visibility = ["//visibility:public"],
     exports = [
         "//runner/monitor",
