@@ -177,7 +177,7 @@ public final class AdapterViewProtocols {
     private boolean isElementFullyRendered(
         AdapterView<? extends Adapter> adapterView, int childAt) {
       View element = adapterView.getChildAt(childAt);
-      // Occassionally we'll have to fight with smooth scrolling logic on our definition of when
+      // Occasionally we'll have to fight with smooth scrolling logic on our definition of when
       // there is extra scrolling to be done. In particular if the element is the first or last
       // element of the list, the smooth scroller may decide that no work needs to be done to scroll
       // to the element if a certain percentage of it is on screen. Ugh. Sigh. Yuck.
