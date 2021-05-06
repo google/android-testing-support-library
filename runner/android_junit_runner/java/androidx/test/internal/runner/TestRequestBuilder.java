@@ -17,6 +17,7 @@
 package androidx.test.internal.runner;
 
 import android.app.Instrumentation;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.VisibleForTesting;
 import android.util.Log;
@@ -124,7 +125,7 @@ public class TestRequestBuilder {
   private static class DeviceBuildImpl implements DeviceBuild {
     @Override
     public int getSdkVersionInt() {
-      return android.os.Build.VERSION.SDK_INT;
+      return android.os.Build.VERSION.SDK_INT + ("REL".equals(Build.VERSION.CODENAME) ? 0 : 1);
     }
 
     @Override
