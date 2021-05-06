@@ -77,6 +77,7 @@ maven_artifact(
     name = "test_storage_maven_artifact",
     src = ":test_storage_release.aar",
     artifact_deps = [
+        "androidx.test:monitor:[%s]" % RUNNER_VERSION,
         "com.google.code.findbugs:jsr305:2.0.1",
     ],
     artifact_id = "storage",

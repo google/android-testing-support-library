@@ -140,6 +140,7 @@ android_library_instrumentation_tests(
         "//ext/junit",
         "//runner/android_junit_runner",
         "//runner/android_junit_runner/javatests/androidx/test/testing/fixtures",
+        "//runner/monitor",
         "//runner/rules",
         "//services/events/java/androidx/test/services/events",
         "@androidsdk//:legacy_test-30",

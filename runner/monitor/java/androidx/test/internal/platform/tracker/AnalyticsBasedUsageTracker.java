@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.test.internal.runner.tracker;
+package androidx.test.internal.platform.tracker;
 
 import static androidx.test.internal.util.Checks.checkNotNull;
 import static java.net.URLEncoder.encode;
@@ -39,13 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Creates a usage tracker that pings google analytics when infra bits get used.
- *
- * @deprecated use {@link androidx.test.internal.platform.tracker.AnalyticsBasedUsageTracker}
- * instead.
- */
-@Deprecated
+/** Creates a usage tracker that pings google analytics when infra bits get used. */
 public final class AnalyticsBasedUsageTracker implements UsageTracker {
   private static final String TAG = "InfraTrack";
 

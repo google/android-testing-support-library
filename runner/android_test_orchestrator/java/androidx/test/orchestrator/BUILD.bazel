@@ -14,6 +14,7 @@ android_library(
         "//:androidx_core",
         "//:androidx_legacy_support_v4",
         "//runner/android_junit_runner",
+        "//runner/monitor",
         "//services/shellexecutor:exec_client",
         "@maven//:com_google_guava_guava",
         "@maven//:junit_junit",

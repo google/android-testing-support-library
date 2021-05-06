@@ -26,6 +26,7 @@ android_library(
         "//espresso/core/java/androidx/test/espresso/matcher",
         "//espresso/intents/java/androidx/test/espresso/intent/matcher",
         "//runner/android_junit_runner",
+        "//runner/monitor",
         "@maven//:org_hamcrest_hamcrest_all",
         "@maven//:junit_junit",
     ],

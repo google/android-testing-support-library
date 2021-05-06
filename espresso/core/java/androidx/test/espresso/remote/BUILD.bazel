@@ -177,6 +177,7 @@ android_library(
         "//espresso/web/java/androidx/test/espresso/web/sugar:remote_sugar",
         "//espresso/web/java/androidx/test/espresso/web/webdriver:remote_webdriver_atoms",
         "//runner/android_junit_runner",
+        "//runner/monitor",
         "@com_google_protobuf//:protobuf_javalite",
         "@maven//:com_google_guava_guava",
         "@maven//:org_hamcrest_hamcrest_all",

@@ -21,6 +21,7 @@ android_library(
         "//espresso/web/java/androidx/test/espresso/web/assertion",
         "//espresso/web/java/androidx/test/espresso/web/model",
         "//runner/android_junit_runner",
+        "//runner/monitor",
         "@maven//:com_google_guava_guava",
         "@maven//:org_hamcrest_hamcrest_all",
         "@maven//:com_google_code_findbugs_jsr305",

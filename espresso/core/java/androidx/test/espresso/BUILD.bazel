@@ -106,6 +106,7 @@ android_library(
         "//espresso/core/java/androidx/test/espresso/remote:interface",
         "//opensource/dagger",
         "//runner/android_junit_runner",
+        "//runner/monitor",
         "@maven//:com_google_guava_guava",
         "@maven//:org_hamcrest_hamcrest_all",
     ],

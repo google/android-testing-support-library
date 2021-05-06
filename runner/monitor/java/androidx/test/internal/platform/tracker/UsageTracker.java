@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package androidx.test.internal.runner.tracker;
+package androidx.test.internal.platform.tracker;
 
 /**
  * Used by test infrastructure to report usage stats (optionally).
  *
  * <p>This interface should only be used by test infrastructure.
- * @deprecated use {@link androidx.test.internal.platform.tracker.UsageTracker} instead.
  */
-@Deprecated
 public interface UsageTracker {
 
   /**
