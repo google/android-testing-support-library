@@ -17,6 +17,8 @@
 package androidx.test.espresso.web.sugar;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.RootMatchers.DEFAULT;
+import static androidx.test.espresso.matcher.RootMatchers.isSystemAlertWindow;
 import static androidx.test.espresso.matcher.ViewMatchers.isJavascriptEnabled;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -25,8 +27,11 @@ import static org.hamcrest.Matchers.any;
 
 import androidx.annotation.CheckResult;
 import android.view.View;
+
+import androidx.test.espresso.Root;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.remote.annotation.RemoteMsgConstructor;
 import androidx.test.espresso.remote.annotation.RemoteMsgField;
 import androidx.test.espresso.web.action.AtomAction;
@@ -98,7 +103,9 @@ public final class Web {
    */
   public static class WebInteraction<R> {
     private final Matcher<View> viewMatcher;
+    private final Matcher<Root> rootMatcher;
     private final boolean brandNew;
+    private final boolean noActivity;
 
     @Nullable private final R result;
     @Nullable private final WindowReference window;
@@ -106,22 +113,26 @@ public final class Web {
     private final Timeout timeout;
 
     private WebInteraction(Matcher<View> viewMatcher) {
-      this(viewMatcher, null, null, null, true, new Timeout(10, TimeUnit.SECONDS, true));
+      this(viewMatcher, null, null, null, true, new Timeout(10, TimeUnit.SECONDS, true), false, DEFAULT);
     }
 
     private WebInteraction(
-        Matcher<View> viewMatcher,
-        R result,
-        WindowReference window,
-        ElementReference element,
-        boolean brandNew,
-        Timeout timeout) {
+            Matcher<View> viewMatcher,
+            R result,
+            WindowReference window,
+            ElementReference element,
+            boolean brandNew,
+            Timeout timeout,
+            boolean noActivity,
+            Matcher<Root> rootMatcher) {
       this.viewMatcher = checkNotNull(viewMatcher);
       this.result = result;
       this.window = window;
       this.element = element;
       this.brandNew = brandNew;
       this.timeout = timeout;
+      this.noActivity = noActivity;
+      this.rootMatcher = rootMatcher;
     }
 
     /**
@@ -131,7 +142,7 @@ public final class Web {
      * navigation that invalidates the ElementReference and WindowReference pointers.
      */
     public WebInteraction<R> reset() {
-      return new WebInteraction<R>(viewMatcher, result, null, null, brandNew, timeout);
+      return new WebInteraction<R>(viewMatcher, result, null, null, brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -157,7 +168,7 @@ public final class Web {
     @CheckResult
     @CheckReturnValue
     public WebInteraction<R> withNoTimeout() {
-      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, Timeout.NONE);
+      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, Timeout.NONE, noActivity, rootMatcher);
     }
 
     /** Sets a specific timeout for this WebInteraction. */
@@ -165,7 +176,14 @@ public final class Web {
     @CheckReturnValue
     public WebInteraction<R> withTimeout(long amount, TimeUnit unit) {
       return new WebInteraction<R>(
-          viewMatcher, result, window, element, brandNew, new Timeout(amount, unit, true));
+          viewMatcher, result, window, element, brandNew, new Timeout(amount, unit, true), noActivity, rootMatcher);
+    }
+
+    @CheckResult
+    @CheckReturnValue
+    public WebInteraction<R> noActivity() {
+      return new WebInteraction<R>(
+              viewMatcher, result, window, element, brandNew, timeout, true, rootMatcher);
     }
 
     /**
@@ -177,7 +195,7 @@ public final class Web {
     @CheckResult
     @CheckReturnValue
     public WebInteraction<R> inWindow(WindowReference window) {
-      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, timeout);
+      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -191,7 +209,7 @@ public final class Web {
     @CheckReturnValue
     public WebInteraction<R> inWindow(Atom<WindowReference> windowPicker) {
       return new WebInteraction<R>(
-          viewMatcher, result, doEval(windowPicker, null, null), element, brandNew, timeout);
+          viewMatcher, result, doEval(windowPicker, null, null), element, brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -205,7 +223,7 @@ public final class Web {
     @CheckResult
     @CheckReturnValue
     public WebInteraction<R> withElement(ElementReference element) {
-      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, timeout);
+      return new WebInteraction<R>(viewMatcher, result, window, element, brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -226,7 +244,7 @@ public final class Web {
     @CheckReturnValue
     public WebInteraction<R> withElement(Atom<ElementReference> elementPicker) {
       return new WebInteraction<R>(
-          viewMatcher, result, window, doEval(elementPicker, window, null), brandNew, timeout);
+          viewMatcher, result, window, doEval(elementPicker, window, null), brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -265,7 +283,7 @@ public final class Web {
     @CheckReturnValue
     public WebInteraction<R> withContextualElement(Atom<ElementReference> elementPicker) {
       return new WebInteraction<R>(
-          viewMatcher, result, window, doEval(elementPicker, window, element), brandNew, timeout);
+          viewMatcher, result, window, doEval(elementPicker, window, element), brandNew, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -278,7 +296,7 @@ public final class Web {
      */
     public <E> WebInteraction<E> perform(Atom<E> atom) {
       E newResult = doEval(atom, window, element);
-      return new WebInteraction<E>(viewMatcher, newResult, window, element, false, timeout);
+      return new WebInteraction<E>(viewMatcher, newResult, window, element, false, timeout, noActivity, rootMatcher);
     }
 
     /**
@@ -293,14 +311,18 @@ public final class Web {
     public <E> WebInteraction<E> check(WebAssertion<E> assertion) {
       E newResult = doEval(assertion.getAtom(), window, element);
       onView(viewMatcher).check(assertion.toViewAssertion(newResult));
-      return new WebInteraction<E>(viewMatcher, newResult, window, element, false, timeout);
+      return new WebInteraction<E>(viewMatcher, newResult, window, element, false, timeout, noActivity, rootMatcher);
     }
 
     private <E> E doEval(Atom<E> atom, WindowReference window, ElementReference elem) {
       checkNotNull(atom, "Need an atom!");
 
       AtomAction<E> atomAction = new AtomAction(atom, window, elem);
-      onView(viewMatcher).perform(atomAction);
+      ViewInteraction viewInteraction = onView(viewMatcher).inRoot(rootMatcher);
+              if (noActivity) {
+                viewInteraction.noActivity();
+              }
+              viewInteraction.perform(atomAction);
       try {
         if (timeout == Timeout.NONE) {
           return atomAction.get();
