@@ -272,6 +272,7 @@ maven_artifact(
         "androidx.test.espresso:espresso-idling-resource:%s" % ESPRESSO_VERSION,
         "com.squareup:javawriter:2.1.1",
         "javax.inject:javax.inject:1",
+        "org.hamcrest:hamcrest-core:%s" % HAMCREST_VERSION,
         "org.hamcrest:hamcrest-library:%s" % HAMCREST_VERSION,
         "org.hamcrest:hamcrest-integration:%s" % HAMCREST_VERSION,
         "com.google.code.findbugs:jsr305:2.0.1",
