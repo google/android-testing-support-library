@@ -54,6 +54,8 @@ public final class OrchestratedInstrumentationListener extends RunListener {
   private final TestRunEventService notificationService;
   private final ConditionVariable testFinishedCondition = new ConditionVariable();
   private final AtomicBoolean isTestFailed = new AtomicBoolean(false);
+  private final AtomicBoolean isTestFinished = new AtomicBoolean(false);
+  private final AtomicBoolean isTestRunFinished = new AtomicBoolean(false);
   private Description description = Description.EMPTY; // Cached test description
 
   /**
@@ -71,6 +73,10 @@ public final class OrchestratedInstrumentationListener extends RunListener {
   /** {@inheritDoc} */
   @Override
   public void testRunStarted(Description description) {
+    // New run, reset our values
+    isTestFailed.set(false);
+    isTestFinished.set(false);
+    isTestRunFinished.set(false);
     try {
       notificationService.send(new TestRunStartedEvent(getTestCaseFromDescription(description)));
     } catch (TestEventException e) {
@@ -81,6 +87,10 @@ public final class OrchestratedInstrumentationListener extends RunListener {
   /** {@inheritDoc} */
   @Override
   public void testRunFinished(Result result) {
+    if (!isTestRunFinished.compareAndSet(false, true)) {
+      return; // we already reported this test run, don't report it again.
+    }
+
     List<FailureInfo> failures = emptyList();
     try {
       failures = getFailuresFromList(result.getFailures());
@@ -91,6 +101,30 @@ public final class OrchestratedInstrumentationListener extends RunListener {
       notificationService.send(
           new TestRunFinishedEvent(
               result.getRunCount(), result.getIgnoreCount(), result.getRunTime(), failures));
+
+    } catch (TestEventException e) {
+      Log.e(TAG, "Unable to send TestRunFinishedEvent to Orchestrator", e);
+    }
+  }
+
+  /**
+   * This is a clone of testRunFinished. Unfortunately the API for Result is locked down so we have
+   * to create our own filler crash data here.
+   */
+  private void testRunCrashed(Failure failure) {
+    if (!isTestRunFinished.compareAndSet(false, true)) {
+      return; // we already reported this test run, don't report it again.
+    }
+
+    List<FailureInfo> failures = emptyList();
+    try {
+      failures.add(getFailure(failure));
+    } catch (TestEventException e) {
+      Log.w(TAG, "Failure event doesn't contain a test case", e);
+    }
+    try {
+      // We don't have any information about this test suite, send some obviously bad data.
+      notificationService.send(new TestRunFinishedEvent(-1, -1, 0, failures));
     } catch (TestEventException e) {
       Log.e(TAG, "Unable to send TestRunFinishedEvent to Orchestrator", e);
     }
@@ -99,6 +133,8 @@ public final class OrchestratedInstrumentationListener extends RunListener {
   /** {@inheritDoc} */
   @Override
   public void testStarted(Description description) {
+    isTestFailed.set(false); // new test, it's not failed yet.
+    isTestFinished.set(false); // new test, it's not finished yet.
     this.description = description; // Caches the test description in case of a crash
     if (!JUnitValidator.validateDescription(description)) {
       Log.w(
@@ -120,6 +156,10 @@ public final class OrchestratedInstrumentationListener extends RunListener {
   /** {@inheritDoc} */
   @Override
   public void testFinished(Description description) {
+    if (!isTestFinished.compareAndSet(false, true)) {
+      return; // we already reported this test, don't report it again.
+    }
+
     if (!JUnitValidator.validateDescription(description)) {
       Log.w(
           TAG,
@@ -145,37 +185,37 @@ public final class OrchestratedInstrumentationListener extends RunListener {
     // failure.
     // We'd like to make sure only one failure gets sent so that the isTestFailed variable is
     // checked and set without possibly racing between two thread calls.
-    if (isTestFailed.compareAndSet(false, true)) {
-      Description description = failure.getDescription();
-      if (!JUnitValidator.validateDescription(description)) {
-        // The call stack from failure.getException() will be logged by the LogRunListener; look for
-        // the "TestRunner" tag in the logcat.
-        Log.w(
-            TAG,
-            "testFailure: JUnit reported "
-                + description.getClassName()
-                + "#"
-                + description.getMethodName()
-                + "; discarding as bogus.");
+    if (!isTestFailed.compareAndSet(false, true)) {
+      return;
+    }
+    Description failureDescription = failure.getDescription();
+    if (!JUnitValidator.validateDescription(failureDescription)) {
+      // The call stack from failure.getException() will be logged by the LogRunListener; look for
+      // the "TestRunner" tag in the logcat.
+      Log.w(
+          TAG,
+          "testFailure: JUnit reported "
+              + failureDescription.getClassName()
+              + "#"
+              + failureDescription.getMethodName()
+              + "; discarding as bogus.");
+      return;
+    }
+    TestFailureEvent event;
+    try {
+      event =
+          new TestFailureEvent(getTestCaseFromDescription(failureDescription), getFailure(failure));
+    } catch (TestEventException e) {
+      Log.d(TAG, "Unable to determine test case from failure [" + failure + "]", e);
+      event = getTestFailureEventFromCachedDescription(failure);
+      if (event == null) {
         return;
       }
-      TestFailureEvent event;
-      try {
-        event =
-            new TestFailureEvent(
-                getTestCaseFromDescription(failure.getDescription()), getFailure(failure));
-      } catch (TestEventException e) {
-        Log.d(TAG, "Unable to determine test case from failure [" + failure + "]", e);
-        event = getTestFailureEventFromCachedDescription(failure);
-        if (event == null) {
-          return;
-        }
-      }
-      try {
-        notificationService.send(event);
-      } catch (TestEventException e) {
-        throw new IllegalStateException("Unable to send TestFailureEvent, terminating", e);
-      }
+    }
+    try {
+      notificationService.send(event);
+    } catch (TestEventException e) {
+      throw new IllegalStateException("Unable to send TestFailureEvent, terminating", e);
     }
   }
 
@@ -238,20 +278,17 @@ public final class OrchestratedInstrumentationListener extends RunListener {
     // will be received. In this case, it will wait until timeoutMillis is reached.
     waitUntilTestFinished(timeoutMillis);
 
-    // Need to report the process crashed event to the orchestrator.
-    // This is to handle the case when the test body finishes but process crashes during
-    // Instrumentation cleanup (e.g. stopping the app). Otherwise, the test will be marked as
-    // passed.
-    if (!isTestFailed.get()) {
-      Log.i(TAG, "No test failure has been reported. Report the process crash.");
-      reportProcessCrash(t);
-    }
+    Log.i(TAG, "Instrumentation process crashed, reporting failures to TestRunService.");
+    reportProcessCrash(t);
   }
 
   /** Reports the process crash event with a given exception. */
   private void reportProcessCrash(Throwable t) {
-    testFailure(new Failure(description, t));
+    Failure failure = new Failure(description, t);
+    testFailure(failure);
     testFinished(description);
+    // The instrumentation is about to exit, let dependencies know we are completely finished.
+    testRunCrashed(failure);
   }
 
   /**
