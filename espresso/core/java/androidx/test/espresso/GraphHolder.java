@@ -18,13 +18,8 @@ package androidx.test.espresso;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import androidx.test.espresso.base.ActiveRootLister;
-import androidx.test.internal.platform.util.TestOutputEmitter;
 import androidx.test.internal.runner.tracker.UsageTrackerRegistry;
 import androidx.test.internal.runner.tracker.UsageTrackerRegistry.AxtVersions;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** Holds Espresso's object graph. */
@@ -45,10 +40,6 @@ public final class GraphHolder {
       instanceRef = new GraphHolder(DaggerBaseLayerComponent.create());
       if (instance.compareAndSet(null, instanceRef)) {
         UsageTrackerRegistry.getInstance().trackUsage("Espresso", AxtVersions.ESPRESSO_VERSION);
-        // Also adds the usage data as test output properties. By default it's no-op.
-        Map<String, Serializable> usageProperties = new HashMap<>();
-        usageProperties.put("Espresso", AxtVersions.ESPRESSO_VERSION);
-        TestOutputEmitter.addOutputProperties(usageProperties);
         return instanceRef.component;
       } else {
         return instance.get().component;

@@ -15,9 +15,6 @@
  */
 package androidx.test.internal.platform.util;
 
-import java.io.Serializable;
-import java.util.Map;
-
 /**
  * An extension definition for outputting debugging information to the test execution environment.
  *
@@ -33,7 +30,4 @@ public interface TestOutputHandler {
 
   /** Dump the window hierarchy and store it in test outputs */
   boolean captureWindowHierarchy(String outputName);
-
-  /** Add output properties for the test. */
-  boolean addOutputProperties(Map<String, Serializable> properties);
 }

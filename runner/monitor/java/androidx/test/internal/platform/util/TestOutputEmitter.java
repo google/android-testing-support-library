@@ -16,8 +16,6 @@
 package androidx.test.internal.platform.util;
 
 import androidx.test.internal.platform.ServiceLoaderWrapper;
-import java.io.Serializable;
-import java.util.Map;
 
 /** A utility for outputting execution data files back to the test environment/CI solution. */
 public class TestOutputEmitter {
@@ -40,11 +38,6 @@ public class TestOutputEmitter {
                 public boolean captureWindowHierarchy(String outputName) {
                   return false;
                 }
-
-                @Override
-                public boolean addOutputProperties(Map<String, Serializable> properties) {
-                  return false;
-                }
               });
 
   private TestOutputEmitter() {}
@@ -62,10 +55,5 @@ public class TestOutputEmitter {
   /** Output the window hierarchy XML dump to the execution environment. */
   public static boolean captureWindowHierarchy(String outputName) {
     return debugHandler.captureWindowHierarchy(outputName);
-  }
-
-  /** Add output properties for the test. */
-  public static boolean addOutputProperties(Map<String, Serializable> properties) {
-    return debugHandler.addOutputProperties(properties);
   }
 }
