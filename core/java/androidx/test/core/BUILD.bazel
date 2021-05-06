@@ -18,6 +18,7 @@ android_library(
         "//:androidx_annotation",
         "//:androidx_lifecycle_common",
         "//runner/monitor",
+        "@maven//:com_google_errorprone_error_prone_annotation:2.3.4",
     ],
 )
 
@@ -55,6 +56,7 @@ maven_artifact(
     artifact_deps = [
         "androidx.annotation:annotation:%s" % ANDROIDX_VERSION,
         "androidx.test:monitor:%s" % RUNNER_VERSION,
+        "com.google.errorprone:error_prone_annotation:2.3.4",
     ],
     artifact_id = "core",
     group_id = "androidx.test",

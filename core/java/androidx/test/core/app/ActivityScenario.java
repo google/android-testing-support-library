@@ -40,6 +40,7 @@ import androidx.test.runner.lifecycle.ActivityLifecycleCallback;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitor;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
+import com.google.errorprone.annotations.MustBeClosed;
 import java.io.Closeable;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -109,6 +110,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *   }
  * }</pre>
  */
+@MustBeClosed
 public final class ActivityScenario<A extends Activity> implements AutoCloseable, Closeable {
   private static final String TAG = ActivityScenario.class.getSimpleName();
 
