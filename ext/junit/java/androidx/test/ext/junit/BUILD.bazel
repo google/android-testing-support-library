@@ -16,6 +16,7 @@ android_library(
     deps = [
         "//:androidx_annotation",
         "//core",
+        "//espresso/core/java/androidx/test/espresso",
         "//runner/monitor",
         "@maven//:junit_junit",
     ],
