@@ -20,6 +20,7 @@ import androidx.test.orchestrator.junit.ParcelableFailure;
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Reimplementation of org.junit.TextListener that accepts {@link
@@ -115,6 +116,7 @@ public class TextListener
 
   /** Returns the formatted string of the elapsed time. Duplicated from BaseTestRunner. Fix it. */
   protected String elapsedTimeAsString(long runTime) {
-    return NumberFormat.getInstance().format((double) runTime / 1000);
+    // Use Locale.US so that instrumentation parsers can parse it correctly.
+    return NumberFormat.getInstance(Locale.US).format((double) runTime / 1000);
   }
 }

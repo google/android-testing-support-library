@@ -21,7 +21,6 @@ import androidx.annotation.VisibleForTesting;
 import android.util.Log;
 import androidx.test.services.events.internal.StackTrimmer;
 import java.io.PrintStream;
-import org.junit.internal.TextListener;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -223,6 +222,6 @@ public class InstrumentationResultPrinter extends InstrumentationRunListener {
   public void instrumentationRunFinished(
       PrintStream streamResult, Bundle resultBundle, Result junitResults) {
     // reuse JUnit TextListener to display a summary of the run
-    new TextListener(streamResult).testRunFinished(junitResults);
+    new TestSummaryListener(streamResult).testRunFinished(junitResults);
   }
 }
