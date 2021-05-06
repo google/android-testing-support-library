@@ -42,16 +42,18 @@ public final class InstrumentationRegistry {
    * @throws IllegalStateException if instrumentation hasn't been registered
    */
   public static Instrumentation getInstrumentation() {
-    Instrumentation instance = instrumentationRef.get();
-    if (instance == null && provider.get() != null) {
-      instance = provider.get().provide();
-      instrumentationRef.set(instance);
+    synchronized (instrumentationRef) {
+      Instrumentation instance = instrumentationRef.get();
+      if (instance == null && provider.get() != null) {
+        instance = provider.get().provide();
+        instrumentationRef.set(instance);
+      }
+      if (instance == null) {
+        throw new IllegalStateException(
+            "No instrumentation registered! " + "Must run under a registering instrumentation.");
+      }
+      return instance;
     }
-    if (instance == null) {
-      throw new IllegalStateException(
-          "No instrumentation registered! " + "Must run under a registering instrumentation.");
-    }
-    return instance;
   }
 
   /**
