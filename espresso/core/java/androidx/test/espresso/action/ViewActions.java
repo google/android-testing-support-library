@@ -187,6 +187,17 @@ public final class ViewActions {
             MotionEvent.BUTTON_PRIMARY));
   }
 
+  /** Same as {@code click()}, but clicks in the top right. */
+  public static ViewAction clickTopRight() {
+    return actionWithAssertions(
+        new GeneralClickAction(
+            Tap.SINGLE,
+            GeneralLocation.TOP_RIGHT,
+            Press.FINGER,
+            InputDevice.SOURCE_UNKNOWN,
+            MotionEvent.BUTTON_PRIMARY));
+  }
+
   /**
    * Returns an action that performs a single click on the view.
    *
