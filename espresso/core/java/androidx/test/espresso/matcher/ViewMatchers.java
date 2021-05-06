@@ -990,7 +990,9 @@ public final class ViewMatchers {
       float viewHeight = (view.getHeight() > screen.height()) ? screen.height() : view.getHeight();
       float viewWidth = (view.getWidth() > screen.width()) ? screen.width() : view.getWidth();
 
-      if (Build.VERSION.SDK_INT >= 11) {
+      // Robolectric doesn't scale getGlobalVisibleRect: getGlobalVisibleRect relies on Matrix
+      // maintained by native RenderNode implementation that is not part of robolectric.
+      if (!"robolectric".equals(Build.FINGERPRINT) && Build.VERSION.SDK_INT >= 11) {
         // For API level 11 and above, factor in the View's scaleX and scaleY properties.
         viewHeight = Math.min(view.getHeight() * Math.abs(view.getScaleY()), screen.height());
         viewWidth = Math.min(view.getWidth() * Math.abs(view.getScaleX()), screen.width());
