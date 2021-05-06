@@ -45,7 +45,7 @@ public final class ActivityLifecycleMonitorImpl implements ActivityLifecycleMoni
   }
 
   // Accessed from any thread.
-  private final List<WeakReference<ActivityLifecycleCallback>> callbacks = new ArrayList<>();
+  private final List<ActivityLifecycleCallback> callbacks = new ArrayList<>();
 
   // Only accessed on main thread.
   private List<ActivityStatus> activityStatuses = new ArrayList<ActivityStatus>();
@@ -57,18 +57,8 @@ public final class ActivityLifecycleMonitorImpl implements ActivityLifecycleMoni
     checkNotNull(callback);
 
     synchronized (callbacks) {
-      boolean needsAdd = true;
-      Iterator<WeakReference<ActivityLifecycleCallback>> refIter = callbacks.iterator();
-      while (refIter.hasNext()) {
-        ActivityLifecycleCallback storedCallback = refIter.next().get();
-        if (null == storedCallback) {
-          refIter.remove();
-        } else if (storedCallback == callback) {
-          needsAdd = false;
-        }
-      }
-      if (needsAdd) {
-        callbacks.add(new WeakReference<>(callback));
+      if (!callbacks.contains(callback)) {
+        callbacks.add(callback);
       }
     }
   }
@@ -78,15 +68,7 @@ public final class ActivityLifecycleMonitorImpl implements ActivityLifecycleMoni
     checkNotNull(callback);
 
     synchronized (callbacks) {
-      Iterator<WeakReference<ActivityLifecycleCallback>> refIter = callbacks.iterator();
-      while (refIter.hasNext()) {
-        ActivityLifecycleCallback storedCallback = refIter.next().get();
-        if (null == storedCallback) {
-          refIter.remove();
-        } else if (storedCallback == callback) {
-          refIter.remove();
-        }
-      }
+      callbacks.remove(callback);
     }
   }
 
@@ -153,25 +135,13 @@ public final class ActivityLifecycleMonitorImpl implements ActivityLifecycleMoni
       activityStatuses.add(new ActivityStatus(activity, stage));
     }
 
+    // grab a copy to avoid holding lock while iterating
+    List<ActivityLifecycleCallback> callbackCopy;
     synchronized (callbacks) {
-      Iterator<WeakReference<ActivityLifecycleCallback>> refIter = callbacks.iterator();
-      while (refIter.hasNext()) {
-        ActivityLifecycleCallback callback = refIter.next().get();
-        if (null == callback) {
-          refIter.remove();
-        } else {
-          try {
-            callback.onActivityLifecycleChanged(activity, stage);
-          } catch (RuntimeException re) {
-            Log.e(
-                TAG,
-                String.format(
-                    "Callback threw exception! (callback: %s activity: %s stage: %s)",
-                    callback, activity, stage),
-                re);
-          }
-        }
-      }
+      callbackCopy = new ArrayList<>(callbacks);
+    }
+    for (ActivityLifecycleCallback callback : callbacks) {
+      callback.onActivityLifecycleChanged(activity, stage);
     }
   }
 
