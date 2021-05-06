@@ -346,6 +346,7 @@ public class ActivityTestRule<T extends Activity> implements TestRule {
    * @return the Activity launched by this rule.
    */
   public T launchActivity(@Nullable Intent startIntent) {
+    Log.e("quintink", "************* ActivityTestRule: start launchActivity");
     // set initial touch mode
     instrumentation.setInTouchMode(initialTouchMode);
 
@@ -392,6 +393,7 @@ public class ActivityTestRule<T extends Activity> implements TestRule {
       Log.e(TAG, errorMessage);
     }
 
+    Log.e("quintink", "************* ActivityTestRule: end launchActivity");
     return hardActivityRef;
   }
 
