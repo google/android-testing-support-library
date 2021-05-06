@@ -74,7 +74,8 @@ def make_device(
         visibility = None,
         emulator_types = None,
         default_emulator_type = None,
-        archs_override = None):
+        archs_override = None,
+        api_to_images = API_TO_IMAGES):
     """Generates a set of android_device targets.
 
     It is recommended to use new_devices() instead.
@@ -104,6 +105,7 @@ def make_device(
         may define about running a particular architecture. (For example, we do
         not use QEMU to run ARM images after api level 19, but if you want to
         deal with the inheritant issues, feel free!
+      api_to_images: [optional] a dictionary between api-level (int) and possible new_image instances.
 
       Returns:
         A set of all types of android_devices that meet the specified
@@ -139,6 +141,7 @@ def make_device(
         archs_override = archs_override,
         system_image_flavors = system_image_flavors,
         visibility = visibility,
+        api_to_images = api_to_images,
     )
 
 def _make_property_target(
@@ -184,7 +187,8 @@ def new_devices(
         default_emulator = None,
         boot_apks = None,
         visibility = None,
-        archs_override = None):
+        archs_override = None,
+        api_to_images = API_TO_IMAGES):
     """Generates a set of android_device targets.
 
     Arguments:
@@ -213,7 +217,7 @@ def new_devices(
         may define about running a particular architecture. (For example, we do
         not use QEMU to run ARM images after api level 19, but if you want to
         deal with the inheritant issues, feel free!
-
+      api_to_images: [optional] a dictionary between api-level (int) and possible new_image instances.
       Returns:
         A set of all types of android_devices that meet the specified
         requirements.
@@ -227,7 +231,7 @@ def new_devices(
     requested_flavors = system_image_flavors or ["google", "android"]
 
     images_to_build = []
-    for api, images in sorted(API_TO_IMAGES.items()):
+    for api, images in sorted(api_to_images.items()):
         if max_api and api > max_api:
             continue
         if api < min_api:
