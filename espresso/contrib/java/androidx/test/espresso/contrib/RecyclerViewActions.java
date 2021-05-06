@@ -32,6 +32,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.util.HumanReadables;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ import org.hamcrest.TypeSafeMatcher;
  */
 public final class RecyclerViewActions {
   private static final int NO_POSITION = -1;
+  private static boolean includeGlobalAssertions = true;
 
   private RecyclerViewActions() {
     // no instance
@@ -95,7 +97,7 @@ public final class RecyclerViewActions {
    */
   public static <VH extends ViewHolder> PositionableRecyclerViewAction scrollToHolder(
       final Matcher<VH> viewHolderMatcher) {
-    return new ScrollToViewAction<VH>(viewHolderMatcher);
+    return actionWithAssertions(new ScrollToViewAction<VH>(viewHolderMatcher));
   }
 
   /**
@@ -115,7 +117,7 @@ public final class RecyclerViewActions {
   public static <VH extends ViewHolder> PositionableRecyclerViewAction scrollTo(
       final Matcher<View> itemViewMatcher) {
     Matcher<VH> viewHolderMatcher = viewHolderMatcher(itemViewMatcher);
-    return new ScrollToViewAction<VH>(viewHolderMatcher);
+    return actionWithAssertions(new ScrollToViewAction<VH>(viewHolderMatcher));
   }
 
   /**
@@ -124,7 +126,8 @@ public final class RecyclerViewActions {
    * @param position the position of the view to scroll to
    */
   public static <VH extends ViewHolder> ViewAction scrollToPosition(final int position) {
-    return new ScrollToPositionViewAction(position);
+    ViewAction viewAction = new ScrollToPositionViewAction(position);
+    return includeGlobalAssertions ? ViewActions.actionWithAssertions(viewAction) : viewAction;
   }
 
   /**
@@ -144,7 +147,7 @@ public final class RecyclerViewActions {
   public static <VH extends ViewHolder> PositionableRecyclerViewAction actionOnItem(
       final Matcher<View> itemViewMatcher, final ViewAction viewAction) {
     Matcher<VH> viewHolderMatcher = viewHolderMatcher(itemViewMatcher);
-    return new ActionOnItemViewAction<VH>(viewHolderMatcher, viewAction);
+    return actionWithAssertions(new ActionOnItemViewAction<VH>(viewHolderMatcher, viewAction));
   }
 
   /**
@@ -166,7 +169,38 @@ public final class RecyclerViewActions {
    */
   public static <VH extends ViewHolder> PositionableRecyclerViewAction actionOnHolderItem(
       final Matcher<VH> viewHolderMatcher, final ViewAction viewAction) {
-    return new ActionOnItemViewAction<VH>(viewHolderMatcher, viewAction);
+    return actionWithAssertions(new ActionOnItemViewAction<VH>(viewHolderMatcher, viewAction));
+  }
+
+  // TODO(brinko): Create public method ViewActions.checkGlobalAssertions(View)
+  private static PositionableRecyclerViewAction actionWithAssertions(
+      final PositionableRecyclerViewAction viewAction) {
+
+    return new PositionableRecyclerViewAction() {
+
+      private final ViewAction possiblyWrappedViewAction =
+          includeGlobalAssertions ? ViewActions.actionWithAssertions(viewAction) : viewAction;
+
+      @Override
+      public String getDescription() {
+        return possiblyWrappedViewAction.getDescription();
+      }
+
+      @Override
+      public Matcher<View> getConstraints() {
+        return possiblyWrappedViewAction.getConstraints();
+      }
+
+      @Override
+      public void perform(UiController uic, View view) {
+        possiblyWrappedViewAction.perform(uic, view);
+      }
+
+      @Override
+      public PositionableRecyclerViewAction atPosition(int position) {
+        return viewAction.atPosition(position);
+      }
+    };
   }
 
   private static final class ActionOnItemViewAction<VH extends ViewHolder>
@@ -250,7 +284,8 @@ public final class RecyclerViewActions {
    */
   public static <VH extends ViewHolder> ViewAction actionOnItemAtPosition(
       final int position, final ViewAction viewAction) {
-    return new ActionOnItemAtPositionViewAction<VH>(position, viewAction);
+    ViewAction va = new ActionOnItemAtPositionViewAction<VH>(position, viewAction);
+    return includeGlobalAssertions ? ViewActions.actionWithAssertions(va) : va;
   }
 
   private static final class ActionOnItemAtPositionViewAction<VH extends ViewHolder>
